@@ -203,7 +203,7 @@
 </div>
         <div class="title-list">
     <form onkeydown="if(event.keyCode === 13){return false;}">
-        <input id="local-search-input" class="search" type="text" placeholder="Search..." />
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
         <i class="cross"></i>
         <span>
             <label for="tagswitch">Tags:</label>
@@ -222,11 +222,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">java</a>
+        <a class="color1">JavaScript</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">JavaScript</a>
+        <a class="color5">java</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -241,6 +241,10 @@
 </div>
 
     
+    <div id="local-search-result">
+
+    </div>
+    
     <nav id="title-list-nav">
         
         <a  class="CTF "
@@ -251,20 +255,20 @@
             <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
         </a>
         
-        <a  class="代码审计 "
-           href="/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/"
-           data-tag="java"
-           data-author="" >
-            <span class="post-title" title="java审计笔记">java审计笔记</span>
-            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
-        </a>
-        
         <a  class="CTF "
            href="/2020/01/30/JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/"
            data-tag="JavaScript"
            data-author="" >
             <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
             <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/2020/01/30/java%E5%AE%A1%E8%AE%A1%E7%AC%94%E8%AE%B0/"
+           data-tag="java"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
         </a>
         
         <a  class=""
@@ -342,17 +346,6 @@
         
         <span>字数:636</span>
         
-        
-        <span id="busuanzi_container_page_pv">
-            阅读:<span id="busuanzi_value_page_pv">
-                <span class="count-comment">
-                    <span class="spinner">
-                      <div class="cube1"></div>
-                      <div class="cube2"></div>
-                    </span>
-                </span>
-            </span>
-        </span>
         
         
     </div>
@@ -493,7 +486,7 @@ print(res2.text)</code></pre>
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#xxe','#xml','#java','#JavaScript','#Apache','#RCE',],
+            'data': ['#xxe','#xml','#JavaScript','#java','#Apache','#RCE',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
@@ -525,8 +518,6 @@ print(res2.text)</code></pre>
         
 
         /*访问数量*/
-        
-        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
         
 
         /*代码高亮，行号对齐*/
