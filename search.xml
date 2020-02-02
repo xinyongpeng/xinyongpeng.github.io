@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>docker基本使用指南</title>
+      <link href="/posts/70b2e753/"/>
+      <url>/posts/70b2e753/</url>
+      
+        <content type="html"><![CDATA[<h2 id="docker-遇到的坑"><a href="#docker-遇到的坑" class="headerlink" title="docker 遇到的坑"></a>docker 遇到的坑</h2><p>运行的时候不能直接用 <code>./</code> 指定当前的文件，需要 <code>$PWD</code></p><p>一次性清理所有的已经关闭的容器<br> <code>docker ps -a | grep Exit | cut -d &#39; &#39; -f 1 | xargs docker rm</code></p><p><code>:ro</code> 表示只读</p><p>访问受到限制</p><p><img src="/posts/70b2e753/1580653426115.png" alt></p><p>此时目录下的文件权限</p><p><img src="/posts/70b2e753/1580653436093.png" alt></p><p>重新运行了一下</p><p><img src="/posts/70b2e753/1580653447982.png" alt></p><p>看来是文件权限的问题，也就是说docker会默认将文件权限直接复制过来，由于我之前的那个用户是pxy，而docker环境中并没有这个用户，导致就变成了1000</p><h2 id="移除镜像"><a href="#移除镜像" class="headerlink" title="移除镜像"></a>移除镜像</h2><pre><code>docker image rm xxxx</code></pre><h2 id="–link-参数"><a href="#–link-参数" class="headerlink" title="–link 参数"></a>–link 参数</h2><p>自动添加了环境变量</p><p><img src="/posts/70b2e753/1580653523204.png" alt></p><p><img src="/posts/70b2e753/1580653527989.png" alt></p><p>还有这个</p><p><img src="/posts/70b2e753/1580653537486.png" alt></p><p><code>/etc/hosts</code> 也会更新</p><p><img src="/posts/70b2e753/1580653546884.png" alt></p><p>神奇。。<br>运行nginx和php-fpm<br><code>docker run --name  myphp-fpm -v $PWD/www:/www  -d php:5.6-fpm</code></p><pre><code>$ docker run --name runoob-php-nginx -p 8083:80 -d \               -v $PWD/www:/usr/share/nginx/html:ro \    -v $PWD/conf/conf.d:/etc/nginx/conf.d:ro \    --link myphp-fpm:php \ ----&gt; 注意需要取别名nginx</code></pre><p>如果不取别名的话直接闪退，别名可以理解成对应的主机地址</p><p><img src="/posts/70b2e753/1580653561167.png" alt></p><p>然后开始折腾docker-compose.yml</p><pre><code class="yaml">version: &#39;2&#39;services:  nginx:    image: nginx:latest    volumes:      - ./conf/conf.d:/etc/nginx/conf.d      - ./www:/usr/share/nginx/html    depends_on:      - myphp-fpm    links:      - myphp-fpm:php    ports:      - &quot;8083:80&quot;  myphp-fpm:    image: php:5.6-fpm    volumes:      - ./www:/www</code></pre><p>试了多次，<code>links</code> 需要取别名</p><p>同时文件的权限也很重要，不然会出现无法读取flag的情况</p><h2 id="nginx配置学习"><a href="#nginx配置学习" class="headerlink" title="nginx配置学习"></a>nginx配置学习</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编从入门到入土二</title>
+      <link href="/posts/6cc1a5d6/"/>
+      <url>/posts/6cc1a5d6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><p>intel的CPU是采用的小端法来存储数据</p><p>在查看内存的时候，我更愿意按照这样的方式，我认为0号应该代表第一根横线，也就是认为是第一个存储单元的开始，也就是说我觉得 0~1 这个单元存放着 20H，因为这样在后续分析栈的时候比较有用</p><p><img src="/posts/6cc1a5d6/1580653048875.png" alt></p><p>字单元：存放一个字节型数据的内存单元，也就是两个字节16位，高位放高地址，低位放低地址</p><h2 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h2><p>数据段寄存器默认为 ds</p><p>所以我们要操作内存数据的时候只需要指定偏移即可</p><p>CPU不支持直接将数据送入到段寄存器，需要有寄存器作为中转</p><pre><code class="x86asm">mov bx,1000Hmov ds,bxmov [0],al</code></pre><p>上述代码的含义：先设置ds寄存器为1000H，然后将al中的数据送往这个内存单元(所以我们要移动数据到内存的时候是需要先设置数据段的基地址的)</p><h2 id="mov指令"><a href="#mov指令" class="headerlink" title="mov指令"></a>mov指令</h2><p>mov 段寄存器，寄存器<br>mov 寄存器，段寄存器<br>mov 内存单元，寄存器<br>mov 寄存器，内存单元<br>mov 段寄存器，内存单元<br>mov 内存单元，段寄存器</p><p>但是 add 指令不能直接操作段寄存器和寄存器</p><p><img src="/posts/6cc1a5d6/1580653072050.png" alt></p><h2 id="数据段-1"><a href="#数据段-1" class="headerlink" title="数据段"></a>数据段</h2><p><img src="/posts/6cc1a5d6/1580653090896.png" alt></p><p>AX=0，BX=0</p><pre><code>mov ax,1mov ds,axmov ax,[0000] ;AX = 2662Hmov bx,[0001] ;BX = E626Hmov ax,bx     ;AX = 2662Hmov ax,[0000] ;AX = 2662Hmov bx,[0002] ;BX = D6E6Hadd ax,bx     ;AX = FD48Hadd ax,[0004] ;AX = 2ECC+FD48 = 2C14mov ax,0      ;AX = 0mov al,[0002] ;AX = E6Hmov bx,0      ;BX = 0mov bl,[000c] ;BX = 00Hadd al,bl     ;AX = E6H</code></pre><h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>任意时刻 <code>SS:SP</code> 指向栈顶元素</p><p>PUSH 操作的过程</p><ol><li>SP = SP -2</li><li>SS:SP 指向新的地址</li><li>然后将数据送入到 <code>SS:SP</code> 指向的地址中</li></ol><p>然后就涉及到怎么计算 <code>SP</code> 的问题了</p><blockquote><p>只需要记住初始状态栈中没有元素，并且 SP+2 是栈中的第一个存储单元</p></blockquote><p><img src="/posts/6cc1a5d6/1580653127959.png" alt></p><p>POP 指令</p><ol><li>将SS:SP 指向的内存单元数据送入到寄存器中，或者是某个内存单元中</li><li>SP = SP + 2</li></ol><p>PUSH和POP的指令形式</p><pre><code>push 寄存器pop 寄存器push 段寄存器pop 段寄存器push 内存单元pop 内存单元</code></pre><p>利用栈可以达到交换数据的目的</p><pre><code>mov ax,1000Hmov ss,axmov sp,0010Hmov ax,001AHmov bx,001BHpush axpush bxpop axpop bx</code></pre><h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><h3 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h3><p><img src="/posts/6cc1a5d6/1580653176153.png" alt></p><pre><code class="x86asm">mov ax,1000Hmov ds,axmov ax,2000mov ss,axmov sp,0010Hpush[0]push[2]push[4]push[6]push[8]push[A]push[C]push[E]</code></pre><p>现在 1000H~100FH 的内存内容为：</p><p><img src="/posts/6cc1a5d6/1580653193364.png" alt></p><p>本着节约内存的想法</p><p><img src="/posts/6cc1a5d6/1580653210499.png" alt></p><p>然而执行完之后的结果</p><p><img src="/posts/6cc1a5d6/1580653219446.png" alt></p><p>看来节约内存不是件好事，于是我重新把 3000:0 作为代码段</p><p><img src="/posts/6cc1a5d6/1580653228997.png" alt></p><p>这回成功了</p><p><img src="/posts/6cc1a5d6/1580653238046.png" alt></p><h3 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h3><p><img src="/posts/6cc1a5d6/1580653248493.png" alt></p><pre><code class="x86asm">mov ax,2000Hmov ds,axmov ax,1000Hmov ss,axmov sp,0pop [E]pop [C]pop [A]pop [8]pop [6]pop [4]pop [2]pop [0]</code></pre><p>同样的，我先设置 1000:0 处的值</p><p><img src="/posts/6cc1a5d6/1580653258074.png" alt></p><p>将指令书写到内存中，也就是设置 3000:0 为代码段</p><p><img src="/posts/6cc1a5d6/1580653266322.png" alt></p><p>在实验的时候，前面一部分数据是可以正常复制的，但是后面就出问题了</p><p><img src="/posts/6cc1a5d6/1580653275496.png" alt></p><p>暂时没想清楚</p><h2 id="实验三"><a href="#实验三" class="headerlink" title="实验三"></a>实验三</h2><p>遇到的问题</p><p>输入指令：</p><p><img src="/posts/6cc1a5d6/1580653286041.png" alt></p><p>但是在执行的时候：</p><p><img src="/posts/6cc1a5d6/1580653293057.png" alt></p><p>这是之后要研究的内容；中断机制<br>Debug的T命令在修改寄存器SS的指令时，下一条指令也会紧接着执行</p><pre><code class="x86asm">mov ax,ffffmov ds,axmov ax,2200mov ss,axmov sp,0100mov ax,[0]     ;ax=C0EAHadd ax,[2]     ;ax=C0FCHmov bx,[4]     ;bx=30Fadd bx,[6]     ;bx=6021Hpush ax        ;sp=FEH,修改的内存单元地址是220FEH,内容为C0FCHpush bx        ;sp=FCH,修改的内存单元地址是220FCH,内容为6021Hpop ax           ;sp=FEH,ax=6021Hpop bx           ;sp=100H,bx=C0FCHpush [4]       ;sp=FEH,修改的内存单元是220FEH,内容为30F0push [6]       ;sp=FCH,修改的内存单元是220FCH,内容为2F31</code></pre><p><img src="/posts/6cc1a5d6/1580653302675.png" alt></p><p>为什么2000:0 ~2000:f 的内容会发生变化？</p><p><img src="/posts/6cc1a5d6/1580653314559.png" alt></p><p>仔细观察发现<br>01A3 不知道是什么，但是0b39和0108确实当前指令的地址，也就是执行完 <code>mov ss,ax mov sp,10H</code> 之后的下一条指令的地址，结合这是在设置栈，不禁想到了函数的压栈，保存了返回地址，但是还有一个 0020 的数据不知道是哪里的</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>汇编从入门到入土一</title>
       <link href="/posts/57418b7f/"/>
       <url>/posts/57418b7f/</url>

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>汇编从入门到入土二 | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" 汇编 ">
+  <meta name="description" content="汇编从入门到入土二 | prontosil&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="关于我">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="关于我">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
+<meta property="article:modified_time" content="2020-01-30T01:20:22.385Z">
+<meta property="article:author" content="prontosil">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.0.1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.0.1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1.0.1" ></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+<script id="dsq-count-scr" src="//https-prontosil-club.disqus.com/count.js" async></script>
+
+
+<script src="/js/iconfont.js?v=1.0.1" ></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="true">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value="">
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>prontosil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="rss" href="/atom.xml" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-rss"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="github" href="https://github.com/xinyongpeng" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+    
+        
+    
+        
+        <a title="jianshu" href="https://www.jianshu.com/u/7b4cb9cdc0c8" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-jianshu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="zhihu" href="https://www.zhihu.com/people/he-yan-52-34" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-zhihu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="csdn" href="https://blog.csdn.net/qq_41645130" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-csdn"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="email" href="mailto:1365155759@qq.com" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-email"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="qq" href="http://wpa.qq.com/msgrd?v=3&uin=1365155759&site=qq&menu=yes" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-qq"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(16)</small></div></li>
+    
+        
+            
+            <li><div data-rel="CTF">CTF<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="渗透测试">渗透测试<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="生活">生活<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="16">
+<input type="hidden" id="yelog_site_word_count" value="10.4k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode === 13){return false;}">
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <li class="article-tag-list-item">
+        <a class="color2">docker</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxd</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">汇编</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">dosbox</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">Apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">RCE</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SSI</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">截断</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        <a  class="CTF "
+           href="/posts/70b2e753/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="docker基本使用指南">docker基本使用指南</span>
+            <span class="post-date" title="2020-02-02 22:22:30">2020/02/02</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/3d16ce36/"
+           data-tag="php,函数"
+           data-author="" >
+            <span class="post-title" title="php常用函数">php常用函数</span>
+            <span class="post-date" title="2020-01-30 17:15:35">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/1f38a4f2/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="safeharbor靶机渗透">safeharbor靶机渗透</span>
+            <span class="post-date" title="2020-01-31 19:35:18">2020/01/31</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5d5d07b8/"
+           data-tag="JavaScript"
+           data-author="" >
+            <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
+            <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/2e545689/"
+           data-tag="xxe,xml"
+           data-author="" >
+            <span class="post-title" title="XXE复习">XXE复习</span>
+            <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5877398d/"
+           data-tag="文件上传"
+           data-author="" >
+            <span class="post-title" title="upload-lab做题笔记">upload-lab做题笔记</span>
+            <span class="post-date" title="2020-01-30 21:17:58">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/728b20a1/"
+           data-tag="cms"
+           data-author="" >
+            <span class="post-title" title="代码审计初尝">代码审计初尝</span>
+            <span class="post-date" title="2020-02-01 10:31:26">2020/02/01</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/21b61fbe/"
+           data-tag="java,反序列化"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/734660ee/"
+           data-tag="leetcode"
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-数组题">每天一道leetcode-数组题</span>
+            <span class="post-date" title="2020-01-30 10:45:29">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/2e6a5f8a/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天以一道leetcode-链表题">每天以一道leetcode-链表题</span>
+            <span class="post-date" title="2020-01-31 19:35:34">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/f1616294/"
+           data-tag="Linux,dig"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-dig">每天一个Linux命令-dig</span>
+            <span class="post-date" title="2020-01-30 10:45:02">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/2e8d4a2a/"
+           data-tag="xxd,hexdump"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-xxd">每天一个Linux命令-xxd</span>
+            <span class="post-date" title="2020-01-31 19:35:51">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/6cc1a5d6/"
+           data-tag="汇编"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土二">汇编从入门到入土二</span>
+            <span class="post-date" title="2020-02-02 22:16:48">2020/02/02</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/57418b7f/"
+           data-tag="汇编,dosbox"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土一">汇编从入门到入土一</span>
+            <span class="post-date" title="2020-02-01 22:02:40">2020/02/01</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/becfc22d/"
+           data-tag="文件上传,Apache,RCE,SSI,截断"
+           data-author="" >
+            <span class="post-title" title="漏洞复现-Apache SSI远程命令执行">漏洞复现-Apache SSI远程命令执行</span>
+            <span class="post-date" title="2020-01-30 10:48:35">2020/01/30</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/b69cd839/"
+           data-tag="域名"
+           data-author="" >
+            <span class="post-title" title="域名解析记录">域名解析记录</span>
+            <span class="post-date" title="2020-01-30 10:40:56">2020/01/30</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-汇编从入门到入土二" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">汇编从入门到入土二</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="编程">编程</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color3">汇编</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-02 22:21:57'>2020-02-02 22:16</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:1.1k</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#内存"><span class="toc-text">内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据段"><span class="toc-text">数据段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mov指令"><span class="toc-text">mov指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据段-1"><span class="toc-text">数据段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#栈"><span class="toc-text">栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#习题"><span class="toc-text">习题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一题"><span class="toc-text">第一题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二题"><span class="toc-text">第二题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验三"><span class="toc-text">实验三</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><p>intel的CPU是采用的小端法来存储数据</p>
+<p>在查看内存的时候，我更愿意按照这样的方式，我认为0号应该代表第一根横线，也就是认为是第一个存储单元的开始，也就是说我觉得 0~1 这个单元存放着 20H，因为这样在后续分析栈的时候比较有用</p>
+<p><img src="/posts/6cc1a5d6/1580653048875.png" alt></p>
+<p>字单元：存放一个字节型数据的内存单元，也就是两个字节16位，高位放高地址，低位放低地址</p>
+<h2 id="数据段"><a href="#数据段" class="headerlink" title="数据段"></a>数据段</h2><p>数据段寄存器默认为 ds</p>
+<p>所以我们要操作内存数据的时候只需要指定偏移即可</p>
+<p>CPU不支持直接将数据送入到段寄存器，需要有寄存器作为中转</p>
+<pre><code class="x86asm">mov bx,1000H
+mov ds,bx
+mov [0],al</code></pre>
+<p>上述代码的含义：先设置ds寄存器为1000H，然后将al中的数据送往这个内存单元(所以我们要移动数据到内存的时候是需要先设置数据段的基地址的)</p>
+<h2 id="mov指令"><a href="#mov指令" class="headerlink" title="mov指令"></a>mov指令</h2><p>mov 段寄存器，寄存器<br>mov 寄存器，段寄存器<br>mov 内存单元，寄存器<br>mov 寄存器，内存单元<br>mov 段寄存器，内存单元<br>mov 内存单元，段寄存器</p>
+<p>但是 add 指令不能直接操作段寄存器和寄存器</p>
+<p><img src="/posts/6cc1a5d6/1580653072050.png" alt></p>
+<h2 id="数据段-1"><a href="#数据段-1" class="headerlink" title="数据段"></a>数据段</h2><p><img src="/posts/6cc1a5d6/1580653090896.png" alt></p>
+<p>AX=0，BX=0</p>
+<pre><code>mov ax,1
+mov ds,ax
+mov ax,[0000] ;AX = 2662H
+mov bx,[0001] ;BX = E626H
+mov ax,bx     ;AX = 2662H
+mov ax,[0000] ;AX = 2662H
+mov bx,[0002] ;BX = D6E6H
+add ax,bx     ;AX = FD48H
+add ax,[0004] ;AX = 2ECC+FD48 = 2C14
+mov ax,0      ;AX = 0
+mov al,[0002] ;AX = E6H
+mov bx,0      ;BX = 0
+mov bl,[000c] ;BX = 00H
+add al,bl     ;AX = E6H</code></pre><h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>任意时刻 <code>SS:SP</code> 指向栈顶元素</p>
+<p>PUSH 操作的过程</p>
+<ol>
+<li>SP = SP -2</li>
+<li>SS:SP 指向新的地址</li>
+<li>然后将数据送入到 <code>SS:SP</code> 指向的地址中</li>
+</ol>
+<p>然后就涉及到怎么计算 <code>SP</code> 的问题了</p>
+<blockquote>
+<p>只需要记住初始状态栈中没有元素，并且 SP+2 是栈中的第一个存储单元</p>
+</blockquote>
+<p><img src="/posts/6cc1a5d6/1580653127959.png" alt></p>
+<p>POP 指令</p>
+<ol>
+<li>将SS:SP 指向的内存单元数据送入到寄存器中，或者是某个内存单元中</li>
+<li>SP = SP + 2</li>
+</ol>
+<p>PUSH和POP的指令形式</p>
+<pre><code>push 寄存器
+pop 寄存器
+
+push 段寄存器
+pop 段寄存器
+
+push 内存单元
+pop 内存单元</code></pre><p>利用栈可以达到交换数据的目的</p>
+<pre><code>mov ax,1000H
+mov ss,ax
+mov sp,0010H
+mov ax,001AH
+mov bx,001BH
+
+push ax
+push bx
+
+pop ax
+pop bx</code></pre><h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><h3 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h3><p><img src="/posts/6cc1a5d6/1580653176153.png" alt></p>
+<pre><code class="x86asm">mov ax,1000H
+mov ds,ax
+mov ax,2000
+mov ss,ax
+mov sp,0010H
+push[0]
+push[2]
+push[4]
+push[6]
+push[8]
+push[A]
+push[C]
+push[E]</code></pre>
+<p>现在 1000H~100FH 的内存内容为：</p>
+<p><img src="/posts/6cc1a5d6/1580653193364.png" alt></p>
+<p>本着节约内存的想法</p>
+<p><img src="/posts/6cc1a5d6/1580653210499.png" alt></p>
+<p>然而执行完之后的结果</p>
+<p><img src="/posts/6cc1a5d6/1580653219446.png" alt></p>
+<p>看来节约内存不是件好事，于是我重新把 3000:0 作为代码段</p>
+<p><img src="/posts/6cc1a5d6/1580653228997.png" alt></p>
+<p>这回成功了</p>
+<p><img src="/posts/6cc1a5d6/1580653238046.png" alt></p>
+<h3 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h3><p><img src="/posts/6cc1a5d6/1580653248493.png" alt></p>
+<pre><code class="x86asm">mov ax,2000H
+mov ds,ax
+mov ax,1000H
+mov ss,ax
+mov sp,0
+pop [E]
+pop [C]
+pop [A]
+pop [8]
+pop [6]
+pop [4]
+pop [2]
+pop [0]</code></pre>
+<p>同样的，我先设置 1000:0 处的值</p>
+<p><img src="/posts/6cc1a5d6/1580653258074.png" alt></p>
+<p>将指令书写到内存中，也就是设置 3000:0 为代码段</p>
+<p><img src="/posts/6cc1a5d6/1580653266322.png" alt></p>
+<p>在实验的时候，前面一部分数据是可以正常复制的，但是后面就出问题了</p>
+<p><img src="/posts/6cc1a5d6/1580653275496.png" alt></p>
+<p>暂时没想清楚</p>
+<h2 id="实验三"><a href="#实验三" class="headerlink" title="实验三"></a>实验三</h2><p>遇到的问题</p>
+<p>输入指令：</p>
+<p><img src="/posts/6cc1a5d6/1580653286041.png" alt></p>
+<p>但是在执行的时候：</p>
+<p><img src="/posts/6cc1a5d6/1580653293057.png" alt></p>
+<p>这是之后要研究的内容；中断机制<br>Debug的T命令在修改寄存器SS的指令时，下一条指令也会紧接着执行</p>
+<pre><code class="x86asm">mov ax,ffff
+mov ds,ax
+mov ax,2200
+mov ss,ax
+mov sp,0100
+mov ax,[0]     ;ax=C0EAH
+add ax,[2]     ;ax=C0FCH
+mov bx,[4]     ;bx=30F
+add bx,[6]     ;bx=6021H
+push ax        ;sp=FEH,修改的内存单元地址是220FEH,内容为C0FCH
+push bx        ;sp=FCH,修改的内存单元地址是220FCH,内容为6021H
+pop ax           ;sp=FEH,ax=6021H
+pop bx           ;sp=100H,bx=C0FCH
+push [4]       ;sp=FEH,修改的内存单元是220FEH,内容为30F0
+push [6]       ;sp=FCH,修改的内存单元是220FCH,内容为2F31</code></pre>
+<p><img src="/posts/6cc1a5d6/1580653302675.png" alt></p>
+<p>为什么2000:0 ~2000:f 的内容会发生变化？</p>
+<p><img src="/posts/6cc1a5d6/1580653314559.png" alt></p>
+<p>仔细观察发现<br>01A3 不知道是什么，但是0b39和0108确实当前指令的地址，也就是执行完 <code>mov ss,ax mov sp,10H</code> 之后的下一条指令的地址，结合这是在设置栈，不禁想到了函数的压栈，保存了返回地址，但是还有一个 0020 的数据不知道是哪里的</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>汇编从入门到入土二</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">1.1k</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-02-02, 22:16:48</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-02, 22:21:57</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/6cc1a5d6/" title="汇编从入门到入土二">http://prontosil.com/posts/6cc1a5d6/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+    <section id="comments" class="disqus">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://prontosil.com/posts/6cc1a5d6/';
+            this.page.identifier = 'posts/6cc1a5d6/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//https-prontosil-club.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a>
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var isLoadComments = false;
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            if(isLoadComments){
+                return;
+            }
+            isLoadComments = true;
+            if(isLoadComments )
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").mouseenter(function(){
+            load$hide();
+        })
+    </script>
+
+
+</section>
+
+<!-- Add comment count-->
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/6cc1a5d6/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/6cc1a5d6/"></span>
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2016-2020 prontosil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.0.1" ></script>
+
+<script src="/js/script.js?v=1.0.1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': ['#docker','#php','#函数','#JavaScript','#xxe','#xml','#文件上传','#cms','#java','#反序列化','#leetcode','#Linux','#dig','#xxd','#hexdump','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#域名',],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+        .nav .hide-list.fullscreen {
+            left: 492px
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
