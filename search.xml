@@ -4,6 +4,96 @@
   
     
     <entry>
+      <title>如何保护版权</title>
+      <link href="/posts/3b32f749/"/>
+      <url>/posts/3b32f749/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 隐写 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>冰气时代玩后感</title>
+      <link href="/posts/69f21310/"/>
+      <url>/posts/69f21310/</url>
+      
+        <content type="html"><![CDATA[<p>寒假正逢steam打折，一直放在愿望单中的冰气时代这会降价了，果断入坑</p><p>买来之后第一把就找不着北了，游戏的玩法还是比较简单，但是前期资源匮乏，我需要收集木炭和木材，我一开始并没有意识到，等我将木材耗尽之后发现没有地方可以收集木材了？？？周围倒是有一些冻树木，但是要建造伐木场才行，wtf???,这游戏难道就到头了？</p><p>之后去找了B站的教程，欸突然意识到原来黑乎乎的一团有些是煤堆，有些是木箱23333，采集木箱可以收集木材。哦这游戏居然可以这样玩啊。这还只是我遇到的第一个坑，后面还遇到了建房子要和道路相连，道路要和能量塔相连等等</p><p> 不过这个游戏设计的比较好的就是法律和不满值了，我一直很担心不满值会升高，但是有些法律又不得不的签署，比如童工，比如加班，如果不这样的话就导致资源收集的速度很慢，大部分时候收集到的煤炭一个晚上就耗完了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 游戏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>python文件</title>
+      <link href="/posts/75a61507/"/>
+      <url>/posts/75a61507/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>python3字符串</title>
+      <link href="/posts/25e898cd/"/>
+      <url>/posts/25e898cd/</url>
+      
+        <content type="html"><![CDATA[<h2 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h2><h3 id="性质判定"><a href="#性质判定" class="headerlink" title="性质判定"></a>性质判定</h3><pre><code>isalnum()、isalpha()、isdigit()、islower()、isupper()、isspace()、istitle()、startswith(prefix[,start[, end]])、endswith(suffix[,start[, end]])</code></pre><h3 id="查找和替换"><a href="#查找和替换" class="headerlink" title="查找和替换"></a>查找和替换</h3><pre><code>count( sub[, start[, end]])、find( sub[, start[,end]])、index( sub[, start[, end]])、rfind( sub[, start[,end]])、rindex(sub[, start[, end]])</code></pre><p>注意find()和index()方法的不同：find()函数族找不到时返回-1，index()函数族则抛出ValueError异常。</p><p>但是对于判定是否包含字串的判定推荐用  <code>in</code> 和 <code>not in</code>操作符</p><p><code>replace(old, new[,count])</code>用以替换字符串的某些子串，如果指定count参数的话，就最多替换count次，如果不指定，就全部替换</p><h3 id="分切和连接"><a href="#分切和连接" class="headerlink" title="分切和连接"></a>分切和连接</h3><p><code>partition()</code> 和 <code>split</code> </p><p>split举例</p><pre><code class="python">&gt;&gt;&gt; &#39; hello     world&#39;.split()[&#39;hello&#39;, &#39;world&#39;]&gt;&gt;&gt; &#39; hello     world&#39;.split(&#39; &#39;)  # 要注意第一种方式和第二种方式不一样[&#39;&#39;, &#39;hello&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;world&#39;]&gt;&gt;&gt; &#39; hello     world&#39;.split(&#39;&#39;)Traceback (most recent call last):  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;ValueError: empty separator&gt;&gt;&gt; &#39;&#39;.split()[]&gt;&gt;&gt; &#39;&#39;.split(&#39; &#39;)[&#39;&#39;]</code></pre><h3 id="变形"><a href="#变形" class="headerlink" title="变形"></a>变形</h3><pre><code>lower()、upper()、capitalize()、swapcase()、title()</code></pre><h3 id="删减与填充"><a href="#删减与填充" class="headerlink" title="删减与填充"></a>删减与填充</h3><pre><code>strip([chars])、lstrip([chars])、rstrip([chars])center(width[, fillchar])、ljust(width[,fillchar])、rjust(width[, fillchar])、zfill(width)、expandtabs([tabsize])</code></pre><p>这些方法中的fillchar参数是指用以填充的字符，默认是空格。而zfill()中的z是指zero，所以顾名思义，zfill()即是以字符0进行填充，在输出数值时比较常用。expandtabs()的tabsize参数默认为8，它的功能是把字符串中的制表符（tab）转换为适当数量的空格。</p><h2 id="f字符串"><a href="#f字符串" class="headerlink" title="f字符串"></a>f字符串</h2><h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><pre><code class="python">In [2]: name = &quot;pxy&quot;In [3]: f&#39;Hello, my name is {name}&#39;Out[3]: &#39;Hello, my name is pxy&#39;</code></pre><p>求值运算</p><pre><code class="python">In [5]: &gt;&gt;&gt; f&#39;Complex number {(2 + 2j) / (2 - 3j)}&#39;Out[5]: &#39;Complex number (-0.15384615384615388+0.7692307692307692j)&#39;In [6]: import mathIn [7]: f&#39;The answer is {math.log(math.pi)}&#39;Out[7]: &#39;The answer is 1.1447298858494002</code></pre><p>f-string大括号内也可填入lambda表达式，但lambda表达式的 <code>:</code> 会被f-string误认为是表达式与格式描述符之间的分隔符，为避免歧义，需要将lambda表达式置于括号 <code>()</code> 内：</p><pre><code class="python">In [1]: f&#39;result is {(lambda x: x ** 2 + 1) (2)}&#39;Out[1]: &#39;result is 5&#39;</code></pre><h2 id="bytes"><a href="#bytes" class="headerlink" title="bytes"></a>bytes</h2><h3 id="str转bytes"><a href="#str转bytes" class="headerlink" title="str转bytes"></a>str转bytes</h3><pre><code class="python">In [23]: bytes(a, encoding=&quot;gbk&quot;)Out[23]: b&#39;\xb0\xd9\xb6\xc8&#39;In [24]: bytes(a, encoding=&quot;utf-8&quot;)Out[24]: b&#39;\xe7\x99\xbe\xe5\xba\xa6&#39;</code></pre><h3 id="从十六进制转化为bytes"><a href="#从十六进制转化为bytes" class="headerlink" title="从十六进制转化为bytes"></a>从十六进制转化为bytes</h3><pre><code class="python">In [39]: a = &#39;aabbccddeeff&#39;In [40]: a_bytes = bytes.fromhex(a)In [41]: a_bytesOut[41]: b&#39;\xaa\xbb\xcc\xdd\xee\xff&#39;</code></pre><h3 id="从bytes转化为十六进制"><a href="#从bytes转化为十六进制" class="headerlink" title="从bytes转化为十六进制"></a>从bytes转化为十六进制</h3><pre><code class="python">In [42]: a_bytesOut[42]: b&#39;\xaa\xbb\xcc\xdd\xee\xff&#39;In [43]: a_bytes.hex()Out[43]: &#39;aabbccddeeff&#39;</code></pre><h3 id="base64编码byets"><a href="#base64编码byets" class="headerlink" title="base64编码byets"></a>base64编码byets</h3><p>python3的base64包的 <code>b64encode</code> 只能使用 bytes 类型</p><pre><code class="python"># 比如我们要编码 \xac\xedIn [54]: a = &quot;aced&quot;In [55]: a = bytes.fromhex(a)In [56]: aOut[56]: b&#39;\xac\xed&#39;In [57]: base64.b64encode(a)Out[57]: b&#39;rO0=&#39;</code></pre><h3 id="md5加密bytes"><a href="#md5加密bytes" class="headerlink" title="md5加密bytes"></a>md5加密bytes</h3><p>python3 只能用hashlib中的md5函数</p><pre><code class="python">a = hashlib.md5()a.update(b&quot;pxy&quot;)a.hexdigest()</code></pre><p>封装一下</p><pre><code class="python"># 生成MD5def genearteMD5(str):    # 创建md5对象    hl = hashlib.md5()    # Tips    # 此处必须声明encode    # 否则报错为：hl.update(str)    Unicode-objects must be encoded before hashing    hl.update(str.encode(encoding=&#39;utf-8&#39;))    print(&#39;MD5加密前为 ：&#39; + str)    print(&#39;MD5加密后为 ：&#39; + hl.hexdigest())</code></pre><h2 id="一些小技巧"><a href="#一些小技巧" class="headerlink" title="一些小技巧"></a>一些小技巧</h2><h3 id="判断字符串是否为空"><a href="#判断字符串是否为空" class="headerlink" title="判断字符串是否为空"></a>判断字符串是否为空</h3><p>用 <code>a == None</code> 是不行的</p><p>可以这样</p><pre><code class="python">a = &quot;&quot;if a.strip() == &quot;&quot;:    print(&quot;a is null&quot;)</code></pre><h3 id="list和str转换"><a href="#list和str转换" class="headerlink" title="list和str转换"></a>list和str转换</h3><pre><code class="python">In [17]: a = &quot;aaaafasfasd&quot;In [18]: list(a)Out[18]: [&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;f&#39;, &#39;a&#39;, &#39;s&#39;, &#39;f&#39;, &#39;a&#39;, &#39;s&#39;, &#39;d&#39;]</code></pre><h3 id="固定长度分割字符串"><a href="#固定长度分割字符串" class="headerlink" title="固定长度分割字符串"></a>固定长度分割字符串</h3><p>传统上一般是遍历</p><pre><code class="python">def fix_width_split(string, width):    return [string[x : x + width] for x in range(0, len(string), width)]print fix_width_split(&#39;123456789&#39;, 3)</code></pre><p>但是如果有了正则，可以这样</p><pre><code class="python">import restring = &#39;123456789&#39;split = re.findall(r&#39;.{7}&#39;, string)</code></pre><p>结果</p><pre><code class="python">In [76]: string = &#39;123456789&#39;In [77]: split = re.findall(&quot;.{3}&quot;, string)In [78]: splitOut[78]: [&#39;123&#39;, &#39;456&#39;, &#39;789&#39;]</code></pre><h3 id="bytes写入文件"><a href="#bytes写入文件" class="headerlink" title="bytes写入文件"></a>bytes写入文件</h3><p>以二进制方式打开即可</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/sunxb10/article/details/81036693" target="_blank" rel="noopener">python格式化字符串f-string</a></p><p><a href="https://www.40huo.cn/blog/python-string-tricks.html" target="_blank" rel="noopener">python字符串trick</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 字符串 </tag>
+            
+            <tag> bytes </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HTB Obscurity靶机实战</title>
       <link href="/posts/a0911a0b/"/>
       <url>/posts/a0911a0b/</url>
