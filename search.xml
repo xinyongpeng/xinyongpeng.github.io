@@ -4,6 +4,58 @@
   
     
     <entry>
+      <title>每天一个Linux命令-kill</title>
+      <link href="/posts/da023d5c/"/>
+      <url>/posts/da023d5c/</url>
+      
+        <content type="html"><![CDATA[<h2 id="ps命令"><a href="#ps命令" class="headerlink" title="ps命令"></a>ps命令</h2><p>首先需要熟悉一下 ps 命令</p><p>一般通过 <code>ps aux | more</code> 查看到所有的进程</p><p><code>ps -e</code> 列出程序时，显示每个程序所使用的环境变量</p><p><code>ps u</code> 　 以用户为主的格式来显示程序状况。</p><p><code>ps -a</code>显示同一终端下的所有程序</p><p><code>ps a</code> 显示所有进程</p><h2 id="kill-命令"><a href="#kill-命令" class="headerlink" title="kill 命令"></a>kill 命令</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> kill </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux命令trick</title>
+      <link href="/posts/ebe7281d/"/>
+      <url>/posts/ebe7281d/</url>
+      
+        <content type="html"><![CDATA[<h2 id="常用的命令组合"><a href="#常用的命令组合" class="headerlink" title="常用的命令组合"></a>常用的命令组合</h2><p><strong>统计字符串长度</strong></p><pre><code class="bash">$ echo -n 12345 | wc -c5</code></pre><h2 id="搜索文件后门"><a href="#搜索文件后门" class="headerlink" title="搜索文件后门"></a>搜索文件后门</h2><pre><code class="bash"># 简单的查找后门find . -name &#39;*.php&#39; | xargs grep -n &#39;eval(&#39;find . -name &#39;*.php&#39; | xargs grep -n &#39;assert(&#39;find . -name &#39;*.php&#39; | xargs grep -n &#39;system(&#39;</code></pre><h2 id="数据库备份-mysqldump用法"><a href="#数据库备份-mysqldump用法" class="headerlink" title="数据库备份 mysqldump用法"></a>数据库备份 mysqldump用法</h2><pre><code class="bash">mysqldump -u db_user -p db_passwd db_name &gt; bak.sql//备份指定数据库mysqldump --all-databases &gt; bak.sql //备份所有数据库mysql -u db_user -p db_passwd db_name &lt; bak.sql //还原指定数据库//也可以登录到mysql之后再 source xxx.sql</code></pre><h2 id="mysql-修改密码"><a href="#mysql-修改密码" class="headerlink" title="mysql 修改密码"></a>mysql 修改密码</h2><pre><code>mysql&gt; set password for root@localhost = password(&#39;root&#39;);Query OK, 0 rows affected, 1 warning (0.00 sec)</code></pre><p>但是这条命令似乎不行</p><pre><code>update user set password=PASSWORD(&#39;NEW PASSWORD&#39;) where user=&#39;root&#39;;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>vulnhub靶机渗透-WebDeveloper</title>
       <link href="/posts/4d0603d0/"/>
       <url>/posts/4d0603d0/</url>
