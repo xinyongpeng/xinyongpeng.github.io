@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>vulnhub靶机渗透-Connectthedots | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" 靶机 ">
+  <meta name="description" content="vulnhub靶机渗透-Connectthedots | prontosil&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="关于我">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="关于我">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
+<meta property="article:modified_time" content="2020-01-30T01:20:22.385Z">
+<meta property="article:author" content="prontosil">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.0.1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.0.1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1.0.1" ></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+<script id="dsq-count-scr" src="//https-prontosil-club.disqus.com/count.js" async></script>
+
+
+<script src="/js/iconfont.js?v=1.0.1" ></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="true">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value="">
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>prontosil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="rss" href="/atom.xml" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-rss"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="github" href="https://github.com/xinyongpeng" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+    
+        
+    
+        
+        <a title="jianshu" href="https://www.jianshu.com/u/7b4cb9cdc0c8" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-jianshu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="zhihu" href="https://www.zhihu.com/people/he-yan-52-34" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-zhihu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="csdn" href="https://blog.csdn.net/qq_41645130" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-csdn"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="email" href="mailto:1365155759@qq.com" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-email"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="qq" href="http://wpa.qq.com/msgrd?v=3&uin=1365155759&site=qq&menu=yes" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-qq"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(27)</small></div></li>
+    
+        
+            
+            <li><div data-rel="CTF">CTF<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="渗透测试">渗透测试<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(10)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="生活">生活<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="27">
+<input type="hidden" id="yelog_site_word_count" value="18.2k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://xingherumeng.top/">星河入梦</a></li>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+            <li><a target="_blank" href="https://r0co.top/">r0co</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode === 13){return false;}">
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">HTB</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">靶机</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">字符串</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">bytes</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">游戏</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">隐写</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">kill</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">docker</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">tcpdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">提权</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxd</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">汇编</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">dosbox</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">Apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">RCE</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SSI</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">截断</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        <a  class="CTF "
+           href="/posts/2e545689/"
+           data-tag="xxe,xml"
+           data-author="" >
+            <span class="post-title" title="XXE复习">XXE复习</span>
+            <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5d5d07b8/"
+           data-tag="JavaScript"
+           data-author="" >
+            <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
+            <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/75a61507/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="python文件">python文件</span>
+            <span class="post-date" title="2020-02-06 10:39:16">2020/02/06</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/21b61fbe/"
+           data-tag="java,反序列化"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/a0911a0b/"
+           data-tag="HTB,靶机"
+           data-author="" >
+            <span class="post-title" title="HTB Obscurity靶机实战">HTB Obscurity靶机实战</span>
+            <span class="post-date" title="2020-02-05 21:50:54">2020/02/05</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/1f38a4f2/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="safeharbor靶机渗透">safeharbor靶机渗透</span>
+            <span class="post-date" title="2020-01-31 19:35:18">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/25e898cd/"
+           data-tag="字符串,bytes"
+           data-author="" >
+            <span class="post-title" title="python3字符串">python3字符串</span>
+            <span class="post-date" title="2020-02-06 10:39:14">2020/02/06</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/e4ff8385/"
+           data-tag="靶机"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-Connectthedots">vulnhub靶机渗透-Connectthedots</span>
+            <span class="post-date" title="2020-02-10 18:49:37">2020/02/10</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/ebe7281d/"
+           data-tag="Linux"
+           data-author="" >
+            <span class="post-title" title="Linux命令trick">Linux命令trick</span>
+            <span class="post-date" title="2020-02-07 09:10:26">2020/02/07</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/fcea4f6a/"
+           data-tag="靶机"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-HackInOs">vulnhub靶机渗透-HackInOs</span>
+            <span class="post-date" title="2020-02-10 18:49:18">2020/02/10</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/4d0603d0/"
+           data-tag="靶机"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-WebDeveloper">vulnhub靶机渗透-WebDeveloper</span>
+            <span class="post-date" title="2020-02-06 21:42:17">2020/02/06</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/69f21310/"
+           data-tag="游戏"
+           data-author="" >
+            <span class="post-title" title="冰气时代玩后感">冰气时代玩后感</span>
+            <span class="post-date" title="2020-02-06 10:39:33">2020/02/06</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/728b20a1/"
+           data-tag="cms"
+           data-author="" >
+            <span class="post-title" title="代码审计初尝">代码审计初尝</span>
+            <span class="post-date" title="2020-02-01 10:31:26">2020/02/01</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/3b32f749/"
+           data-tag="隐写"
+           data-author="" >
+            <span class="post-title" title="如何保护版权">如何保护版权</span>
+            <span class="post-date" title="2020-02-06 11:19:57">2020/02/06</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/da023d5c/"
+           data-tag="Linux,kill"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-kill">每天一个Linux命令-kill</span>
+            <span class="post-date" title="2020-02-07 17:30:24">2020/02/07</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/f1616294/"
+           data-tag="Linux,dig"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-dig">每天一个Linux命令-dig</span>
+            <span class="post-date" title="2020-01-30 10:45:02">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/70b2e753/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="docker基本使用指南">docker基本使用指南</span>
+            <span class="post-date" title="2020-02-02 22:22:30">2020/02/02</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/9cc474ce/"
+           data-tag="tcpdump,提权"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-tcpdump">每天一个Linux命令-tcpdump</span>
+            <span class="post-date" title="2020-02-06 20:33:51">2020/02/06</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/734660ee/"
+           data-tag="leetcode"
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-数组题">每天一道leetcode-数组题</span>
+            <span class="post-date" title="2020-01-30 10:45:29">2020/01/30</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/2e6a5f8a/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天以一道leetcode-链表题">每天以一道leetcode-链表题</span>
+            <span class="post-date" title="2020-01-31 19:35:34">2020/01/31</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/2e8d4a2a/"
+           data-tag="xxd,hexdump"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-xxd">每天一个Linux命令-xxd</span>
+            <span class="post-date" title="2020-01-31 19:35:51">2020/01/31</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/3d16ce36/"
+           data-tag="php,函数"
+           data-author="" >
+            <span class="post-title" title="php常用函数">php常用函数</span>
+            <span class="post-date" title="2020-01-30 17:15:35">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/57418b7f/"
+           data-tag="汇编,dosbox"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土一">汇编从入门到入土一</span>
+            <span class="post-date" title="2020-02-01 22:02:40">2020/02/01</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5877398d/"
+           data-tag="文件上传"
+           data-author="" >
+            <span class="post-title" title="upload-lab做题笔记">upload-lab做题笔记</span>
+            <span class="post-date" title="2020-01-30 21:17:58">2020/01/30</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/becfc22d/"
+           data-tag="文件上传,Apache,RCE,SSI,截断"
+           data-author="" >
+            <span class="post-title" title="漏洞复现-Apache SSI远程命令执行">漏洞复现-Apache SSI远程命令执行</span>
+            <span class="post-date" title="2020-01-30 10:48:35">2020/01/30</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/b69cd839/"
+           data-tag="域名"
+           data-author="" >
+            <span class="post-title" title="域名解析记录">域名解析记录</span>
+            <span class="post-date" title="2020-01-30 10:40:56">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/6cc1a5d6/"
+           data-tag="汇编"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土二">汇编从入门到入土二</span>
+            <span class="post-date" title="2020-02-02 22:16:48">2020/02/02</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-vulnhub靶机渗透-Connectthedots" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">vulnhub靶机渗透-Connectthedots</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="渗透测试">渗透测试</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color3">靶机</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-02-10 18:58:04'>2020-02-10 18:49</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:856</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vulnhub靶机渗透-Connectthedots"><span class="toc-text">vulnhub靶机渗透-Connectthedots</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#环境准备"><span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21端口"><span class="toc-text">21端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#80端口"><span class="toc-text">80端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2049端口"><span class="toc-text">2049端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssh服务"><span class="toc-text">ssh服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后的“提权”"><span class="toc-text">最后的“提权”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="vulnhub靶机渗透-Connectthedots"><a href="#vulnhub靶机渗透-Connectthedots" class="headerlink" title="vulnhub靶机渗透-Connectthedots"></a>vulnhub靶机渗透-Connectthedots</h1><p>目标：/home/user.txt and /root/root.txt</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>由于VMware会出现种种问题，于是改成了Virtual Box,而且Vulhub上的大部分靶机都是使用Virtual Box制作的</p>
+<p>附上一些相关的配置截图：</p>
+<p>kali 2019.04<br>第一块网卡没做修改</p>
+<p>添加了第二块网卡<br><img src="/posts/e4ff8385/1576475770757.png" alt></p>
+<p>vulnhub靶机渗透-Connectthedots作为靶机，同样添加了第二块网卡</p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>kali IP ： 192.168.99.101<br><img src="/posts/e4ff8385/1576475827530.png" alt></p>
+<p>通过nmap发现另一台主机(注意netdiscover和arp-scan都无法使用了)<br><img src="/posts/e4ff8385/1576475870118.png" alt></p>
+<p>主机开放的所有服务：</p>
+<p><img src="/posts/e4ff8385/1576476412907.png" alt></p>
+<p>一个个来看</p>
+<h2 id="21端口"><a href="#21端口" class="headerlink" title="21端口"></a>21端口</h2><p>vsftp 服务， metasploit搜索payload</p>
+<p>返回的信息：</p>
+<pre><code>msf5 exploit(unix/ftp/vsftpd_234_backdoor) &gt; exploit 
+
+[*] 192.168.99.104:21 - Banner: 220 Welcome to Heaven!
+[*] 192.168.99.104:21 - USER: 530 Permission denied.
+[-] 192.168.99.104:21 - This server is configured for anonymous only and the backdoor code cannot be reached
+[*] Exploit completed, but no session was created.</code></pre><p>尝试匿名登陆没有成功</p>
+<p><img src="/posts/e4ff8385/1576476598073.png" alt></p>
+<h2 id="80端口"><a href="#80端口" class="headerlink" title="80端口"></a>80端口</h2><p>目录遍历：</p>
+<p><img src="/posts/e4ff8385/1575977787813.png" alt><br>扫描结果有两个index页面，查看其中一个发现：</p>
+<p>发现了注释</p>
+<p><img src="/posts/e4ff8385/1575977822127.png" alt></p>
+<p>访问发现是一个登陆页面，发现这个登陆页面并不会有数据包，是个静态页面</p>
+<p><img src="/posts/e4ff8385/1576476010899.png" alt></p>
+<p>然后访问 <code>/mysite</code><br><img src="/posts/e4ff8385/1575977851454.png" alt></p>
+<p>查看文件后发现<br><img src="/posts/e4ff8385/1575977868784.png" alt></p>
+<p>是jsfuck编码</p>
+<p>jsfuck解码网站 <a href="http://www.jsfuck.com/#" target="_blank" rel="noopener">http://www.jsfuck.com/#</a></p>
+<p>也可以直接用浏览器的控制台解码</p>
+<p>可以将其复制到浏览器的控制台：<br>然后输入：<br><img src="/posts/e4ff8385/1575977938119.png" alt></p>
+<p>这样可以免去手动复制粘贴的麻烦</p>
+<p>得到结果：<br><img src="/posts/e4ff8385/1575977956725.png" alt></p>
+<pre><code>You&#39;re smart enough to understand me. Here&#39;s your secret, TryToGuessThisNorris@2k19</code></pre><p>得到了secret，猜测是ssh登陆的口令</p>
+<h2 id="2049端口"><a href="#2049端口" class="headerlink" title="2049端口"></a>2049端口</h2><p>开放了NFS服务</p>
+<p>使用nmap或者metasploit探测可以挂载的目录，</p>
+<pre><code>msf5 auxiliary(scanner/nfs/nfsmount) &gt; exploit 
+
+[+] 192.168.99.104:111    - 192.168.99.104 NFS Export: /home/morris [*]
+[*] 192.168.99.104:111    - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed</code></pre><p>获得挂载目录 <code>/home/morris</code></p>
+<p>安装nfspysh:</p>
+<p><code>git clone https://github.com/bonsaiviking/NfSpy.git</code></p>
+<h2 id="ssh服务"><a href="#ssh服务" class="headerlink" title="ssh服务"></a>ssh服务</h2><p>nmap没有扫除ssh开放的端口，因为这台靶机的ssh并不是开放在通常的22号端口上</p>
+<p>通过扫描确认：<br><img src="/posts/e4ff8385/1576476969297.png" alt></p>
+<p>ssh开放的端口是7822</p>
+<p>尝试用之前得到的口令去登陆，用户名是<code>morris</code><br>登陆失败</p>
+<p>从80端口的<code>index.html</code>知道，M和N的命名规则，尝试修改用户名为<code>norris</code><br><img src="/posts/e4ff8385/1576477106793.png" alt></p>
+<p>登陆成功！<br>得到<code>user.txt</code>的内容</p>
+<p><img src="/posts/e4ff8385/1576477362762.png" alt><br>之后去<code>/var/www/html</code>目录下查看文件</p>
+<p>发现了<code>.secretfile.swp</code>文件<br>直接查看提示权限不够，于是想到从网页下载</p>
+<p>可以看到<code>.secretfile.swp</code>文件的权限被设置为只有<code>www-data</code>用户才能读写</p>
+<p><img src="/posts/e4ff8385/1576479512154.png" alt></p>
+<p>通过<code>vim -r secretfile.swp</code>得到源文件内容</p>
+<pre><code>I see you&#39;re here for the password. Holy Moly! Battery is dying !! Mentioning below for reference..
+
+blehguessme090</code></pre><p>于是成功登陆morris用户<br><img src="/posts/e4ff8385/1576477489908-1581332150635.png" alt></p>
+<h2 id="最后的“提权”"><a href="#最后的“提权”" class="headerlink" title="最后的“提权”"></a>最后的“提权”</h2><p>登陆了morris用户之后，还是无法进入到root的目录下查看文件</p>
+<p>先上一个<code>LinEnum.sh</code>提权辅助脚本，但是并未发现有意思的东西</p>
+<p>又去找到了另外一个脚本 <a href="https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh" target="_blank" rel="noopener">https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh</a></p>
+<p>功能比较全面，并且发现了这个：<br><img src="/posts/e4ff8385/1577460701158.png" alt><br>查阅文档发现了这个，类似SUID<br><img src="/posts/e4ff8385/1577460729799.png" alt></p>
+<p>那么尝试用tar去打包root目录下的文件<br><img src="/posts/e4ff8385/1577460784686.png" alt><br>打包失败，原来这个命令应该在<code>norris</code>用户下执行</p>
+<p>于是将root目录下的文件打包<br><img src="/posts/e4ff8385/1576477730035.png" alt></p>
+<p>解压之后得到flag<br><img src="/posts/e4ff8385/1576477748712.png" alt></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://medium.com/@barrymalone/vulnhub-vulnhub靶机渗透-Connectthedots-walkthrough-ba4566674ba" target="_blank" rel="noopener">https://medium.com/@barrymalone/vulnhub-vulnhub靶机渗透-Connectthedots-walkthrough-ba4566674ba</a><br><a href="https://medium.com/@alshawwa/vulnhub靶机渗透-Connectthedots-vulnhub-61787608dc6c" target="_blank" rel="noopener">https://medium.com/@alshawwa/vulnhub靶机渗透-Connectthedots-vulnhub-61787608dc6c</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>vulnhub靶机渗透-Connectthedots</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">856</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-02-10, 18:49:37</p>
+    <p><span class="copy-title">最后更新:</span>2020-02-10, 18:58:04</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/e4ff8385/" title="vulnhub靶机渗透-Connectthedots">http://prontosil.com/posts/e4ff8385/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+    <section id="comments" class="disqus">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://prontosil.com/posts/e4ff8385/';
+            this.page.identifier = 'posts/e4ff8385/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//https-prontosil-club.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a>
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var isLoadComments = false;
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            if(isLoadComments){
+                return;
+            }
+            isLoadComments = true;
+            if(isLoadComments )
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").mouseenter(function(){
+            load$hide();
+        })
+    </script>
+
+
+</section>
+
+<!-- Add comment count-->
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/e4ff8385/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/e4ff8385/"></span>
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2016-2020 prontosil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.0.1" ></script>
+
+<script src="/js/script.js?v=1.0.1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': ['#xxe','#xml','#JavaScript','#java','#反序列化','#HTB','#靶机','#字符串','#bytes','#Linux','#游戏','#cms','#隐写','#kill','#dig','#docker','#tcpdump','#提权','#leetcode','#xxd','#hexdump','#php','#函数','#汇编','#dosbox','#文件上传','#Apache','#RCE','#SSI','#截断','#域名',],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+        .nav .hide-list.fullscreen {
+            left: 492px
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
