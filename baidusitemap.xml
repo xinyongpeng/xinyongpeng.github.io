@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://prontosil.com/posts/5d5d07b8/</loc>
+    <lastmod>2020-02-29</lastmod>
+  </url>  <url>
+    <loc>http://prontosil.com/posts/a99288c/</loc>
+    <lastmod>2020-02-29</lastmod>
+  </url>  <url>
     <loc>http://prontosil.com/posts/73230382/</loc>
     <lastmod>2020-02-29</lastmod>
   </url>  <url>
     <loc>http://prontosil.com/posts/d5bfc2a3/</loc>
     <lastmod>2020-02-29</lastmod>
-  </url>  <url>
-    <loc>http://prontosil.com/posts/a99288c/</loc>
-    <lastmod>2020-02-10</lastmod>
   </url>  <url>
     <loc>http://prontosil.com/posts/fcea4f6a/</loc>
     <lastmod>2020-02-10</lastmod>
@@ -86,9 +89,6 @@
     <lastmod>2020-02-01</lastmod>
   </url>  <url>
     <loc>http://prontosil.com/posts/2e545689/</loc>
-    <lastmod>2020-02-01</lastmod>
-  </url>  <url>
-    <loc>http://prontosil.com/posts/5d5d07b8/</loc>
     <lastmod>2020-02-01</lastmod>
   </url>
 </urlset>
