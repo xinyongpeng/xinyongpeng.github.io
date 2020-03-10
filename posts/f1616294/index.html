@@ -6,27 +6,38 @@
   <meta name="keywords" content=" Linux , dig ">
   <meta name="description" content="每天一个Linux命令-dig | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="tar命令绕过最近也是才知道的姿势，很多CTF题目并没有过滤tar命令，可以直接打包然后下载，GXYCTF的一道题就可以这样非预期 ?ip&#x3D;1;tar$IFS$9-cvf$IFS$9index$IFS$9. Windows命令执行&lt;?php $a &#x3D; &quot;..&#x2F; %1a whoami&quot;; $command &#x3D; &#39;dir &#39;.urldecode($a); $e">
+<meta name="description" content="实验拓扑如下   任务一 寻找漏洞主机扫描存活主机(虽然知道了但还是扫一下) 注意本机ip是192.168.1.2  -F 选项快速扫描一下其他主机   既然是ftp，那么就锁定192.168.1.3 提示了搜索vsftpd (靶机上搜索太慢了，我在自己机器上搜索的)  然后使用这个exploit去打就行了  可以看到进去就是root权限hhhh 然后还要搜索 1.key 这个文件 find  &#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="命令执行绕过技巧">
-<meta property="og:url" content="http://prontosil.com/posts/58281de6/index.html">
+<meta property="og:title" content="漏洞挖掘实验">
+<meta property="og:url" content="http://prontosil.com/posts/12fff649/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
-<meta property="og:description" content="tar命令绕过最近也是才知道的姿势，很多CTF题目并没有过滤tar命令，可以直接打包然后下载，GXYCTF的一道题就可以这样非预期 ?ip&#x3D;1;tar$IFS$9-cvf$IFS$9index$IFS$9. Windows命令执行&lt;?php $a &#x3D; &quot;..&#x2F; %1a whoami&quot;; $command &#x3D; &#39;dir &#39;.urldecode($a); $e">
+<meta property="og:description" content="实验拓扑如下   任务一 寻找漏洞主机扫描存活主机(虽然知道了但还是扫一下) 注意本机ip是192.168.1.2  -F 选项快速扫描一下其他主机   既然是ftp，那么就锁定192.168.1.3 提示了搜索vsftpd (靶机上搜索太慢了，我在自己机器上搜索的)  然后使用这个exploit去打就行了  可以看到进去就是root权限hhhh 然后还要搜索 1.key 这个文件 find  &#x2F;">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582542493140.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/2020/PersonNote/CTF%E7%AC%94%E8%AE%B0/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/1581933022683.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582539212357.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582540869115.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/dd89dc70-2446-48e1-a728-5693d1fa868a.bbb0aaacef7d.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582541083787.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/8296bbd4-40cd-481e-9147-6f11e80967d8.6b4cdb17a1b8.png">
-<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582707944277.png">
-<meta property="article:published_time" content="2020-03-10T07:17:49.000Z">
-<meta property="article:modified_time" content="2020-03-10T07:19:48.026Z">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583830717716.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583830733667.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583830890209.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583830929741.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583830945755.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583831162349.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583831194224.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583831225885.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583831499729.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583832214527.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583832242295.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583832729565.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583832774511.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583833127686.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583833240668.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583833748737.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583833790609.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583833821793.png">
+<meta property="og:image" content="http://prontosil.com/posts/12fff649/1583833940934.png">
+<meta property="article:published_time" content="2020-03-10T08:57:06.000Z">
+<meta property="article:modified_time" content="2020-03-10T09:52:23.711Z">
 <meta property="article:author" content="prontosil">
-<meta property="article:tag" content="命令执行">
+<meta property="article:tag" content="实验">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://prontosil.com/posts/58281de6/1582542493140.png">
+<meta name="twitter:image" content="http://prontosil.com/posts/12fff649/1583830717716.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -154,11 +165,11 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(48)</small></div></li>
+    <li><div class="all active">全部文章<small>(49)</small></div></li>
     
         
             
-            <li><div data-rel="渗透测试">渗透测试<small>(10)</small></div>
+            <li><div data-rel="渗透测试">渗透测试<small>(11)</small></div>
                 
             </li>
             
@@ -206,8 +217,8 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="48">
-<input type="hidden" id="yelog_site_word_count" value="35.7k">
+<input type="hidden" id="yelog_site_posts_number" value="49">
+<input type="hidden" id="yelog_site_word_count" value="36.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -261,11 +272,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
+        <a class="color4">XSS</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">XSS</a>
+        <a class="color1">Linux</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -325,6 +336,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">实验</a>
     </li>
     
@@ -337,11 +352,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">cms</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">隐写</a>
+        <a class="color5">命令执行</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -349,11 +360,15 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">隐写</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">网站</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">命令执行</a>
+        <a class="color3">比赛</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -361,7 +376,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">比赛</a>
+        <a class="color5">kill</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -370,10 +385,6 @@
     
     <li class="article-tag-list-item">
         <a class="color3">提权</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">kill</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -413,11 +424,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">ctf</a>
+        <a class="color4">CSP</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">CSP</a>
+        <a class="color4">ctf</a>
     </li>
     
     <div class="clearfix"></div>
@@ -436,6 +447,14 @@
            data-author="" >
             <span class="post-title" title="常用的网站">常用的网站</span>
             <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/12fff649/"
+           data-tag="实验"
+           data-author="" >
+            <span class="post-title" title="漏洞挖掘实验">漏洞挖掘实验</span>
+            <span class="post-date" title="2020-03-10 16:57:06">2020/03/10</span>
         </a>
         
         <a  class="渗透测试 "
@@ -1005,7 +1024,7 @@ _pages-challenge.prontosil.club. 600 IN TXT     &quot;rCAijO55WRowkOABj2JwHDEacV
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#Linux','#XSS','#xxe','#xml','#docker','#java','#反序列化','#php','#函数','#pickle','#字符串','#bytes','#文档','#SQL','#文件上传','#vulnhub','#实验','#游戏','#CTF','#cms','#隐写','#域名','#网站','#命令执行','#dig','#比赛','#tcpdump','#提权','#kill','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#ctf','#CSP',],
+            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#XSS','#Linux','#xxe','#xml','#docker','#java','#反序列化','#php','#函数','#pickle','#字符串','#bytes','#文档','#SQL','#文件上传','#vulnhub','#cms','#实验','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#dig','#kill','#tcpdump','#提权','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
