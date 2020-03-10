@@ -4,6 +4,106 @@
   
     
     <entry>
+      <title>汇编从入门到入土五</title>
+      <link href="/posts/7fad3d80/"/>
+      <url>/posts/7fad3d80/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编从入门到入土四</title>
+      <link href="/posts/624f5fc5/"/>
+      <url>/posts/624f5fc5/</url>
+      
+        <content type="html"><![CDATA[<p>BX 寄存器在内存寻址的作用</p><p><img src="/posts/624f5fc5/1583847161633.png" alt></p><pre><code>mov ax, 2000Hmov ds,axmov bx,1000Hmov ax,[bx]  ; AX=00BEHinc bxinc bxmov [bx],ax  ; BX=1002inc bxinc bxmov [bx],ax  ; BX=1004inc bxmov [bx],al  ; BX=1005inc bx       mov [bx],al  ; BX=1006</code></pre><p>最后得到的内存分布</p><p><img src="/posts/624f5fc5/1583847171666.png" alt></p><h2 id="loop指令的使用"><a href="#loop指令的使用" class="headerlink" title="loop指令的使用"></a>loop指令的使用</h2><pre><code>assume cs:codecode segment    mov ax,2    mov cx,11s:  add ax,ax    loop s</code></pre><p>cx 作为循环的计数器</p><p>计算乘法，123*236</p><pre><code>assume cs:codecode segment    mov ax,0    mov cx,236s:  add ax,123    loop s    mov ax,4c00h    int 21hcode endsend</code></pre><blockquote><p>注意：在汇编程序中，数据不能以字母开头</p></blockquote><p><code>g</code> 指令可以直接执行到指定的位置</p><p><code>p</code> 会自动重复直到 <code>cx == 0</code> 为止</p><h2 id="Debug和masm对指令的不同处理"><a href="#Debug和masm对指令的不同处理" class="headerlink" title="Debug和masm对指令的不同处理"></a>Debug和masm对指令的不同处理</h2><p>在汇编源程序中，我们需要这么写</p><pre><code>mov ax, 2000hmov ds, axmov al, ds:[0]</code></pre><p>如果没有指定段寄存器</p><pre><code>mov al,[0]</code></pre><p>则 <code>masm</code> 理解成</p><pre><code>mov al, 0</code></pre><p>当然如果是寄存器的话</p><pre><code>mov al, [bx]</code></pre><p>则段寄存器默认存在是 ds</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>计算 <code>ffff:0 ~ ffff:b</code> 单元中的数据的和，结果存储在 dx 中</p><p>由于每一个数据都是字节的，不能直接加到16位的寄存器dx中，那么我们是不是可以用dh和dl呢，但是这样可能导致进位丢失</p><p>所以我们需要将8位的数据赋值到16位寄存器然后再与dx相加</p><pre><code class="x86asm">assume cs:codecode segment    mov ax,0ffffh ; 注意数字不能以字母开头    mov ds,ax    mov bx,0 ;首先让 ds:bx 指向 ffff:0    mov dx,0    mov cx,12 ;进行12次循环s:  mov al,[bx]    mov ah,0  ;不要忘记给ah置0！    add dx,ax    inc bx    loop s    mov ax,4c00h    int 21hcode endsend</code></pre><h2 id="如何使用内存空间"><a href="#如何使用内存空间" class="headerlink" title="如何使用内存空间"></a>如何使用内存空间</h2><pre><code>assume cs:codecode segment    mov ax,0    mov ds,ax    mov ds:[26h], ax    mov ax,4c00h    int 21hcode endsend</code></pre><p>程序出问题了，无法继续运行</p><p><img src="/posts/624f5fc5/1583847197500.png" alt></p><p>DOS方式下，一般情况，<code>0:200 ~ 0:2ff</code> 空间中没有系统或其他程序的数据或代码</p><h2 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h2><p>将内存 ffff:0 ~ ffff:b 单元中的数据复制到 0:200 ~ 0:20b 单元中</p><p>可以将两个段的地址保存到两个寄存器中</p><pre><code>assume cs:codecode segment    mov ax,0ffffh    mov ds,ax     mov ax,0020h    mov es,ax    mov bx,0    mov cx,12s:  mov dl,[bx]    mov es:[bx],dl    inc bx    loop s    mov ax,4c00h    int 21hcode endsend</code></pre><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><ol><li>编程，向内存 0:200<del>0:23F 依次传送数据 0</del>63(3FH)</li></ol><p>代码</p><pre><code>assume cs:codecode segment    mov ax,0    mov ds,ax    mov bx,200h    mov cx,40h    mov ax,0s:  mov [bx],ax    inc ax    inc bx    loop s    mov ax, 4c00h    int 21hcode endsend</code></pre><p>运行结果</p><p><img src="/posts/624f5fc5/1583847221964.png" alt></p><ol start="2"><li>编程，向内存 0:200<del>0:23F 一次传递数据 0</del>63(3FH),程序中只能使用9条指令<br>如果只能用9条指令，那么可以这么改<pre><code>assume cs:codecode segment mov ax,0 mov ds,ax mov bx,0 mov cx,40hs:  mov [bx+200h],bx ;去掉了 ax，只用bx一个寄存器就可以做到 inc bx loop s mov ax, 4c00h int 21hcode endsend</code></pre>运行结果</li></ol><p><img src="/posts/624f5fc5/1583847232334.png" alt></p><ol start="3"><li><pre><code>assume cs:codecode segment mov ax,cs mov ds,ax mov ax,0020h mov es,ax mov bx,0 mov cx,20hs:  mov al,[bx] mov es:[bx],al inc bx loop s mov ax,4c00h int 21hcode endsend</code></pre></li></ol><p><img src="/posts/624f5fc5/1583847251042.png" alt></p><p>于是可以推测出 CX=17h</p><p>完整代码如下</p><pre><code>assume cs:codecode segment        mov ax,cs    mov ds,ax    mov ax,0020h    mov es,ax    mov bx,0    mov cx,17hs:  mov al,[bx]    mov es:[bx],al    inc bx    loop s    mov ax,4c00h    int 21hcode endsend</code></pre><p><img src="/posts/624f5fc5/1583847262812.png" alt></p><p>可以看到成功复制了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编从入门到入土三</title>
+      <link href="/posts/2e9d33db/"/>
+      <url>/posts/2e9d33db/</url>
+      
+        <content type="html"><![CDATA[<h2 id="从汇编程序开始"><a href="#从汇编程序开始" class="headerlink" title="从汇编程序开始"></a>从汇编程序开始</h2><pre><code class="x86asm">assume cs:codesgcodesg segment    mov ax,0123H    mov bx,0456H    add ax,bx    add ax,ax    mov ax,4c00H    int 21Hcodesg endsend</code></pre><p>伪指令</p><pre><code>段名 segment段名 ends</code></pre><p><code>end</code> 和 <code>ends</code> 不一样， end标记整个程序的结束<br><code>assume</code> 将有特定用途的段和相关的段寄存器关联起来</p><p>程序返回</p><pre><code>    mov ax,4c00H    int 21H</code></pre><p>编写代码，使用 MASM.exe 编译，然后使用 LINK.exe 进行链接</p><p><img src="/posts/2e9d33db/1583847029418.png" alt></p><p><img src="/posts/2e9d33db/1583847034341.png" alt></p><p>运行当然是没有结果的，我们需要使用 <code>debug</code> 调试</p><h2 id="可执行文件的加载过程"><a href="#可执行文件的加载过程" class="headerlink" title="可执行文件的加载过程"></a>可执行文件的加载过程</h2><p>程序加载的时候，找到一个段地址 <code>SA:0000</code>,程序从 <code>SA+10H:0000</code> 处开始运行，<code>SA</code> 存放在 ds寄存器中</p><p>刚加载进内存中时，</p><p><img src="/posts/2e9d33db/1583847094408.png" alt></p><p>此时看到 ds 寄存器的内容为 <code>075AH</code> ,所以程序的物理地址就是 ds+10h ,正好符合<br>在int21 时需要使用 p命令执行</p><p><img src="/posts/2e9d33db/1583847103427.png" alt></p><h2 id="实验3-编译链接跟踪"><a href="#实验3-编译链接跟踪" class="headerlink" title="实验3 编译链接跟踪"></a>实验3 编译链接跟踪</h2><pre><code class="x86asm">assume cs:codesgcodesg segment    mov ax,2000H  ; AX=2000H    mov ss,ax     ; SS=2000H    mov sp,0      ; SP=0    add sp,10     ; SP=10    pop ax        ; SP=000CH, AX=076AH    pop bx        ; SP=000EH, BX=7206H    push ax       ; SP=000CH    push bx       ; SP=000AH     pop ax        ; AX=7c06H    pop bx        ; BX=076AH    mov ax,4c00H    int 21Hcodesg endsend</code></pre><p>PSP 的头两个字节是CD20,用debug加载，查看PSP的内容</p><p><img src="/posts/2e9d33db/1583847116112.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>每天一道leetcode-二叉树的直径</title>
+      <link href="/posts/c2fa82b5/"/>
+      <url>/posts/c2fa82b5/</url>
+      
+        <content type="html"><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>给定一棵二叉树，你需要计算它的直径长度。一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。</p><p>示例 :<br>给定二叉树</p><pre><code>      1     / \    2   3   / \       4   5    </code></pre><p>返回 3, 它的长度是路径 [4,2,1,3] 或者 [5,2,1,3]。</p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>找到左子树的节点个数，右子树的节点个数，剩下的就好做了</p><p>我写了的lj代码</p><pre><code class="java">package March;/** * @description: 二叉树的直径 * @author: Pxy * @create: 2020-03-10 20:02 **//** * [4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2] * 上面这个结果过不了 */public class diameterOfBinaryTree {    class TreeNode{        int val;        TreeNode left;        TreeNode right;        TreeNode(int x){            val = x;}    }    public int diameterOfBinaryTree(TreeNode root) {        if (root == null) {            return 0;        }        if (root.right == null) {            return helper(root.left);        } else if (root.left == null) {            return helper(root.right);        } else {            int leftLength = helper(root.left);            int rightLength = helper(root.right);            return leftLength + rightLength;        }    }    public static int helper(TreeNode root) {        if (root != null) {            return Math.max(helper(root.left), helper(root.right)) + 1;        } else {            return 0;        }    }}</code></pre><p>但是leetcode提交的时候给了一个奇葩的测试样例</p><pre><code>[4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]</code></pre><p>这。。</p><p><img src="/posts/c2fa82b5/1583846422840.png" alt></p><p>算了我暂时也看不出哪里有问题</p><h2 id="官方"><a href="#官方" class="headerlink" title="官方"></a>官方</h2><pre><code class="java">class Solution {    int ans;    public int diameterOfBinaryTree(TreeNode root) {        ans = 1;        depth(root);        return ans - 1;    }    public int depth(TreeNode node) {        if (node == null) return 0; // 访问到空节点了，返回0        int L = depth(node.left); // 左儿子为根的子树的深度        int R = depth(node.right); // 右儿子为根的子树的深度        ans = Math.max(ans, L+R+1); // 计算d_node即L+R+1 并更新ans        return Math.max(L, R) + 1; // 返回该节点为根的子树的深度    }}</code></pre><p>思路也是比较简单的，不过这个用法很神奇，<code>depth</code> 函数有返回值，这个返回值只在递归的时候用到</p><p>java写OJ的时候如果要用全局变量，只需要在外面写一个就行了。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://leetcode-cn.com/problems/diameter-of-binary-tree/solution/liang-chong-si-lu-shi-yong-quan-ju-bian-liang-yu-b/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/diameter-of-binary-tree/solution/liang-chong-si-lu-shi-yong-quan-ju-bian-liang-yu-b/</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> leetcode </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>漏洞挖掘实验</title>
       <link href="/posts/12fff649/"/>
       <url>/posts/12fff649/</url>
