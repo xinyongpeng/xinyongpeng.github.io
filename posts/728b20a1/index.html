@@ -6,15 +6,26 @@
   <meta name="keywords" content=" cms ">
   <meta name="description" content="代码审计初尝 | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="XSS挑战(突然发现这个平台有bug，只需要在控制台alert(1)即可。。) level1 http:&#x2F;&#x2F;test.ctf8.com&#x2F;level1.php?name&#x3D;%3Cscript%3Ealert(1)%3C&#x2F;script%3Elevel2 没有找到和&amp;lt;&#x2F;h2&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tornado框架">
-<meta property="og:url" content="http://prontosil.com/posts/11fc1d3/index.html">
+<meta property="og:title" content="XSS学习记录">
+<meta property="og:url" content="http://prontosil.com/posts/88edfa78/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="XSS挑战(突然发现这个平台有bug，只需要在控制台alert(1)即可。。) level1 http:&#x2F;&#x2F;test.ctf8.com&#x2F;level1.php?name&#x3D;%3Cscript%3Ealert(1)%3C&#x2F;script%3Elevel2 没有找到和&amp;lt;&#x2F;h2&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-03-10T05:26:44.000Z">
-<meta property="article:modified_time" content="2020-03-10T05:26:44.405Z">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1581324449393.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1582880021264.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1582896974234.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1582897922738.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874638329.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874680248.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874701778.png">
+<meta property="article:published_time" content="2020-03-10T07:11:49.000Z">
+<meta property="article:modified_time" content="2020-03-10T07:16:09.089Z">
 <meta property="article:author" content="prontosil">
+<meta property="article:tag" content="XSS">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://prontosil.com/posts/88edfa78/1581324449393.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -141,7 +152,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(41)</small></div></li>
+    <li><div class="all active">全部文章<small>(45)</small></div></li>
     
         
             
@@ -153,7 +164,7 @@
     
         
             
-            <li><div data-rel="CTF">CTF<small>(7)</small></div>
+            <li><div data-rel="CTF">CTF<small>(12)</small></div>
                 
             </li>
             
@@ -161,7 +172,7 @@
     
         
             
-            <li><div data-rel="编程">编程<small>(10)</small></div>
+            <li><div data-rel="编程">编程<small>(11)</small></div>
                 
             </li>
             
@@ -193,8 +204,8 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="41">
-<input type="hidden" id="yelog_site_word_count" value="26.4k">
+<input type="hidden" id="yelog_site_posts_number" value="45">
+<input type="hidden" id="yelog_site_word_count" value="32.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -240,14 +251,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">xxe</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">xml</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color1">JavaScript</a>
     </li>
     
@@ -256,7 +259,31 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">XSS</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color2">docker</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -276,15 +303,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">java</a>
+        <a class="color3">文档</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">反序列化</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">vulnhub</a>
+        <a class="color4">SQL</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -292,7 +315,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">CTF</a>
+        <a class="color3">游戏</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -300,7 +323,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">隐写</a>
+        <a class="color4">CTF</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">vulnhub</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -308,15 +335,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">游戏</a>
+        <a class="color3">隐写</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
+        <a class="color3">网站</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">kill</a>
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">比赛</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -328,7 +359,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">dig</a>
+        <a class="color5">kill</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -368,6 +399,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">CSP</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color4">ctf</a>
     </li>
     
@@ -385,12 +420,44 @@
     
     <nav id="title-list-nav">
         
-        <a id="top" class=""
+        <a id="top" class="CTF "
            href="/posts/f364e7d6/"
-           data-tag=""
+           data-tag="网站"
            data-author="" >
             <span class="post-title" title="常用的网站">常用的网站</span>
             <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/70df97a2/"
+           data-tag="SQL"
+           data-author="" >
+            <span class="post-title" title="sqli-lab记录">sqli-lab记录</span>
+            <span class="post-date" title="2020-03-10 15:14:56">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/88edfa78/"
+           data-tag="XSS"
+           data-author="" >
+            <span class="post-title" title="XSS学习记录">XSS学习记录</span>
+            <span class="post-date" title="2020-03-10 15:11:49">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/1e1d8fb4/"
+           data-tag="CSP"
+           data-author="" >
+            <span class="post-title" title="绕过CSP">绕过CSP</span>
+            <span class="post-date" title="2020-03-10 15:10:40">2020/03/10</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/e247dc77/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="python字符串的一些小坑">python字符串的一些小坑</span>
+            <span class="post-date" title="2020-03-10 14:03:41">2020/03/10</span>
         </a>
         
         <a  class=""
@@ -409,17 +476,17 @@
             <span class="post-date" title="2020-03-10 13:24:10">2020/03/10</span>
         </a>
         
-        <a  class=""
+        <a  class="编程 "
            href="/posts/bce54486/"
-           data-tag=""
+           data-tag="文档"
            data-author="" >
             <span class="post-title" title="requests文档阅读笔记">requests文档阅读笔记</span>
             <span class="post-date" title="2020-03-10 13:20:52">2020/03/10</span>
         </a>
         
-        <a  class=""
+        <a  class="CTF "
            href="/posts/2f3193b1/"
-           data-tag=""
+           data-tag="比赛"
            data-author="" >
             <span class="post-title" title="战疫分享赛wp">战疫分享赛wp</span>
             <span class="post-date" title="2020-03-10 09:15:07">2020/03/10</span>
@@ -1018,7 +1085,7 @@ cmd=del_admin&amp;id=3 or if(ascii(mid(database(),2,1))=105,sleep(3),0) ...</cod
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#HTB','#靶机','#xxe','#xml','#JavaScript','#原型链污染','#docker','#php','#函数','#字符串','#bytes','#java','#反序列化','#vulnhub','#文件上传','#CTF','#cms','#隐写','#域名','#游戏','#Linux','#kill','#tcpdump','#提权','#dig','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#ctf','#实验',],
+            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#Linux','#XSS','#xxe','#xml','#docker','#java','#反序列化','#php','#函数','#字符串','#bytes','#文档','#SQL','#文件上传','#游戏','#cms','#CTF','#vulnhub','#域名','#隐写','#网站','#dig','#比赛','#tcpdump','#提权','#kill','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf','#实验',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');

