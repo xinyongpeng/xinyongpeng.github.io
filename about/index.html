@@ -6,17 +6,27 @@
   <meta name="keywords" content="">
   <meta name="description" content="about | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="关于我">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta name="description" content="tar命令绕过最近也是才知道的姿势，很多CTF题目并没有过滤tar命令，可以直接打包然后下载，GXYCTF的一道题就可以这样非预期 ?ip&#x3D;1;tar$IFS$9-cvf$IFS$9index$IFS$9. Windows命令执行&lt;?php $a &#x3D; &quot;..&#x2F; %1a whoami&quot;; $command &#x3D; &#39;dir &#39;.urldecode($a); $e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="命令执行绕过技巧">
+<meta property="og:url" content="http://prontosil.com/posts/58281de6/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
-<meta property="og:description" content="关于我">
+<meta property="og:description" content="tar命令绕过最近也是才知道的姿势，很多CTF题目并没有过滤tar命令，可以直接打包然后下载，GXYCTF的一道题就可以这样非预期 ?ip&#x3D;1;tar$IFS$9-cvf$IFS$9index$IFS$9. Windows命令执行&lt;?php $a &#x3D; &quot;..&#x2F; %1a whoami&quot;; $command &#x3D; &#39;dir &#39;.urldecode($a); $e">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
-<meta property="article:modified_time" content="2020-03-01T04:03:15.091Z">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582542493140.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/2020/PersonNote/CTF%E7%AC%94%E8%AE%B0/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/1581933022683.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582539212357.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582540869115.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/dd89dc70-2446-48e1-a728-5693d1fa868a.bbb0aaacef7d.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582541083787.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/8296bbd4-40cd-481e-9147-6f11e80967d8.6b4cdb17a1b8.png">
+<meta property="og:image" content="http://prontosil.com/posts/58281de6/1582707944277.png">
+<meta property="article:published_time" content="2020-03-10T07:17:49.000Z">
+<meta property="article:modified_time" content="2020-03-10T07:19:48.026Z">
 <meta property="article:author" content="prontosil">
+<meta property="article:tag" content="命令执行">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://prontosil.com/posts/58281de6/1582542493140.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -44,7 +54,8 @@
 
 <script src="/js/iconfont.js?v=1.0.1" ></script>
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="prontosil's Blog" type="application/atom+xml">
+</head>
 <div style="display: none">
   <input class="theme_disqus_on" value="true">
   <input class="theme_preload_comment" value="false">
@@ -354,19 +365,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">tcpdump</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">提权</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">xxd</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">tcpdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">提权</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -398,11 +409,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">CSP</a>
+        <a class="color4">ctf</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">ctf</a>
+        <a class="color4">CSP</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -946,7 +957,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#Linux','#XSS','#xxe','#xml','#docker','#java','#反序列化','#php','#函数','#pickle','#字符串','#bytes','#文档','#SQL','#文件上传','#vulnhub','#cms','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#dig','#kill','#tcpdump','#提权','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf','#实验',],
+            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#Linux','#XSS','#xxe','#xml','#docker','#java','#反序列化','#php','#函数','#pickle','#字符串','#bytes','#文档','#SQL','#文件上传','#vulnhub','#cms','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#dig','#kill','#xxd','#hexdump','#tcpdump','#提权','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#ctf','#CSP','#实验',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
