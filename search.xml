@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>python数据结构</title>
+      <link href="/posts/7f8e2ad4/"/>
+      <url>/posts/7f8e2ad4/</url>
+      
+        <content type="html"><![CDATA[<p>补充一个小知识</p><p>python 输入重定向为文件</p><pre><code>import syssys.stdin = open(&quot;test.txt&quot;)</code></pre><p>之后就可以直接从文件读入，不需要手动输入了</p><h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><pre><code>实现链表输入1 3 5 4 1 9 4 将其存储为链表格式</code></pre><p>链表数据结构：</p><pre><code class="python">class ListNode:    def __init__(self, x=-1):        self.val = x        self.next = None</code></pre><h3 id="创建链表，返回头节点-尾插法"><a href="#创建链表，返回头节点-尾插法" class="headerlink" title="创建链表，返回头节点 (尾插法)"></a>创建链表，返回头节点 (尾插法)</h3><pre><code class="python">def creat_list(line:list) -&gt; ListNode:    root = ListNode()    tail = root    for i in line:        temp = ListNode(i)        tail.next = temp        tail = tail.next      return root.next</code></pre><h3 id="遍历链表"><a href="#遍历链表" class="headerlink" title="遍历链表"></a>遍历链表</h3><pre><code class="python">def traverse_list(root:ListNode):    &#39;&#39;&#39;    遍历链表，没有头节点    &#39;&#39;&#39;    temp = root    while temp:        print(temp.val+&quot; &quot;,end=&quot;&quot;)        temp = temp.next    print()</code></pre><h3 id="删除倒数第n个节点，一次遍历"><a href="#删除倒数第n个节点，一次遍历" class="headerlink" title="删除倒数第n个节点，一次遍历"></a>删除倒数第n个节点，一次遍历</h3><p>用两个指针指向，第一个指针先走 <code>n+1</code> 步，中间空出n个节点，然后删除即可</p><pre><code class="python">def removeNthFromEnd(head:ListNode, n:int)-&gt;ListNode:    &#39;&#39;&#39;    一次遍历算法    &#39;&#39;&#39;    new_head = ListNode(-1)    new_head.next = head    first = new_head    second = new_head    for i in range(n+1):        first = first.next        while first != None:        first = first.next        second = second.next    second.next = second.next.next    return new_head.next</code></pre><h3 id="向右旋转链表"><a href="#向右旋转链表" class="headerlink" title="向右旋转链表"></a>向右旋转链表</h3><p>就是把单链表组成一个循环链表</p><pre><code class="python">def rotateRight(head:ListNode, k:int)-&gt;ListNode:    &#39;&#39;&#39;    针对链表进行旋转    &#39;&#39;&#39;    if k == 0:        return head    if head == None:        return head    temp = head    length = 0    while temp.next != None:        length += 1        temp = temp.next    length += 1    temp.next = head    temp = head    for i in range((length - k%length -1)):        temp = temp.next    new_head = temp.next    temp.next = None    return new_head</code></pre><h2 id="图"><a href="#图" class="headerlink" title="图"></a>图</h2><h3 id="创建图"><a href="#创建图" class="headerlink" title="创建图"></a>创建图</h3><p>采用邻接表进行存储， <code>ArcNode</code> 代表邻接点， <code>VNode</code> 代表边节点</p><pre><code class="python">class ArcNode:    def __init__(self,adjvex, weight):        self.adjvex = adjvex        self.weight = weight        self.next = Noneclass VNode:    def __init__(self):        self.next = None</code></pre><p>输入数据</p><pre><code>输入格式：4 40 1 1 01 0 1 01 1 0 11 1 1 1</code></pre><p>读入数据，创建邻接矩阵</p><pre><code class="python">def create_table()-&gt;list:    m,n = [int(i) for i in input().split()] # 自动解包    A = [0 for i in range(m)]    for i in range(m):        A[i] = [int(j) for j in input().split()]    return A</code></pre><p>邻接矩阵转换为邻接表</p><pre><code class="python">def create_Adj(A)-&gt;list:    &#39;&#39;&#39;    邻接矩阵转换为邻接表    &#39;&#39;&#39;    G = [VNode() for i in range(len(A))]    for i,vex in enumerate(A):        # 第i个节点，及其所有的边        for node,j in enumerate(vex):            if j != 0:                p = ArcNode(node, j)                p.next = G[i].next                G[i].next = p    return G</code></pre><p>打印邻接表</p><pre><code class="python">def disp_adj(G):    for index,i in enumerate(G):        p = i.next        print(index, end=&quot;&quot;)        while p != None:            print(&quot; {}-&gt;&quot;.format(p.adjvex), end=&quot;&quot;)            p = p.next        print()</code></pre><h3 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h3><pre><code class="python">visited = [0 for i in range(4)]def DFS(G, v):    &#39;&#39;&#39;    深度优先搜索    &#39;&#39;&#39;    visited[v] = 1    print(v, end=&quot;&quot;)    p = G[v].next    while p != None:        w = p.adjvex        if visited[w] == 0:            DFS(G,w)        p = p.next    print()</code></pre><h3 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h3><pre><code class="python">def BFS(G, v):    &#39;&#39;&#39;    广度优先搜索    &#39;&#39;&#39;    q = Queue()    visited = [0 for i in range(len(G))]    print(v,end=&quot;&quot;)    visited[v] = 1    q.put(v)    while not q.empty():        w = q.get()        p = G[w].next        while p!=None:            if visited[p.adjvex] == 0:                print(p.adjvex, end=&quot;&quot;)                visited[p.adjvex] = 1                q.put(p.adjvex)            p = p.next    print()</code></pre><h3 id="Dijkstar-算法"><a href="#Dijkstar-算法" class="headerlink" title="Dijkstar 算法"></a>Dijkstar 算法</h3><pre><code class="python">def Dijkstra(A, v):    &#39;&#39;&#39;    Dijkstar 算法    &#39;&#39;&#39;    for i in A:        for index,value in enumerate(i):            if value == -1:                i[index] = sys.maxsize    dist = A[v] # 原始v到各个顶点的距离    path = [0 for i in range(len(A))]     for i in range(len(A)):        if A[v][i] != -1:            path[i] = v        else:            path[i] = -1    s = [0 for i in range(len(A))]    s[v] = 1    for i in range(len(A)):        mindis = sys.maxsize        # 寻找最小路径长度顶点u        for j in range(len(A)):            if s[j] == 0  and dist[j] &lt; mindis:                u = j                mindis = dist[j]        s[u] = 1        for j in range(len(A)):            if s[j] == 0:                if A[u][j] &lt; sys.maxsize and dist[j] &gt; 0 and dist[u]+A[u][j] &lt; dist[j]:                    dist[j] = dist[u] + A[u][j]                    path[j] = u    return path, dist</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>thinkphp6.0漏洞分析</title>
+      <link href="/posts/314a66d3/"/>
+      <url>/posts/314a66d3/</url>
+      
+        <content type="html"><![CDATA[<h2 id="通过session写文件"><a href="#通过session写文件" class="headerlink" title="通过session写文件"></a>通过session写文件</h2><p>漏洞点位于：<code>/think/session/Store.php</code></p><pre><code class="php">    /**     * session_id设置     * @access public     * @param string $id session_id     * @return void     */    public function setId($id = null): void    {        $this-&gt;id = is_string($id) &amp;&amp; strlen($id) === 32 ? $id : md5(microtime(true) . session_create_id());    }</code></pre><p>针对sessionid的校验不严</p><p><img src="/posts/314a66d3/1584448906099.png" alt></p><p>之后初始化session</p><p><img src="/posts/314a66d3/1584448927094.png" alt></p><p>保存session的过程： <code>think/session/Store.php</code></p><pre><code class="php">    /**     * 保存session数据     * @access public     * @return void     */    public function save(): void    {        $this-&gt;clearFlashData();        $sessionId = $this-&gt;getId();        if (!empty($this-&gt;data)) {            $data = $this-&gt;serialize($this-&gt;data);            $this-&gt;handler-&gt;write($sessionId, $data);        } else {            $this-&gt;handler-&gt;delete($sessionId);        }        $this-&gt;init = false;    }</code></pre><p>进入到 <code>write</code> 函数写入</p><p>最后存储到文件中</p><p><img src="/posts/314a66d3/1584449025846.png" alt></p><p>这样，如果我能控制session的数组中的某个值，就能直接写入shell</p><p>成功写入：</p><p><img src="/posts/314a66d3/1584449183704.png" alt></p><h2 id="6-0-POP链分析"><a href="#6-0-POP链分析" class="headerlink" title="6.0 POP链分析"></a>6.0 POP链分析</h2><p>入口</p><p><img src="/posts/314a66d3/1584451502585.png" alt></p><p>进入 <code>save</code> 函数</p><p><img src="/posts/314a66d3/1584451535191.png" alt></p><p>继续步入</p><p><img src="/posts/314a66d3/1584451560678.png" alt></p><p>进入到 <code>cleanContents</code> 函数，直接返回原值(没有过滤因为不是多维数组)</p><pre><code class="php">    public function cleanContents(array $contents)    {        $cachedProperties = array_flip([            &#39;path&#39;, &#39;dirname&#39;, &#39;basename&#39;, &#39;extension&#39;, &#39;filename&#39;,            &#39;size&#39;, &#39;mimetype&#39;, &#39;visibility&#39;, &#39;timestamp&#39;, &#39;type&#39;,        ]);        foreach ($contents as $path =&gt; $object) {            if (is_array($object)) {                $contents[$path] = array_intersect_key($object, $cachedProperties);            }        }        return $contents;    }</code></pre><p>返回</p><p><img src="/posts/314a66d3/1584451622290.png" alt></p><p>跟进 <code>set</code> 函数，这里的 <code>$this-&gt;store</code> 已经被覆盖为 File 类</p><p><img src="/posts/314a66d3/1584451656966.png" alt></p><p><img src="/posts/314a66d3/1584451671730.png" alt></p><p>最后有两个利用方式：</p><ol><li><pre><code class="php"> protected function serialize($data): string {     if (is_numeric($data)) {         return (string) $data;     }     $serialize = $this-&gt;options[&#39;serialize&#39;][0] ?? &quot;\Opis\Closure\serialize&quot;;     return $serialize($data); }</code></pre></li></ol><ol start="2"><li><p>利用伪协议任意文件写入</p></li></ol><p><img src="/posts/314a66d3/1584451721156.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> thinkphp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>apache配置文件简单记录</title>
       <link href="/posts/a3f2ee6b/"/>
       <url>/posts/a3f2ee6b/</url>
@@ -385,9 +435,9 @@
       
         <tags>
             
-            <tag> pickle </tag>
-            
             <tag> 反序列化 </tag>
+            
+            <tag> pickle </tag>
             
         </tags>
       
@@ -1337,9 +1387,9 @@
       
         <tags>
             
-            <tag> 反序列化 </tag>
-            
             <tag> java </tag>
+            
+            <tag> 反序列化 </tag>
             
         </tags>
       
