@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>CSRF相关总结</title>
+      <link href="/posts/f70b79f3/"/>
+      <url>/posts/f70b79f3/</url>
+      
+        <content type="html"><![CDATA[<p>刚开始想写这篇文章的时候有点纠结分类，感觉归类到CTF不是很好，因为在CTF中就没遇到过，归类到渗透测试呢，又感觉不太对23333，算了还是丢到渗透测试吧</p><h2 id="同源策略-SOP"><a href="#同源策略-SOP" class="headerlink" title="同源策略(SOP)"></a>同源策略(SOP)</h2><p>SOP影响范围包括：普通的HTTP请求、XMLHttpRequest、XSLT、XBL。</p><p>同源是指，<strong>域名，协议，端口相同</strong></p><p>跨域的种类</p><ul><li>协议不同</li><li>端口不同</li><li>主域名不同</li><li>子域名不同</li></ul><p>允许跨域的标签</p><pre><code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;&lt;img src=&quot;...&quot;&gt;&lt;video src=&quot;...&quot;&gt;&lt;/video&gt;&lt;audio src=&quot;...&quot;&gt;&lt;/audio&gt;&lt;embed src=&quot;...&quot;&gt;&lt;frame src=&quot;...&quot;&gt;&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;...&quot;&gt;&lt;applet code=&quot;...&quot;&gt;&lt;/applet&gt;&lt;object data=&quot;...&quot; &gt;&lt;/object&gt;</code></pre><p>同源策略虽然感觉很陌生，但确实前端的基石，地位类似于在牛顿定律在力学中的地位</p><p>试想没有同源策略的话，那么任何一个网页都可以随意操控其他网页的数据，那真的是web世界的灾难。就像牛顿定律如果失效，估计地球都不知道怎么绕太阳转了</p><p><strong>重点：</strong></p><p><strong>跨域并不是请求发不出去，请求能发出去，服务端能收到请求并正常返回结果，只是结果被浏览器拦截了</strong>。你可能会疑问明明通过表单的方式可以发起跨域请求，为什么 Ajax 就不会?因为归根结底，跨域是为了阻止用户读取到另一个域名下的内容，Ajax 可以获取响应，浏览器认为这不安全，所以拦截了响应。但是表单并不会获取新的内容，所以可以发起跨域请求。同时也说明了跨域并不能完全阻止 CSRF，因为请求毕竟是发出去了。</p><h2 id="如何跨域？"><a href="#如何跨域？" class="headerlink" title="如何跨域？"></a>如何跨域？</h2><p>跨域是必须的，因为同源策略的限制太严格了，子域名居然也和域名不同源！</p><ol><li>设置window.domain</li></ol><p>浏览器允许通过设置 <code>document.domain</code> 来共享cookie</p><ol start="2"><li>cookie本身的domain属性</li></ol><p>cookie本身可以设置 <code>domain</code> 属性，指定Cookie的所属域名为一级域名，比如<code>.example.com</code>。那么二级和三级域名也可以读取到cookie    </p><h3 id="jsonp跨域"><a href="#jsonp跨域" class="headerlink" title="jsonp跨域"></a>jsonp跨域</h3><p>声明一个回调函数，其函数名(如show)当做参数值，要传递给跨域请求数据的服务器，函数形参为要获取目标数据(服务器返回的data)。</p><p>创建一个<code>&lt;script&gt;</code>标签，把那个跨域的API数据接口地址，赋值给script的src,还要在这个地址中向服务器传递该函数名（可以通过问号传参:?callback=show）。</p><p>服务器接收到请求后，需要进行特殊的处理：把传递进来的函数名和它需要给你的数据拼接成一个字符串,例如：传递进去的函数名是show，它准备好的数据是<code>show(&#39;我不爱你&#39;)</code>。</p><p>最后服务器把准备的数据通过HTTP协议返回给客户端，客户端再调用执行之前声明的回调函数（show），对返回的数据进行操作。</p><p>一个典型的jsonp攻击的代码</p><pre><code class="js">&lt;script&gt;function wooyun(v){    alert(v.username);}&lt;/script&gt;&lt;script src=&quot;http://js.login.360.cn/?o=sso&amp;m=info&amp;func=wooyun&quot;&gt;&lt;/script&gt;</code></pre><p>发送请求过去之后，服务端返回了数据，然后就被弹出来了</p><p>遇到过的一个CTF题目</p><pre><code>&lt;script/src=&amp;unit=https://www.google.com/complete/search?client=chrome&amp;q=hello&amp;callback=alert&gt;&lt;/script&gt;</code></pre><h4 id="防御jsonp攻击"><a href="#防御jsonp攻击" class="headerlink" title="防御jsonp攻击"></a>防御jsonp攻击</h4><p>验证 JSON 文件调用的来源（ Referer ）。这个方案是主要利用了 <code>&lt;script&gt;</code> 远程加载 JSON 文件时会发送 Referer ，在网站输出 JSON 数据时判断 Referer 是不是白名单合法的就可以进行防御！这个方法是可行的</p><ol><li>正则过滤不严谨</li><li>空referer</li></ol><h3 id="CORS-跨域资源共享"><a href="#CORS-跨域资源共享" class="headerlink" title="CORS 跨域资源共享"></a>CORS 跨域资源共享</h3><p>允许浏览器向跨源服务器，发出<a href="http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html" target="_blank" rel="noopener"><code>XMLHttpRequest</code></a>请求，从而克服了AJAX只能<a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="noopener">同源</a>使用的限制。</p><p>区分简单请求和非简单请求：</p><pre><code>（1) 请求方法是以下三种方法之一：HEADGETPOST（2）HTTP的头信息不超出以下几种字段：AcceptAccept-LanguageContent-LanguageLast-Event-IDContent-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain</code></pre><p>满足以上要求即是简单请求</p><p>重点在最后一句： </p><blockquote><p>Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain</p></blockquote><p>对于简单请求，浏览器直接发出CORS请求。具体来说，就是在头信息之中，增加一个<code>Origin</code>字段。这个字段用来说明，本次请求来自哪个源（协议 + 域名 + 端口）。服务器根据这个值，决定是否同意这次请求。</p><p>如果<code>Origin</code>指定的域名在许可范围内，服务器返回的响应，会多出几个头信息字段。</p><pre><code>Access-Control-Allow-Origin: http://api.bob.comAccess-Control-Allow-Credentials: trueAccess-Control-Expose-Headers: FooBarContent-Type: text/html; charset=utf-8</code></pre><p>Access-Control-Allow-Origin： 要么是 origin 的值，要么就是 *</p><p>Access-Control-Allow-Credentials: 它的值是一个布尔值，表示是否允许发送Cookie。如果不要的话就删除这个字段</p><p>Access-Control-Expose-Headers：如果想拿到其他字段，就必须在<code>Access-Control-Expose-Headers</code>里面指定。</p><p>CORS请求默认不发送Cookie和HTTP认证信息。如果要把Cookie发到服务器，一方面要服务器同意，指定<code>Access-Control-Allow-Credentials</code>字段。</p><h2 id="cookie属性"><a href="#cookie属性" class="headerlink" title="cookie属性"></a>cookie属性</h2><p>cookie的五大属性:“path, domain, expire, HttpOnly, Secure”，很少有人了解到cookie还有一个SameSite属性，这是一个专门用于防止csrf漏洞的属性。</p><ol><li>http-only:</li></ol><p>浏览器会禁止页面中的 JavaScript 访问带有 HttpOnly 属性的 Cookie</p><ol start="2"><li>domain</li></ol><p>domain标识域，如域A为t1.test.com，域B为t2.test.com，那么在域A生产一个令域A和域B都能访问的cookie就要将该cookie的domain设置为.test.com</p><ol start="3"><li>expire</li></ol><p>过期时间</p><ol start="4"><li>Secure</li></ol><p>当设置为true时，表示创建的 Cookie 会被以安全的形式向服务器传输，也就是只能在 HTTPS 连接中被浏览器传递到服务器端进行会话验证，如果是 HTTP 连接则不会传递该信息，所以不会被窃取到Cookie 的具体内容。</p><ol start="5"><li>path</li></ol><p>path表示cookie所在的目录</p><h3 id="cookie分类"><a href="#cookie分类" class="headerlink" title="cookie分类"></a>cookie分类</h3><h2 id="防护"><a href="#防护" class="headerlink" title="防护"></a>防护</h2><h3 id="samsite属性"><a href="#samsite属性" class="headerlink" title="samsite属性"></a>samsite属性</h3><p>面试真实问题：vue开发的前后端项目如何避免CSRF？</p><p>查到的解决方案：</p><ol><li>如果后端用Django开发，可以通过传递CSRF token过来</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 渗透测试 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CSRF </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>内网渗透常见知识</title>
       <link href="/posts/6941c9ee/"/>
       <url>/posts/6941c9ee/</url>
@@ -563,9 +588,21 @@
       <link href="/posts/70fc8f0c/"/>
       <url>/posts/70fc8f0c/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>JWT的全称是Json Web Token。它遵循JSON格式，将用户信息加密到token里，服务器不保存任何用户信息，只保存密钥信息，通过使用特定加密算法验证token，通过token验证用户身份。基于token的身份验证可以替代传统的cookie+session身份验证方法。</p><p>jwt由三个部分组成</p><pre><code>header.payload.signature</code></pre><p>首先看 <code>header</code></p><p><code>alg</code> 指定了token加密使用的算法（最常用的为<strong>HMAC</strong>和<strong>RSA</strong>算法</p><p>HMAC：对称</p><p>RSA：非对称</p><blockquote><p>HASH: 压缩</p><p>MAC: 带密钥的hash</p><p>HMAC: MAC的一种</p></blockquote><pre><code>{        &quot;alg&quot; : &quot;HS256&quot;,        &quot;typ&quot; : &quot;jwt&quot;}</code></pre><p><code>payload</code></p><p>相关的数据：</p><pre><code>{    &quot;user_role&quot; : &quot;finn&quot;,    //当前登录用户    &quot;iss&quot;: &quot;admin&quot;,          //该JWT的签发者    &quot;iat&quot;: 1573440582,        //签发时间    &quot;exp&quot;: 1573940267,        //过期时间    &quot;nbf&quot;: 1573440582,         //该时间之前不接收处理该Token    &quot;domain&quot;: &quot;example.com&quot;,   //面向的用户    &quot;jti&quot;: &quot;dff4214121e83057655e10bd9751d657&quot;   //Token唯一标识}</code></pre><p><code>signature</code> ,保护token完整性</p><pre><code>signature = HMAC-SHA256(base64urlEncode(header) + &#39;.&#39; + base64urlEncode(payload), secret_key)</code></pre><h2 id="pyjwt"><a href="#pyjwt" class="headerlink" title="pyjwt"></a>pyjwt</h2><p>（注意是必须 pip install pyjwt</p><pre><code>In [1]: import jwtIn [2]: encoded_jwt = jwt.encode({&#39;user_name&#39;: &#39;admin&#39;}, &#39;key&#39;, algorithm=&#39;HS256&#39;)In [3]: encoded_jwtOut[3]: b&#39;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiJ9.fN_uBYJZuGWi_XnqKe_HDo6EYBU8Te1nanJRBnpnPns&#39;</code></pre><p><a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a> 解密</p><p>可以看到并不需要key也可以直接解密，有点像flask 的session</p><p><img src="/posts/70fc8f0c/1584601836858.png" alt></p><p>解密</p><pre><code>In [4]: print(jwt.decode(encoded_jwt, &#39;key&#39;, algorithms=[&#39;HS256&#39;])){&#39;user_name&#39;: &#39;admin&#39;}</code></pre><h2 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h2><h3 id="空加密算法"><a href="#空加密算法" class="headerlink" title="空加密算法"></a>空加密算法</h3><p>JWT支持使用空加密算法，可以在header中指定alg为<code>None</code></p><p>pyjwt生成空加密算法的jwt</p><pre><code class="python">In [10]: encoded_jwt = jwt.encode({&#39;user_name&#39;: &#39;admin&#39;}, &#39;key&#39;, headers={&quot;alg&quot;:&quot;None&quot;, &quot;typ&quot;:&quot;jwt&quot;})In [11]: encoded_jwtOut[11]: b&#39;eyJ0eXAiOiJqd3QiLCJhbGciOiJOb25lIn0.eyJ1c2VyX25hbWUiOiJhZG1pbiJ9.73u0KBesnvDB-k3jhmyzzPnExs8gUsxaYG2MBtBeNtg&#39;</code></pre><p><img src="/posts/70fc8f0c/1584602118605.png" alt></p><h3 id="修改加密算法RSA为HMAC-未尝试"><a href="#修改加密算法RSA为HMAC-未尝试" class="headerlink" title="修改加密算法RSA为HMAC(未尝试)"></a>修改加密算法RSA为HMAC(未尝试)</h3><p>理论：</p><p>一个Web应用，在JWT传输过程中使用RSA算法，密钥<code>pem</code>对JWT token进行签名，公钥<code>pub</code>对签名进行验证。</p><p>通常情况下密钥<code>pem</code>是无法获取到的，但是公钥<code>pub</code>却可以很容易通过某些途径读取到，这时，将JWT的加密算法修改为HMAC</p><pre><code>{    &quot;alg&quot; : &quot;HS256&quot;,    &quot;typ&quot; : &quot;jwt&quot;}</code></pre><p>同时使用公钥pub作为密钥，这样服务端接收到的数据就会用HMAC的方式来验证了</p><h3 id="爆破密钥"><a href="#爆破密钥" class="headerlink" title="爆破密钥"></a>爆破密钥</h3><p><a href="https://github.com/brendan-rius/c-jwt-cracker" target="_blank" rel="noopener">c-jwt-cracker</a>了解一下</p><h3 id="修改kid参数"><a href="#修改kid参数" class="headerlink" title="修改kid参数"></a>修改kid参数</h3><p>用来指定私钥位置，也可以修改？</p><pre><code>{    &quot;alg&quot; : &quot;HS256&quot;,    &quot;typ&quot; : &quot;jwt&quot;,    &quot;kid&quot; : &quot;/home/jwt/.ssh/pem&quot;}</code></pre><h3 id="任意文件读取？-有点骚"><a href="#任意文件读取？-有点骚" class="headerlink" title="任意文件读取？(有点骚)"></a>任意文件读取？(有点骚)</h3><pre><code>{    &quot;alg&quot; : &quot;HS256&quot;,    &quot;typ&quot; : &quot;jwt&quot;,    &quot;kid&quot; : &quot;/etc/passwd&quot;}</code></pre><h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><pre><code>{    &quot;alg&quot; : &quot;HS256&quot;,    &quot;typ&quot; : &quot;jwt&quot;,    &quot;kid&quot; : &quot;key11111111&#39; || union select &#39;secretkey&#39; -- &quot;}</code></pre><h3 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h3><pre><code>&quot;/path/to/key_file|whoami&quot;</code></pre><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://xz.aliyun.com/t/6776#toc-4" target="_blank" rel="noopener">jwt安全问题</a></p>]]></content>
       
       
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> jwt </tag>
+            
+        </tags>
       
     </entry>
     
