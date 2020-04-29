@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://prontosil.com/"/>
-  <updated>2020-04-29T01:09:32.125Z</updated>
+  <updated>2020-04-29T03:38:14.510Z</updated>
   <id>http://prontosil.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>汇编从入门到入土八</title>
+    <link href="http://prontosil.com/posts/90d750b6/"/>
+    <id>http://prontosil.com/posts/90d750b6/</id>
+    <published>2020-04-29T03:03:16.000Z</published>
+    <updated>2020-04-29T03:38:14.510Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="中断处理的流程-牢记"><a href="#中断处理的流程-牢记" class="headerlink" title="中断处理的流程(牢记)"></a>中断处理的流程(牢记)</h2><p><img src="/posts/90d750b6/clipboard.png" alt></p><p>关于第三步</p><p>为什么要设置第8位 TF？</p><p>这就涉及到debug程序的原理：</p><blockquote><p>debug的原理，通过设置 TF 为1，引发单步中断去执行debug准备好的中断代码</p><p><img src="/posts/90d750b6/1588129690345.png" alt></p></blockquote><p>但是这样会有问题，在处理中断的时候是不能去触发单步中断的，所以CPU要提前设置TF为0</p><p>中断过程具体的操作</p><p><img src="/posts/90d750b6/1588129813844.png" alt></p><h2 id="lab12"><a href="#lab12" class="headerlink" title="lab12"></a>lab12</h2><p>代码如下：</p><pre><code class="asm">assume cs:codecode segmentstart:    mov ax,cs    mov ds,ax    mov si,offset do0    mov ax,0    mov es,ax    mov di,200H    mov cx,offset do0end-offset do0    rep movsb    mov ax,0    mov es,ax    mov word ptr es:[0],200H    mov word ptr es:[2],0    mov ax, 1000h    mov bh, 1    div bh    mov ax,4C00H    int 21Hdo0:    jmp short do0start    db &quot;divide error!&quot;do0start:    mov ax,cs    mov ds,ax    mov si,202H    mov ax,0B800H    mov es,ax    mov di,12*160+33*2;这里要注意一下，不能因为字符串长度为13，为了居中输出就设置成12*160+67，会出现意想不到的情况    mov cx,13    s:    mov al,[si]    mov es:[di],al    inc si    add di,2    loop s    mov ax,4C00H    int 21Hdo0end:nopcode endsend start</code></pre><p>通过 <code>offset</code> 获得偏移地址</p><p>通过 <code>rep movsb</code> 来拷贝 do0 程序</p><blockquote><p>这里特别注意，do0 要使用的字符串必须存储在 do0 子程序中，并且需要手动计算一下字符串的位置</p></blockquote><p>当然最后还需要来触发这个中断</p><pre><code class="asm">    mov ax, 1000h    mov bh, 1    div bh</code></pre><p>如果直接存放原来data中的位置</p><pre><code class="asm">assume cs:codedata segmentdb &quot;overflow!&quot;data endscode segmentstart:    mov ax,cs    mov ds,ax    mov si,offset do0    mov ax,0    mov es,ax    mov di,200H    mov cx,offset do0end-offset do0    rep movsb    mov ax,0    mov es,ax    mov word ptr es:[0],200H    mov word ptr es:[2],0    mov ax, 1000h    mov bh, 1    div bh    mov ax,4C00H    int 21Hdo0:    mov ax,data    mov ds,ax    mov si,0    mov ax,0B800H    mov es,ax    mov di,12*160+33*2    mov cx,13    s:    mov al,[si]    mov es:[di],al    inc si    add di,2    loop s    mov ax,4C00H    int 21Hdo0end:nopcode endsend start</code></pre><p>也是可以执行的</p><p><img src="/posts/90d750b6/1588131368497.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;中断处理的流程-牢记&quot;&gt;&lt;a href=&quot;#中断处理的流程-牢记&quot; class=&quot;headerlink&quot; title=&quot;中断处理的流程(牢记)&quot;&gt;&lt;/a&gt;中断处理的流程(牢记)&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/posts/90d750b6/clipboard.
+      
+    
+    </summary>
+    
+    
+      <category term="编程" scheme="http://prontosil.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+      <category term="汇编" scheme="http://prontosil.com/tags/%E6%B1%87%E7%BC%96/"/>
+    
+  </entry>
   
   <entry>
     <title>企业环境渗透一</title>
@@ -410,7 +436,7 @@ if(!preg_match(&amp;#39;/[a-z0-9]/is&amp;#39;,$_GET[&amp;#39;shell&amp;#39;])) {
     <link href="http://prontosil.com/posts/d7bd6781/"/>
     <id>http://prontosil.com/posts/d7bd6781/</id>
     <published>2020-04-03T09:51:50.000Z</published>
-    <updated>2020-04-04T23:52:44.154Z</updated>
+    <updated>2020-04-29T03:25:13.549Z</updated>
     
     <summary type="html">
     
@@ -513,33 +539,6 @@ if(!preg_match(&amp;#39;/[a-z0-9]/is&amp;#39;,$_GET[&amp;#39;shell&amp;#39;])) {
     
     
       <category term="jndi" scheme="http://prontosil.com/tags/jndi/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CSRF相关总结</title>
-    <link href="http://prontosil.com/posts/f70b79f3/"/>
-    <id>http://prontosil.com/posts/f70b79f3/</id>
-    <published>2020-03-19T07:27:00.000Z</published>
-    <updated>2020-03-19T15:11:52.177Z</updated>
-    
-    <content type="html"><![CDATA[<p>刚开始想写这篇文章的时候有点纠结分类，感觉归类到CTF不是很好，因为在CTF中就没遇到过，归类到渗透测试呢，又感觉不太对23333，算了还是丢到渗透测试吧</p><h2 id="同源策略-SOP"><a href="#同源策略-SOP" class="headerlink" title="同源策略(SOP)"></a>同源策略(SOP)</h2><p>SOP影响范围包括：普通的HTTP请求、XMLHttpRequest、XSLT、XBL。</p><p>同源是指，<strong>域名，协议，端口相同</strong></p><p>跨域的种类</p><ul><li>协议不同</li><li>端口不同</li><li>主域名不同</li><li>子域名不同</li></ul><p>允许跨域的标签</p><pre><code>&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;&lt;img src=&quot;...&quot;&gt;&lt;video src=&quot;...&quot;&gt;&lt;/video&gt;&lt;audio src=&quot;...&quot;&gt;&lt;/audio&gt;&lt;embed src=&quot;...&quot;&gt;&lt;frame src=&quot;...&quot;&gt;&lt;iframe src=&quot;...&quot;&gt;&lt;/iframe&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;...&quot;&gt;&lt;applet code=&quot;...&quot;&gt;&lt;/applet&gt;&lt;object data=&quot;...&quot; &gt;&lt;/object&gt;</code></pre><p>同源策略虽然感觉很陌生，但确实前端的基石，地位类似于在牛顿定律在力学中的地位</p><p>试想没有同源策略的话，那么任何一个网页都可以随意操控其他网页的数据，那真的是web世界的灾难。就像牛顿定律如果失效，估计地球都不知道怎么绕太阳转了</p><p><strong>重点：</strong></p><p><strong>跨域并不是请求发不出去，请求能发出去，服务端能收到请求并正常返回结果，只是结果被浏览器拦截了</strong>。你可能会疑问明明通过表单的方式可以发起跨域请求，为什么 Ajax 就不会?因为归根结底，跨域是为了阻止用户读取到另一个域名下的内容，Ajax 可以获取响应，浏览器认为这不安全，所以拦截了响应。但是表单并不会获取新的内容，所以可以发起跨域请求。同时也说明了跨域并不能完全阻止 CSRF，因为请求毕竟是发出去了。</p><h2 id="如何跨域？"><a href="#如何跨域？" class="headerlink" title="如何跨域？"></a>如何跨域？</h2><p>跨域是必须的，因为同源策略的限制太严格了，子域名居然也和域名不同源！</p><ol><li>设置window.domain</li></ol><p>浏览器允许通过设置 <code>document.domain</code> 来共享cookie</p><ol start="2"><li>cookie本身的domain属性</li></ol><p>cookie本身可以设置 <code>domain</code> 属性，指定Cookie的所属域名为一级域名，比如<code>.example.com</code>。那么二级和三级域名也可以读取到cookie    </p><h3 id="jsonp跨域"><a href="#jsonp跨域" class="headerlink" title="jsonp跨域"></a>jsonp跨域</h3><p>声明一个回调函数，其函数名(如show)当做参数值，要传递给跨域请求数据的服务器，函数形参为要获取目标数据(服务器返回的data)。</p><p>创建一个<code>&lt;script&gt;</code>标签，把那个跨域的API数据接口地址，赋值给script的src,还要在这个地址中向服务器传递该函数名（可以通过问号传参:?callback=show）。</p><p>服务器接收到请求后，需要进行特殊的处理：把传递进来的函数名和它需要给你的数据拼接成一个字符串,例如：传递进去的函数名是show，它准备好的数据是<code>show(&#39;我不爱你&#39;)</code>。</p><p>最后服务器把准备的数据通过HTTP协议返回给客户端，客户端再调用执行之前声明的回调函数（show），对返回的数据进行操作。</p><p>一个典型的jsonp攻击的代码</p><pre><code class="js">&lt;script&gt;function wooyun(v){    alert(v.username);}&lt;/script&gt;&lt;script src=&quot;http://js.login.360.cn/?o=sso&amp;m=info&amp;func=wooyun&quot;&gt;&lt;/script&gt;</code></pre><p>发送请求过去之后，服务端返回了数据，然后就被弹出来了</p><p>遇到过的一个CTF题目</p><pre><code>&lt;script/src=&amp;unit=https://www.google.com/complete/search?client=chrome&amp;q=hello&amp;callback=alert&gt;&lt;/script&gt;</code></pre><h4 id="防御jsonp攻击"><a href="#防御jsonp攻击" class="headerlink" title="防御jsonp攻击"></a>防御jsonp攻击</h4><p>验证 JSON 文件调用的来源（ Referer ）。这个方案是主要利用了 <code>&lt;script&gt;</code> 远程加载 JSON 文件时会发送 Referer ，在网站输出 JSON 数据时判断 Referer 是不是白名单合法的就可以进行防御！这个方法是可行的</p><ol><li>正则过滤不严谨</li><li>空referer</li></ol><h3 id="CORS-跨域资源共享"><a href="#CORS-跨域资源共享" class="headerlink" title="CORS 跨域资源共享"></a>CORS 跨域资源共享</h3><p>允许浏览器向跨源服务器，发出<a href="http://www.ruanyifeng.com/blog/2012/09/xmlhttprequest_level_2.html" target="_blank" rel="noopener"><code>XMLHttpRequest</code></a>请求，从而克服了AJAX只能<a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="noopener">同源</a>使用的限制。</p><p>区分简单请求和非简单请求：</p><pre><code>（1) 请求方法是以下三种方法之一：HEADGETPOST（2）HTTP的头信息不超出以下几种字段：AcceptAccept-LanguageContent-LanguageLast-Event-IDContent-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain</code></pre><p>满足以上要求即是简单请求</p><p>重点在最后一句： </p><blockquote><p>Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain</p></blockquote><p>对于简单请求，浏览器直接发出CORS请求。具体来说，就是在头信息之中，增加一个<code>Origin</code>字段。这个字段用来说明，本次请求来自哪个源（协议 + 域名 + 端口）。服务器根据这个值，决定是否同意这次请求。</p><p>如果<code>Origin</code>指定的域名在许可范围内，服务器返回的响应，会多出几个头信息字段。</p><pre><code>Access-Control-Allow-Origin: http://api.bob.comAccess-Control-Allow-Credentials: trueAccess-Control-Expose-Headers: FooBarContent-Type: text/html; charset=utf-8</code></pre><p>Access-Control-Allow-Origin： 要么是 origin 的值，要么就是 *</p><p>Access-Control-Allow-Credentials: 它的值是一个布尔值，表示是否允许发送Cookie。如果不要的话就删除这个字段</p><p>Access-Control-Expose-Headers：如果想拿到其他字段，就必须在<code>Access-Control-Expose-Headers</code>里面指定。</p><p>CORS请求默认不发送Cookie和HTTP认证信息。如果要把Cookie发到服务器，一方面要服务器同意，指定<code>Access-Control-Allow-Credentials</code>字段。</p><h2 id="cookie属性"><a href="#cookie属性" class="headerlink" title="cookie属性"></a>cookie属性</h2><p>cookie的五大属性:“path, domain, expire, HttpOnly, Secure”，很少有人了解到cookie还有一个SameSite属性，这是一个专门用于防止csrf漏洞的属性。</p><ol><li>http-only:</li></ol><p>浏览器会禁止页面中的 JavaScript 访问带有 HttpOnly 属性的 Cookie</p><ol start="2"><li>domain</li></ol><p>domain标识域，如域A为t1.test.com，域B为t2.test.com，那么在域A生产一个令域A和域B都能访问的cookie就要将该cookie的domain设置为.test.com</p><ol start="3"><li>expire</li></ol><p>过期时间</p><ol start="4"><li>Secure</li></ol><p>当设置为true时，表示创建的 Cookie 会被以安全的形式向服务器传输，也就是只能在 HTTPS 连接中被浏览器传递到服务器端进行会话验证，如果是 HTTP 连接则不会传递该信息，所以不会被窃取到Cookie 的具体内容。</p><ol start="5"><li>path</li></ol><p>path表示cookie所在的目录</p><h3 id="cookie分类"><a href="#cookie分类" class="headerlink" title="cookie分类"></a>cookie分类</h3><h2 id="防护"><a href="#防护" class="headerlink" title="防护"></a>防护</h2><h3 id="samsite属性"><a href="#samsite属性" class="headerlink" title="samsite属性"></a>samsite属性</h3><p>面试真实问题：vue开发的前后端项目如何避免CSRF？</p><p>查到的解决方案：</p><ol><li>如果后端用Django开发，可以通过传递CSRF token过来</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;刚开始想写这篇文章的时候有点纠结分类，感觉归类到CTF不是很好，因为在CTF中就没遇到过，归类到渗透测试呢，又感觉不太对23333，算了还是丢到渗透测试吧&lt;/p&gt;
-&lt;h2 id=&quot;同源策略-SOP&quot;&gt;&lt;a href=&quot;#同源策略-SOP&quot; class=&quot;headerlink
-      
-    
-    </summary>
-    
-    
-      <category term="渗透测试" scheme="http://prontosil.com/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-    
-      <category term="CSRF" scheme="http://prontosil.com/tags/CSRF/"/>
     
   </entry>
   

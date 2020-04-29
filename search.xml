@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>汇编从入门到入土八</title>
+      <link href="/posts/90d750b6/"/>
+      <url>/posts/90d750b6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="中断处理的流程-牢记"><a href="#中断处理的流程-牢记" class="headerlink" title="中断处理的流程(牢记)"></a>中断处理的流程(牢记)</h2><p><img src="/posts/90d750b6/clipboard.png" alt></p><p>关于第三步</p><p>为什么要设置第8位 TF？</p><p>这就涉及到debug程序的原理：</p><blockquote><p>debug的原理，通过设置 TF 为1，引发单步中断去执行debug准备好的中断代码</p><p><img src="/posts/90d750b6/1588129690345.png" alt></p></blockquote><p>但是这样会有问题，在处理中断的时候是不能去触发单步中断的，所以CPU要提前设置TF为0</p><p>中断过程具体的操作</p><p><img src="/posts/90d750b6/1588129813844.png" alt></p><h2 id="lab12"><a href="#lab12" class="headerlink" title="lab12"></a>lab12</h2><p>代码如下：</p><pre><code class="asm">assume cs:codecode segmentstart:    mov ax,cs    mov ds,ax    mov si,offset do0    mov ax,0    mov es,ax    mov di,200H    mov cx,offset do0end-offset do0    rep movsb    mov ax,0    mov es,ax    mov word ptr es:[0],200H    mov word ptr es:[2],0    mov ax, 1000h    mov bh, 1    div bh    mov ax,4C00H    int 21Hdo0:    jmp short do0start    db &quot;divide error!&quot;do0start:    mov ax,cs    mov ds,ax    mov si,202H    mov ax,0B800H    mov es,ax    mov di,12*160+33*2;这里要注意一下，不能因为字符串长度为13，为了居中输出就设置成12*160+67，会出现意想不到的情况    mov cx,13    s:    mov al,[si]    mov es:[di],al    inc si    add di,2    loop s    mov ax,4C00H    int 21Hdo0end:nopcode endsend start</code></pre><p>通过 <code>offset</code> 获得偏移地址</p><p>通过 <code>rep movsb</code> 来拷贝 do0 程序</p><blockquote><p>这里特别注意，do0 要使用的字符串必须存储在 do0 子程序中，并且需要手动计算一下字符串的位置</p></blockquote><p>当然最后还需要来触发这个中断</p><pre><code class="asm">    mov ax, 1000h    mov bh, 1    div bh</code></pre><p>如果直接存放原来data中的位置</p><pre><code class="asm">assume cs:codedata segmentdb &quot;overflow!&quot;data endscode segmentstart:    mov ax,cs    mov ds,ax    mov si,offset do0    mov ax,0    mov es,ax    mov di,200H    mov cx,offset do0end-offset do0    rep movsb    mov ax,0    mov es,ax    mov word ptr es:[0],200H    mov word ptr es:[2],0    mov ax, 1000h    mov bh, 1    div bh    mov ax,4C00H    int 21Hdo0:    mov ax,data    mov ds,ax    mov si,0    mov ax,0B800H    mov es,ax    mov di,12*160+33*2    mov cx,13    s:    mov al,[si]    mov es:[di],al    inc si    add di,2    loop s    mov ax,4C00H    int 21Hdo0end:nopcode endsend start</code></pre><p>也是可以执行的</p><p><img src="/posts/90d750b6/1588131368497.png" alt></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 汇编 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>企业环境渗透一</title>
       <link href="/posts/c7cfd527/"/>
       <url>/posts/c7cfd527/</url>

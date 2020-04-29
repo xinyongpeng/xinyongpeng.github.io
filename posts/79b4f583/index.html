@@ -6,17 +6,23 @@
   <meta name="keywords" content=" 汇编 ">
   <meta name="description" content="汇编从入门到入土六 | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="关于我">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://prontosil.com/about/index.html">
+<meta name="description" content="中断处理的流程(牢记) 关于第三步 为什么要设置第8位 TF？ 这就涉及到debug程序的原理：  debug的原理，通过设置 TF 为1，引发单步中断去执行debug准备好的中断代码   但是这样会有问题，在处理中断的时候是不能去触发单步中断的，所以CPU要提前设置TF为0 中断过程具体的操作  lab12代码如下： assume cs:code code segment start:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编从入门到入土八">
+<meta property="og:url" content="http://prontosil.com/posts/90d750b6/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
-<meta property="og:description" content="关于我">
+<meta property="og:description" content="中断处理的流程(牢记) 关于第三步 为什么要设置第8位 TF？ 这就涉及到debug程序的原理：  debug的原理，通过设置 TF 为1，引发单步中断去执行debug准备好的中断代码   但是这样会有问题，在处理中断的时候是不能去触发单步中断的，所以CPU要提前设置TF为0 中断过程具体的操作  lab12代码如下： assume cs:code code segment start:">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-01-30T01:19:01.000Z">
-<meta property="article:modified_time" content="2020-03-01T04:03:15.091Z">
+<meta property="og:image" content="http://prontosil.com/posts/90d750b6/clipboard.png">
+<meta property="og:image" content="http://prontosil.com/posts/90d750b6/1588129690345.png">
+<meta property="og:image" content="http://prontosil.com/posts/90d750b6/1588129813844.png">
+<meta property="og:image" content="http://prontosil.com/posts/90d750b6/1588131368497.png">
+<meta property="article:published_time" content="2020-04-29T03:03:16.000Z">
+<meta property="article:modified_time" content="2020-04-29T03:38:14.510Z">
 <meta property="article:author" content="prontosil">
+<meta property="article:tag" content="汇编">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://prontosil.com/posts/90d750b6/clipboard.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -144,7 +150,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(82)</small></div></li>
+    <li><div class="all active">全部文章<small>(83)</small></div></li>
     
         
             
@@ -164,7 +170,7 @@
     
         
             
-            <li><div data-rel="编程">编程<small>(24)</small></div>
+            <li><div data-rel="编程">编程<small>(25)</small></div>
                 
             </li>
             
@@ -204,8 +210,8 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="82">
-<input type="hidden" id="yelog_site_word_count" value="58.4k">
+<input type="hidden" id="yelog_site_posts_number" value="83">
+<input type="hidden" id="yelog_site_word_count" value="58.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -271,11 +277,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">Linux</a>
+        <a class="color4">POP</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">POP</a>
+        <a class="color1">Linux</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -295,15 +301,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color2">apache</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">xxe</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color4">xml</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color2">apache</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -371,15 +377,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">thinkphp</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color1">sqlit</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color4">数据库</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">thinkphp</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -443,19 +449,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">面经</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">dig</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">AWD</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color3">总结</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">面经</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">dig</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -471,15 +477,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">leetcode</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">xxd</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color3">hexdump</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -530,6 +536,14 @@
            data-author="" >
             <span class="post-title" title="常用的网站">常用的网站</span>
             <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="编程 "
+           href="/posts/90d750b6/"
+           data-tag="汇编"
+           data-author="" >
+            <span class="post-title" title="汇编从入门到入土八">汇编从入门到入土八</span>
+            <span class="post-date" title="2020-04-29 11:03:16">2020/04/29</span>
         </a>
         
         <a  class="渗透测试 "
@@ -1406,7 +1420,7 @@ end start</code></pre>
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#CSRF','#HTB','#靶机','#JavaScript','#原型链污染','#Linux','#POP','#jndi','#应急响应','#SQL注入','#XSS','#apache','#xxe','#xml','#docker','#go','#java','#反序列化','#js','#jwt','#php','#函数','#pickle','#python','#Qt','#字符串','#bytes','#KMP','#文档','#SQL','#thinkphp','#sqlit','#数据库','#vscode','#xdebug','#文件上传','#vulnhub','#cms','#实验','#内网','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#webshell','#面经','#dig','#AWD','#总结','#kill','#tcpdump','#提权','#leetcode','#xxd','#hexdump','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf',],
+            'data': ['#CSRF','#HTB','#靶机','#JavaScript','#原型链污染','#POP','#Linux','#jndi','#应急响应','#SQL注入','#XSS','#xxe','#xml','#apache','#docker','#go','#java','#反序列化','#js','#jwt','#php','#函数','#pickle','#python','#Qt','#字符串','#bytes','#KMP','#文档','#SQL','#sqlit','#数据库','#thinkphp','#vscode','#xdebug','#文件上传','#vulnhub','#cms','#实验','#内网','#游戏','#CTF','#命令执行','#域名','#隐写','#网站','#比赛','#webshell','#AWD','#总结','#面经','#dig','#kill','#tcpdump','#提权','#xxd','#hexdump','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
