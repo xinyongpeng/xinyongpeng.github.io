@@ -5114,14 +5114,6 @@ blockquote.pullquote.right {
 .read-mode #web_bg {
   background: none;
 }
-.read-mode #chatra,
-.read-mode #tidio-chat-code,
-.read-mode #tidio-chat,
-.read-mode #daodream-container,
-.read-mode .gitter-chat-embed,
-.read-mode .gitter-open-chat-button {
-  display: none !important;
-}
 .read-mode #article-container h1,
 .read-mode #article-container h2,
 .read-mode #article-container h3,
