@@ -1560,6 +1560,8 @@ pre .javascript .function {
   background: #212121;
   color: #eff;
   line-height: 20px;
+  counter-reset: line;
+  white-space: pre-wrap;
 }
 blockquote {
   margin: 0 0 1rem;
@@ -1610,6 +1612,15 @@ blockquote footer cite:before {
   margin: 0;
   padding: 8px 0;
   border: none;
+}
+#article-container figure.highlight .line:before {
+  display: inline-block;
+  padding: 0 0.3rem 0 0;
+  min-width: 1.6rem;
+  color: rgba(238,255,255,0.5);
+  content: counter(line);
+  counter-increment: line;
+  text-align: left;
 }
 #article-container figure.highlight .line.marked {
   background-color: rgba(97,97,97,0.314);
